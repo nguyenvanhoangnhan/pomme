@@ -2,13 +2,12 @@
 import { useAuthStore } from "@/stores/auth"
 import { computed } from "@vue/reactivity"
 import { Icon } from "@iconify/vue"
-defineProps<{}>()
 const auth = useAuthStore()
 const email = computed(() => auth.email)
 </script>
 
 <template>
-    <div class="bg-gray-800 text-white w-screen h-screen flex flex-col justify-center items-center">
+    <div class="text-black w-screen h-screen flex flex-col justify-center items-center">
         <Icon icon="bi:house-fill" :width="40" :height="40" />
         <h1>Home</h1>
         <p>This is the home page.</p>
