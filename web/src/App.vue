@@ -2,40 +2,69 @@
 import { markRaw, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import DefaultLayout from "@/layouts/default/index.vue"
+import AdminLayout from "@/layouts/admin/index.vue"
+import AuthLayout from "@/layouts/auth/index.vue"
+import EmptyLayout from "@/layouts/empty/index.vue"
 
-// handle layout
+// handle dynamic layout
 const route = useRoute()
+const layouts = {
+    default: DefaultLayout,
+    auth: AuthLayout,
+    admin: AdminLayout,
+    empty: EmptyLayout,
+}
 const layout = ref()
 watch(
-    () => route.meta?.layout as string | undefined,
-    async (metaLayout: string | undefined) => {
+    () => route.meta.layout as string | undefined,
+    (layoutName: string | undefined) => {
+        if (layoutName === "404") {
+            layout.value = undefined
+            return
+        }
         try {
-            const component = metaLayout && (await import(/* @vite-ignore */ `@/layouts/${metaLayout}/index.vue`))
-            layout.value = markRaw(component?.default || DefaultLayout)
-        } catch (e) {
-            layout.value = markRaw(DefaultLayout)
+            layout.value = markRaw(layouts[layoutName || "default"])
+        } catch (err) {
+            layout.value = markRaw(layouts["default"])
         }
     },
     { immediate: true }
 )
+
+const isLoadingLayout = ref(true)
+setTimeout(() => {
+    isLoadingLayout.value = false
+}, 400)
 </script>
 
 <template>
-    <component :is="layout">
-        <RouterView />
-    </component>
+    <div v-if="isLoadingLayout" class="loading bg-white text-primary w-screen h-screen flex justify-center items-center fixed z-[999]">
+        <img src="/granny-smith-logo.svg" alt="logo" class="w-[10vw]" />
+    </div>
+    <Transition name="slide-fade">
+        <component v-if="!isLoadingLayout" :is="layout">
+            <Transition name="slide-fade">
+                <RouterView />
+            </Transition>
+        </component>
+    </Transition>
 </template>
 
 <style scoped>
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
+/*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active {
+    transition: all 0.3s ease;
 }
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+.slide-fade-leave-active {
+    transition: all 0.3s ease;
 }
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    opacity: 0;
 }
 </style>

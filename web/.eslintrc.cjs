@@ -14,7 +14,11 @@ module.exports = {
         // defineProps no warning on type {}
         "@typescript-eslint/ban-types": "off",
 
+        "vue/no-v-model-argument": "off",
+
         // not needed for vue 3
         "vue/no-multiple-template-root": "off",
+
+
     },
 }
