@@ -1,8 +1,10 @@
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('ant-design-vue/dist/antd.less');
 
+@import url('ant-design-vue/dist/antd.less');
 
 @layer components {
     h1 {
@@ -28,6 +30,11 @@
     h6 {
         font-size: 0.67em;
     }
+
+}
+
+body a:hover {
+    @apply text-primary;
 }
 
 
@@ -87,8 +94,6 @@ body video {
     color: inherit;
 }
 
-<<<<<<< Updated upstream
-=======
 body ul,
 body ol,
 body menu {
@@ -98,7 +103,6 @@ body menu {
 
 
 
->>>>>>> Stashed changes
 html {
     font-family: "Roboto", sans-serif;
 }

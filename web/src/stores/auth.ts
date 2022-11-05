@@ -5,11 +5,6 @@ export const useAuthStore = defineStore({
     state: () => ({
         token: "",
         exp: 0,
-<<<<<<< Updated upstream
-        fullName: "",
-        email: "nguyen.vh.nhan@gmail.com",
-    }),
-=======
         fullname: "",
         email: "",
     }),
@@ -30,5 +25,4 @@ export const useAuthStore = defineStore({
             console.log("logout")
         },
     },
->>>>>>> Stashed changes
 })

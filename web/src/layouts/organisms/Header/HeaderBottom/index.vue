@@ -40,6 +40,7 @@ import { Icon } from "@iconify/vue"
                 <template #prefix>
                     <Icon icon="ph:magnifying-glass-bold" />
                 </template>
+
             </AInput>
         </div>
     </div>
