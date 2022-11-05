@@ -3,10 +3,10 @@ import { defineStore } from "pinia"
 export const useAuthStore = defineStore({
     id: "auth",
     state: () => ({
-        token: "test",
+        token: "",
         exp: 0,
-        username: "Nhân Nguyễn",
-        email: "nguyen.vh.nhan@gmail.com",
+        fullname: "",
+        email: "",
     }),
     getters: {
         isAuthenticated(state) {
@@ -20,7 +20,7 @@ export const useAuthStore = defineStore({
         logout() {
             this.token = ""
             this.exp = 0
-            this.username = ""
+            this.fullname = ""
             this.email = ""
             console.log("logout")
         },

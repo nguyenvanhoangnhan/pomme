@@ -4,8 +4,10 @@ defineProps<{}>()
 </script>
 
 <template>
-    <Header />
-    <slot />
+    <div class="__default__">
+        <Header />
+        <slot />
+    </div>
 </template>
 
 <style lang="less" scoped></style>
