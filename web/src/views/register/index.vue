@@ -38,7 +38,7 @@ const onFinishFailed = (errInfo: any) => {
         <!-- Title -->
         <h1 class="login__title font-black text-5xl mb-16">Đăng ký</h1>
 
-        <!-- Login form -->
+        <!-- Register form -->
         <AForm class="login__form" :model="loginFormState" layout="vertical" @finish="onFinish" @finishFailed="onFinishFailed">
             <AFormItem name="fullname" :rules="[{ required: true, message: 'Xin vui lòng nhập trường này!' }]">
                 <AInput type="text" size="large" v-model:value="loginFormState.fullname" placeholder="Họ và tên">

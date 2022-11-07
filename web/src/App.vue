@@ -41,11 +41,9 @@ setTimeout(() => {
     <div v-if="isLoadingLayout" class="loading bg-white text-primary w-screen h-screen flex justify-center items-center fixed z-[999]">
         <img src="/granny-smith-logo.svg" alt="logo" class="w-[10vw]" />
     </div>
-    <Transition name="slide-fade">
+    <Transition name="fade">
         <component v-if="!isLoadingLayout" :is="layout">
-            <Transition name="slide-fade">
-                <RouterView />
-            </Transition>
+            <RouterView />
         </component>
     </Transition>
 </template>
@@ -55,16 +53,16 @@ setTimeout(() => {
   Enter and leave animations can use different
   durations and timing functions.
 */
-.slide-fade-enter-active {
+.fade-enter-active {
     transition: all 0.3s ease;
 }
 
-.slide-fade-leave-active {
+.fade-leave-active {
     transition: all 0.3s ease;
 }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
     opacity: 0;
 }
 </style>
