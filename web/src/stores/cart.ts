@@ -6,8 +6,8 @@ export const useCartStore = defineStore({
         items: [] as CartItem[],
     }),
     getters: {
-        itemsCount(): number {
-            return this.items.length
+        total(): number {
+            return this.items.reduce((total: number, item: CartItem) => total + item.price * item.quantity, 0)
         },
     },
     actions: {
