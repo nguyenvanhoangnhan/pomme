@@ -11,7 +11,7 @@ const handleSubscribe = () => {
 <template>
     <div class="footer flex bg-[#4C4C4C] text-white w-screen p-8 mt-auto">
         <div class="footer__left flex flex-col items-center justify-center gap-4 w-60 min-w-40">
-            <img src="images/store.png" class="w-full" alt="#" />
+            <img src="/images/store.png" class="w-full" alt="#" />
             <RouterLink
                 :to="{ name: 'Home' }"
                 class="h-10 font-bold w-full max-w-[400px] bg-white border-white text-black border-2 flex justify-center items-center text-[16px] cursor-pointer hover:text-primary hover:border-primary transition-all duration-300 group"

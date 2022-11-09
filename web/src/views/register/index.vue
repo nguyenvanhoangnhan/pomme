@@ -19,7 +19,7 @@ if (auth.token) {
 }
 
 //handle form
-const loginFormState = reactive<RegisterFormState>({
+const registerFormState = reactive<RegisterFormState>({
     fullname: "",
     email: "",
     password: "",
@@ -34,29 +34,29 @@ const onFinishFailed = (errInfo: any) => {
 </script>
 
 <template>
-    <div id="login" class="my-auto">
+    <div id="register" class="my-auto">
         <!-- Title -->
-        <h1 class="login__title font-black text-5xl mb-16">Đăng ký</h1>
+        <h1 class="register__title font-black text-5xl mb-16">Đăng ký</h1>
 
         <!-- Register form -->
-        <AForm class="login__form" :model="loginFormState" layout="vertical" @finish="onFinish" @finishFailed="onFinishFailed">
+        <AForm class="register__form" :model="registerFormState" layout="vertical" @finish="onFinish" @finishFailed="onFinishFailed">
             <AFormItem name="fullname" :rules="[{ required: true, message: 'Xin vui lòng nhập trường này!' }]">
-                <AInput type="text" size="large" v-model:value="loginFormState.fullname" placeholder="Họ và tên">
+                <AInput type="text" size="large" v-model:value="registerFormState.fullname" placeholder="Họ và tên">
                     <template #prefix> <Icon icon="ph:user-bold" /> </template
                 ></AInput>
             </AFormItem>
             <AFormItem name="email" :rules="[{ required: true, message: 'Xin vui lòng nhập trường này!' }]">
-                <AInput type="text" size="large" v-model:value="loginFormState.email" placeholder="Email">
+                <AInput type="text" size="large" v-model:value="registerFormState.email" placeholder="Email">
                     <template #prefix> <Icon icon="ph:envelope-simple-bold" /> </template
                 ></AInput>
             </AFormItem>
             <AFormItem name="password" :rules="[{ required: true, message: 'Xin vui lòng nhập trường này!' }]">
-                <AInput type="password" size="large" v-model:value="loginFormState.password" placeholder="Mật khẩu">
+                <AInput type="password" size="large" v-model:value="registerFormState.password" placeholder="Mật khẩu">
                     <template #prefix> <Icon icon="ph:lock-simple-bold" /> </template
                 ></AInput>
             </AFormItem>
             <AFormItem name="password" :rules="[{ required: true, message: 'Xin vui lòng nhập trường này!' }]">
-                <AInput type="password" size="large" v-model:value="loginFormState.confirmPassword" placeholder="Xác nhận mật khẩu">
+                <AInput type="password" size="large" v-model:value="registerFormState.confirmPassword" placeholder="Xác nhận mật khẩu">
                     <template #prefix> <Icon icon="ph:lock-simple-bold" /> </template
                 ></AInput>
             </AFormItem>

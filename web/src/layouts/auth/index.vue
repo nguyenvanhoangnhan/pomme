@@ -28,7 +28,7 @@ defineProps<{}>()
 }
 .bg-image {
     background-color: #44af7d;
-    background-image: url(images/auth-layout-img.jpg);
+    background-image: url(/images/auth-layout-img.jpg);
     background-position: center;
     background-size: cover;
 }
