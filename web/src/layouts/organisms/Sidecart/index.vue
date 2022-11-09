@@ -18,7 +18,7 @@ const toggleSideCart = () => {
                     <span> Giỏ hàng ({{ cart.items.length }}) </span>
                     <span class="caret"></span>
                 </div>
-                <div class="cart__divider h-[3px] bg-black self-center"></div>
+                <div class="cart__divider"></div>
                 <ul class="cart__items px-[15px] py-[10px] flex flex-col max-h-[312px] overflow-y-scroll">
                     <li v-for="item in cart.items" :key="item.id" class="list-none">
                         <div class="flex">
@@ -31,7 +31,7 @@ const toggleSideCart = () => {
                                         <span class="price-before-sale line-through">{{ Number(1000000).toLocaleString() }}</span>
                                     </div>
                                     <div class="quantity flex w-full justify-between">
-                                        <span>Quantity</span>
+                                        <span>Số lượng</span>
                                         <span>{{ item.quantity }}</span>
                                     </div>
                                 </div>
@@ -40,14 +40,14 @@ const toggleSideCart = () => {
                         <div class="divider w-full h-[2px] mt-[14px] mb-[10px]"></div>
                     </li>
                 </ul>
-                <div class="cart__divider h-[3px] bg-black self-center"></div>
+                <div class="cart__divider"></div>
                 <div class="cart__total flex justify-between px-[15px] py-[5px] font-bold text-base">
                     <div>Total:</div>
                     <div class="text-love">{{ cart.total.toLocaleString() }} VNĐ</div>
                 </div>
                 <div class="cart__pay-btn-container px-[15px] py-[5px]"></div>
                 <div class="px-[15px] pt-[5px] pb-[10px]">
-                    <AButton class="uppercase font-bold" type="primary" size="large" block>Checkout</AButton>
+                    <AButton class="uppercase font-bold" type="primary" size="large" block>THANH TOÁN</AButton>
                 </div>
             </div>
         </div>
@@ -88,7 +88,9 @@ const toggleSideCart = () => {
     }
 }
 .cart__divider {
+    @apply bg-black self-center;
     width: calc(100% - 30px);
+    height: 3px;
 }
 .text-2-line {
     display: -webkit-box;

@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']
+    AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
     ExampleOrganismName: typeof import("./src/components/page_organisms/_example_page_name/ExampleOrganismName.vue")["default"]
     OrganismName: typeof import('./src/components/page/page_name/OrganismName.vue')['default']
     ProductCard: typeof import('./src/components/common/ProductCard/index.vue')['default']

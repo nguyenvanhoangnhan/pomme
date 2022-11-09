@@ -31,6 +31,25 @@ const router = createRouter({
             },
         },
         {
+            name: "Reset Password",
+            path: "/reset-password",
+            component: () => import("@/views/reset-password/index.vue"),
+            meta: {
+                title: "Khôi phục mật khẩu",
+                layout: "auth",
+            },
+            children: [
+                {
+                    name: "Reset Password OTP",
+                    path: "auth-otp",
+                    component: () => import("@/views/reset-password/auth-otp/index.vue"),
+                    meta: {
+                        title: "Xác thực OTP",
+                    }
+                },
+            ]
+        },
+        {
             name: "About",
             path: "/about",
             component: () => import("@/views/about/index.vue"),
@@ -57,7 +76,7 @@ const router = createRouter({
     ],
 })
 
-const DEFAULT_TITLE = "Pomme Shop"
+const DEFAULT_TITLE = "Pomme"
 router.afterEach((to, from) => {
     // Use next tick to handle router history correctly
     // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
