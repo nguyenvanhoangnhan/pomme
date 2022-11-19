@@ -10,6 +10,8 @@ class Product(models.Model):
     salePercent =  models.FloatField()
     in_stock = models.PositiveBigIntegerField()
     sold = models.PositiveBigIntegerField()
+    def __str__(self) -> str:
+        return self.name
 class Image(models.Model):
     image_id = models.AutoField(primary_key=True)
     product= models.ForeignKey(Product,on_delete=models.CASCADE,related_name='images')
