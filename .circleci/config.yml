@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@1.5.0
+  ta-python: travelaudience/python@1.1.2
 
 jobs:
   build-and-deploy-django-image:
@@ -38,5 +39,15 @@ jobs:
 workflows:
   ci-django:
     jobs:
+      - ta-python/pylint
+          source: api/
+      - ta-python/flake8
+          source: api/
+      - ta-python/mypy_type_check
+          source: api/
       - build-and-deploy-django-image
+          requires:
+            - ta-python/pylint
+            - ta-python/flake8
+            - ta-python/mypy_type_check
 
