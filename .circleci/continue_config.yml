@@ -124,6 +124,12 @@ workflows:
           requires:
             - pylint
             - ta-python/flake8
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+
   ci-web:
     when: << pipeline.parameters.run-web-ci >>
     jobs:
@@ -131,3 +137,8 @@ workflows:
       - build-and-deploy-web-image:
           requires:
             - jslint 
+          filters:
+            branches:
+              only:
+                - develop
+                - main
