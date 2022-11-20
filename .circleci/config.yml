@@ -63,7 +63,7 @@ workflows:
       - pylint
       - ta-python/flake8:
           source: api/
-      - mypy-type-check:
+      - mypy-type-check
       - build-and-deploy-django-image:
           requires:
             - pylint
