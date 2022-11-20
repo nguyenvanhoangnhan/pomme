@@ -26,5 +26,5 @@ jobs:
 workflows:
   ci-django:
     jobs:
-      - build-and-deploy-image
+      - build-and-deploy-django-image
 
