@@ -20,22 +20,21 @@ jobs:
       - image: cimg/node:17.4.0
     steps:
       - checkout
-      - run: cd web
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
       - run:
           name: Install dependencies
-          command: yarn install
+          command: cd web && yarn install
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
           paths:
-            - ./node_modules
+            - ./web/node_modules
       - run:
           name: Format code
-          command: yarn format
+          command: cd web && yarn format
       - run:
           name: Lint check
-          command: yarn lint:js
+          command: cd web && yarn lint:js
 
   build-and-deploy-api-image:
     docker:
@@ -70,20 +69,19 @@ jobs:
             docker push $DOCKER_USER/shoe-shop-api:$TAG
 
   build-and-deploy-web-image:
-    working_directory: ~/project/web
     docker:
       - image: cimg/node:17.4.0
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
       - run:
           name: Install dependencies
-          command:  yarn install
+          command:  cd web && yarn install
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
           paths:
-            - ./node_modules
+            - ./web/node_modules
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
@@ -95,8 +93,8 @@ jobs:
           name: Build docker image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build -t $DOCKER_USER/shoe-shop-web:latest .
-            docker build -t $DOCKER_USER/shoe-shop-web:$TAG .
+            docker build -t $DOCKER_USER/shoe-shop-web:latest web/
+            docker build -t $DOCKER_USER/shoe-shop-web:$TAG web/
       - run:
           name: Check images
           command: docker images
