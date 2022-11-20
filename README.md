@@ -61,7 +61,7 @@ $ cd web && yarn format
 ```bash
 # .env file
 API_ROOT=localhost:8000
-DATABASE_URL="postgresql://postgres:password@localhost:5432/d13?schema=public"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shoeshop"
 ```
 
 ## Databases
