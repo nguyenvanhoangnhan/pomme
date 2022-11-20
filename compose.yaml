@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  api: 
+    container_name: api
+    build: ./api
+    ports: 
+      - 8000:8000
+  web:
+    container_name: web
+    build: ./web
+    ports:
+      - 5173:5173
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - ./data:/data/postgres
+    ports:
+      - 5432:5432
