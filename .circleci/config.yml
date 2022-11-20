@@ -9,11 +9,9 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
-      - run: ls -la
-      - run: ls ~
       - python/install-packages:
           pkg-manager: pip
-          app-dir: ~/shoe-shop/api
+          app-dir: api
       - run:
           name: Run tests
           command: id
