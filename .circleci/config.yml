@@ -15,8 +15,29 @@ jobs:
       - run: 
           name: Lint check
           command: find api/ -name '*.py' | xargs pylint
+  jslint:
+    docker:
+      - image: cimg/node:17.4.0
+    steps:
+      - checkout
+      - run: sudo npm install -g yarn
+      - restore_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: cd web && yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+          paths:
+            - ./web/node_modules
+      - run:
+          name: Format code
+          command: yarn format
+      - run:
+          name: Lint check
+          command: yarn lint:js
 
-  build-and-deploy-django-image:
+  build-and-deploy-api-image:
     docker:
       - image: cimg/python:3.10.2
     steps:
@@ -47,14 +68,57 @@ jobs:
             docker push $DOCKER_USER/shoe-shop-api:latest
             docker push $DOCKER_USER/shoe-shop-api:$TAG
 
+  build-and-deploy-web-image::
+    docker:
+      - image: cimg/node:17.4.0
+    steps:
+      - checkout
+      - run: sudo npm install -g yarn
+      - restore_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: cd web && yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+          paths:
+            - ./web/node_modules
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Login Dockerhub
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build -t $DOCKER_USER/shoe-shop-web:latest web
+            docker build -t $DOCKER_USER/shoe-shop-web:$TAG web/
+      - run:
+          name: Check images
+          command: docker images
+      - run:
+          name: Push images
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/shoe-shop-web:latest
+            docker push $DOCKER_USER/shoe-shop-web:$TAG
+ 
 workflows:
-  ci-django:
+  ci-api:
     jobs:
       - pylint
       - ta-python/flake8:
           source: api/
-      - build-and-deploy-django-image:
+      - build-and-deploy-api-image:
           requires:
             - pylint
             - ta-python/flake8
-
+  ci-web:
+    jobs:
+      - jslint
+      - build-and-deploy-web-image:
+          requires:
+            - jslint 
