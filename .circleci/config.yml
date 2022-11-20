@@ -11,6 +11,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
+          app-dir: ~/shoe-shop/api
       - run:
           name: Run tests
           command: id
