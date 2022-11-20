@@ -39,13 +39,13 @@ jobs:
 workflows:
   ci-django:
     jobs:
-      - ta-python/pylint
+      - ta-python/pylint:
           source: api/
-      - ta-python/flake8
+      - ta-python/flake8:
           source: api/
-      - ta-python/mypy_type_check
+      - ta-python/mypy_type_check:
           source: api/
-      - build-and-deploy-django-image
+      - build-and-deploy-django-image:
           requires:
             - ta-python/pylint
             - ta-python/flake8
