@@ -68,7 +68,7 @@ jobs:
             docker push $DOCKER_USER/shoe-shop-api:latest
             docker push $DOCKER_USER/shoe-shop-api:$TAG
 
-  build-and-deploy-web-image::
+  build-and-deploy-web-image:
     docker:
       - image: cimg/node:17.4.0
     steps:
