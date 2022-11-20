@@ -15,7 +15,7 @@ jobs:
       - run: 
           name: Lint check
           command: pylint api/
-mypy-type-check:
+  mypy-type-check:
     docker:
       - image: cimg/python:3.10.2
     steps:
