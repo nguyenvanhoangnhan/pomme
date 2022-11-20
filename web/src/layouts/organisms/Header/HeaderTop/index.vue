@@ -11,7 +11,7 @@ const fullname = computed(() => auth.fullname)
         <HeaderTopItem title="Tra cứu đơn hàng" icon="ph:package-bold" to-view-name="Home" />
         <HeaderTopItem title="Tìm cửa hàng" icon="ph:map-pin-bold" to-view-name="" />
         <HeaderTopItem title="Yêu thích" icon="ph:heart-bold" to-view-name="" />
-        <HeaderTopItem title="Giỏ hàng (13)" icon="ph:shopping-cart-simple-bold" to-view-name="" />
+        <HeaderTopItem title="Giỏ hàng (13)" icon="ph:shopping-cart-simple-bold" to-view-name="Cart" />
         <HeaderTopItem v-if="!fullname" title="Đăng nhập" icon="ph:user-bold" to-view-name="Login" />
         <div v-else class="flex gap-6">
             <HeaderTopItem :title="fullname" icon="ph:user-bold" to-view-name="" />

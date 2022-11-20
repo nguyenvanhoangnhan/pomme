@@ -45,14 +45,23 @@ const router = createRouter({
                     component: () => import("@/views/reset-password/auth-otp/index.vue"),
                     meta: {
                         title: "Xác thực OTP",
-                    }
+                    },
                 },
-            ]
+            ],
         },
         {
             name: "About",
             path: "/about",
             component: () => import("@/views/about/index.vue"),
+        },
+        {
+            name: "Cart",
+            path: "/cart",
+            component: () => import("@/views/cart/index.vue"),
+            meta: {
+                title: "Giỏ hàng",
+                layout: "default",
+            },
         },
         {
             name: "Products",

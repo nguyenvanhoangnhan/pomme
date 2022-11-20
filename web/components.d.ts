@@ -8,15 +8,23 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AButton: typeof import('ant-design-vue/es')['Button']
+    ACarousel: typeof import('ant-design-vue/es')['Carousel']
     ADatePicker: typeof import("ant-design-vue/es")["DatePicker"]
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
+    ASelect: typeof import('ant-design-vue/es')['Select']
+    ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
+    BuyMoreSuggest: typeof import('./src/components/page/cart/BuyMoreSuggest.vue')['default']
+    CartList: typeof import('./src/components/page/cart/CartList.vue')['default']
     ExampleOrganismName: typeof import("./src/components/page_organisms/_example_page_name/ExampleOrganismName.vue")["default"]
-    OrganismName: typeof import('./src/components/page/page_name/OrganismName.vue')['default']
+    NavButton: typeof import('./src/components/atoms/NavButton.vue')['default']
+    OrganismName: typeof import('./src/components/page/cart/OrganismName.vue')['default']
     ProductCard: typeof import('./src/components/common/ProductCard/index.vue')['default']
+    ProductItem: typeof import('./src/components/page/cart/ProductItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SuggestBuyMore: typeof import('./src/components/page/cart/SuggestBuyMore.vue')['default']
   }
 }
