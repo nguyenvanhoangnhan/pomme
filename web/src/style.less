@@ -108,3 +108,15 @@ html body {
 .iconify {
     display: initial;
 }
+
+.divider {
+    &--solid {
+        border-top: 3px solid black;
+    }
+
+    &--dashed {
+        @apply w-full;
+        height: 2px;
+        background: url("@/assets/images/bg_divider_dashed.png") repeat-x 7px;
+    }
+}

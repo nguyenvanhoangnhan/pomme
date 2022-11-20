@@ -11,56 +11,52 @@ const toggleSideCart = () => {
 </script>
 
 <template>
-    <div class="side-cart fixed top-56 right-0 hidden lg:flex" :class="isShow ? 'side-cart--show-menu' : 'side-cart--hide-menu'">
-        <div v-if="cart.items.length" class="side-cart__menu overflow-hidden">
-            <div class="bg-slate-300 text-black flex flex-col">
-                <div class="cart__title px-[15px] py-[10px] uppercase font-bold flex justify-between">
+    <div class="side-cart fixed top-56 right-0 hidden lg:flex z-[555]" :class="isShow ? 'side-cart--show-menu' : 'side-cart--hide-menu'">
+        <div class="side-cart__menu overflow-hidden">
+            <div class="bg-[#C6E7D8] text-black flex flex-col px-[15px]">
+                <div class="cart__title py-[10px] uppercase font-bold flex justify-between">
                     <span> Giỏ hàng ({{ cart.items.length }}) </span>
                     <span class="caret"></span>
                 </div>
-                <div class="cart__divider"></div>
-                <ul class="cart__items px-[15px] py-[10px] flex flex-col max-h-[312px] overflow-y-scroll">
-                    <li v-for="item in cart.items" :key="item.id" class="list-none">
-                        <div class="flex">
-                            <img :src="item.thumbnailUrl" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
-                            <div class="item-info w-[180px] h-[80px] flex flex-col justify-between">
-                                <div class="name font-bold text-base leading-[1.1] text-2-line">{{ item.name }}</div>
-                                <div class="text-[12px] leading-[1.1]">
-                                    <div class="price w-full flex justify-between">
-                                        <span class="current-price font-bold">{{ Number(item.price).toLocaleString() }} VNĐ</span>
-                                        <span class="price-before-sale line-through">{{ Number(1000000).toLocaleString() }}</span>
-                                    </div>
-                                    <div class="quantity flex w-full justify-between">
-                                        <span>Số lượng</span>
-                                        <span>{{ item.quantity }}</span>
+                <template v-if="cart.items.length">
+                    <div class="divider--solid my-4"></div>
+                    <ul class="cart__items py-[10px] flex flex-col max-h-[312px] overflow-y-scroll">
+                        <li v-for="item in cart.items" :key="item.id" class="list-none">
+                            <div class="flex">
+                                <img :src="item.thumbnailUrl" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
+                                <div class="item-info w-[180px] h-[80px] flex flex-col justify-between">
+                                    <div class="name font-bold text-base leading-[1.1] text-2-line">{{ item.name }}</div>
+                                    <div class="text-[12px] leading-[1.1]">
+                                        <div class="price w-full flex justify-between">
+                                            <span class="current-price font-bold">{{ Number(item.price).toLocaleString() }} VNĐ</span>
+                                            <span class="price-before-sale line-through">{{ Number(1000000).toLocaleString() }}</span>
+                                        </div>
+                                        <div class="quantity flex w-full justify-between">
+                                            <span>Số lượng</span>
+                                            <span>{{ item.quantity }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="divider w-full h-[2px] mt-[14px] mb-[10px]"></div>
-                    </li>
-                </ul>
-                <div class="cart__divider"></div>
-                <div class="cart__total flex justify-between px-[15px] py-[5px] font-bold text-base">
-                    <div>Total:</div>
-                    <div class="text-love">{{ cart.total.toLocaleString() }} VNĐ</div>
-                </div>
-                <div class="cart__pay-btn-container px-[15px] py-[5px]"></div>
-                <div class="px-[15px] pt-[5px] pb-[10px]">
-                    <AButton class="uppercase font-bold" type="primary" size="large" block>THANH TOÁN</AButton>
-                </div>
-            </div>
-        </div>
-        <div v-else class="side-cart__menu--empty overflow-hidden">
-            <div class="bg-slate-300 text-black flex flex-col">
-                <div class="cart__title px-[15px] py-[10px] uppercase font-bold flex justify-between">
-                    <span> Giỏ hàng ({{ cart.items.length }}) </span>
-                    <span class="caret"></span>
-                </div>
-                <div class="flex flex-col items-center justify-center gap-3 p-8">
-                    <Icon icon="ph:heart-straight-break" :width="48" :height="48" />
-                    <h3 class="text-center font-bold w-36">Trong này chưa có gì cả bạn ơi!</h3>
-                </div>
+                            <div class="divider--dashed my-4"></div>
+                        </li>
+                    </ul>
+                    <div class="divider--solid mb-4"></div>
+                    <div class="cart__total flex justify-between py-[5px] font-bold text-base">
+                        <div>Total:</div>
+                        <div class="text-love">{{ cart.total.toLocaleString() }} VNĐ</div>
+                    </div>
+                    <div class="cart__pay-btn-container py-[5px]"></div>
+                    <div class="pt-[5px] pb-[10px]">
+                        <AButton class="uppercase font-bold" type="primary" size="large" block>THANH TOÁN</AButton>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="flex flex-col items-center justify-center gap-3 p-8">
+                        <Icon icon="ph:heart-straight-break" :width="48" :height="48" />
+                        <h3 class="text-center font-bold w-36">Trong này chưa có gì cả bạn ơi!</h3>
+                    </div>
+                </template>
             </div>
         </div>
         <div class="side-cart__trigger-btn cursor-pointer w-10 h-[80px] bg-primary text-white flex flex-col items-center justify-center gap-2" @click="toggleSideCart">
@@ -87,11 +83,7 @@ const toggleSideCart = () => {
         pointer-events: none;
     }
 }
-.cart__divider {
-    @apply bg-black self-center;
-    width: calc(100% - 30px);
-    height: 3px;
-}
+
 .text-2-line {
     display: -webkit-box;
     -webkit-line-clamp: 2;
