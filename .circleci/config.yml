@@ -16,14 +16,11 @@ jobs:
           name: Lint check
           command: find api/ -name '*.py' | xargs pylint
   jslint:
-    working_directory: ~/project/web
     docker:
       - image: cimg/node:17.4.0
     steps:
       - checkout
-      - run: ls -la ~/project/web
-      - run: pwd
-      - run: cat ~/project/web/package-lock.json
+      - run: cd web
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -45,6 +42,7 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
+      - run: cd web
       - python/install-packages:
           pkg-manager: pip
           app-dir: api
