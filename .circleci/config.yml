@@ -21,8 +21,9 @@ jobs:
       - image: cimg/node:17.4.0
     steps:
       - checkout
-      - run: ls -la
-      - run: ls -la ~
+      - run: ls -la ~/project/web
+      - run: pwd
+      - run: cat ~/project/web/package-lock.json
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
