@@ -14,5 +14,5 @@ workflows:
           mapping: |
             api/.* run-api-ci true
             web/.* run-web-ci true
-          base-revision: develop
+          base-revision: << pipeline.git.base_revision >>
           config-path: .circleci/continue_config.yml
