@@ -20,7 +20,6 @@ jobs:
       - image: cimg/node:17.4.0
     steps:
       - checkout
-      - run: sudo npm install -g yarn
       - restore_cache:
           key: dependency-cache-{{ checksum "web/package-lock.json" }}
       - run:
