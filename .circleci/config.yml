@@ -10,21 +10,11 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
-      - run: pip install --user pylint
+      - run: pip install --user pylint pylint-django
       - run: pip install --user -r api/requirements.txt
       - run: 
           name: Lint check
-          command: pylint api/
-  mypy-type-check:
-    docker:
-      - image: cimg/python:3.10.2
-    steps:
-      - checkout
-      - run: pip install --user mypy
-      - run: pip install --user -r api/requirements.txt
-      - run: 
-          name: Type check
-          command: mypy api/
+          command: pylint --load-plugins pylint_django api/
 
   build-and-deploy-django-image:
     docker:
@@ -63,10 +53,8 @@ workflows:
       - pylint
       - ta-python/flake8:
           source: api/
-      - mypy-type-check
       - build-and-deploy-django-image:
           requires:
             - pylint
             - ta-python/flake8
-            - mypy-type-check
 
