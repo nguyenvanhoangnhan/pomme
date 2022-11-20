@@ -5,6 +5,27 @@ orbs:
   ta-python: travelaudience/python@1.1.2
 
 jobs:
+  pylint:
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - run: pip install --user pylint
+      - run: pip install --user -r api/requirements.txt
+      - run: 
+          name: Lint check
+          command: pylint api/
+mypy-type-check:
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - run: pip install --user mypy
+      - run: pip install --user -r api/requirements.txt
+      - run: 
+          name: Type check
+          command: mypy api/
+
   build-and-deploy-django-image:
     docker:
       - image: cimg/python:3.10.2
@@ -39,15 +60,13 @@ jobs:
 workflows:
   ci-django:
     jobs:
-      - ta-python/pylint:
-          source: api/
+      - pylint
       - ta-python/flake8:
           source: api/
-      - ta-python/mypy_type_check:
-          source: api/
+      - mypy-type-check:
       - build-and-deploy-django-image:
           requires:
-            - ta-python/pylint
+            - pylint
             - ta-python/flake8
-            - ta-python/mypy_type_check
+            - mypy-type-check
 
