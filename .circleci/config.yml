@@ -4,7 +4,7 @@ orbs:
   python: circleci/python@1.5.0
 
 jobs:
-  build-and-deploy-image:
+  build-and-deploy-django-image:
     docker:
       - image: cimg/python:3.10.2
     steps:
@@ -12,9 +12,16 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
           app-dir: api
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
-          name: Run tests
-          command: id
+          name: Build docker image
+          command: |
+            docker build -t $DOCKER_USER/shoe-shop-api:latest api/
+      - run:
+          name: Check images
+          command: docker ps
 
 workflows:
   ci-django:
