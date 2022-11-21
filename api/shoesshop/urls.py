@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
+
+from shoesshop.views import ShoeView, UserView
+>>>>>>> develop
 from rest_framework import routers
 from shoesshop.views import ShoeView, UserView, ImageView
 from django.urls import path, include
