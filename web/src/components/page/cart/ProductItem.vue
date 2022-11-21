@@ -10,7 +10,7 @@ defineProps<{
 <template>
     <div class="flex gap-8">
         <div class="w-[180px]">
-            <img class="w-[180px] h-[180px] object-cover" :src="product.thumbnailUrl" />
+            <img class="w-[180px] h-[180px] object-cover" :src="product.images.find((item) => item.is_thumbnail)?.url" />
         </div>
         <div class="flex-1 flex flex-col justify-between">
             <div class="flex justify-between text-lg font-bold">

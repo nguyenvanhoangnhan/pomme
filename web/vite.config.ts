@@ -33,6 +33,7 @@ export default defineConfig({
                 modifyVars: {
                     "primary-color": "#44af7d",
                     "border-radius-base": "0px",
+                    "success-color": "#1B76FF",
                 },
             },
         },

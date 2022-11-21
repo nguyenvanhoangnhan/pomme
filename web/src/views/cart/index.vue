@@ -16,7 +16,7 @@ const handleDeleteAll = () => {
 </script>
 
 <template>
-    <div class="cart flex container mx-auto py-8">
+    <div class="cart flex">
         <div class="cart__left flex-1 pr-10">
             <SuggestBuyMore />
             <div class="flex flex-col gap-4 mb-8">
@@ -63,7 +63,7 @@ const handleDeleteAll = () => {
                     <span>{{ Number(9999999).toLocaleString() }} VNĐ</span>
                 </div>
                 <div class="order-form__order-button mt-6">
-                    <NavButton :onClick="handleOrder"> Tiếp tục thanh toán </NavButton>
+                    <NavButton :on-click="handleOrder"> Tiếp tục thanh toán </NavButton>
                 </div>
             </div>
         </div>

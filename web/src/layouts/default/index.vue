@@ -9,7 +9,9 @@ defineProps<{}>()
     <div class="__default__ min-h-screen flex flex-col">
         <Header />
         <SideCart />
-        <slot />
+        <div class="container mx-auto py-8">
+            <slot />
+        </div>
         <Footer />
     </div>
 </template>

@@ -64,6 +64,24 @@ const router = createRouter({
             },
         },
         {
+            name: "Order List",
+            path: "/order",
+            component: () => import("@/views/order/index.vue"),
+            meta: {
+                title: "Danh sách đơn hàng",
+                layout: "default",
+            },
+        },
+        {
+            name: "Order Detail",
+            path: "/order/:id",
+            component: () => import("@/views/order/_id/index.vue"),
+            meta: {
+                title: "Chi tiết đơn hàng",
+                layout: "default",
+            },
+        },
+        {
             name: "Products",
             path: "/products",
             component: () => import("@/views/products/index.vue"),
@@ -80,8 +98,8 @@ const router = createRouter({
             meta: {
                 title: "404",
                 layout: "empty",
-            }
-        }
+            },
+        },
     ],
 })
 
