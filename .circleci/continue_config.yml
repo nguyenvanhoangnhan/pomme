@@ -18,11 +18,11 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
-      - run: pip install --user pylint
+      - run: pip install --user pylint pylint-django
       - run: pip install --user -r api/requirements.txt
       - run: 
           name: Lint check
-          command: find api/ -name '*.py' | xargs pylint
+          command: pylint --load-plugins pylint_django --django-settings-module=api.settings .
   jslint:
     docker:
       - image: cimg/node:17.4.0
