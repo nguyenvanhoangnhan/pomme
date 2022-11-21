@@ -123,7 +123,7 @@ class ProductView(viewsets.ViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
-    def createProduct(self, data):
+    def createProduct(data):
         serializer = ProductSerializer(data=data)
         serializer.is_valid()
         serializer.save()
