@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   python: circleci/python@1.5.0
-  ta-python: travelaudience/python@1.1.2
 
 parameters:
   run-api-ci:
@@ -22,7 +21,7 @@ jobs:
       - run: pip install --user -r api/requirements.txt
       - run: 
           name: Lint check
-          command: pylint --load-plugins pylint_django --django-settings-module=api.settings .
+          command: PYTHONgPATH=$(pwd) pylint --load-plugins pylint_django --django-settings-module=api.settings .
   jslint:
     docker:
       - image: cimg/node:17.4.0
@@ -118,12 +117,9 @@ workflows:
     when: << pipeline.parameters.run-api-ci >>
     jobs:
       - pylint
-      - ta-python/flake8:
-          source: api/
       - build-and-deploy-api-image:
           requires:
             - pylint
-            - ta-python/flake8
           filters:
             branches:
               only:
