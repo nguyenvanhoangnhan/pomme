@@ -1,6 +1,17 @@
 from django.contrib import admin
 
-from shoesshop.models import Accessory, Clothes, Image, Order, OrderProduct, Product, Shoe, ShoeChild, UserCartProduct, UserLoveProduct
+from shoesshop.models import (
+    Accessory,
+    Clothes,
+    Image,
+    Order,
+    OrderProduct,
+    Product,
+    Shoe,
+    ShoeChild,
+    UserCartProduct,
+    UserLoveProduct,
+)
 
 # Register your models here.
 admin.site.register(Product)
