@@ -104,13 +104,13 @@ class ImageView(APIView):
         except:
             return Response({"message": "error", "data": []}, status=400)
 
-    def createImage(self, data):
+    def createImage(data):
         serializer = ImageSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return
 
-    def getListImage(self, idP):
+    def getListImage(idP):
         images = Image.objects.filter(product=idP)
         # serializer = ImageSerializer(instance=images, many=True)
         return images.values()
