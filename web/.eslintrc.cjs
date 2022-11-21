@@ -19,6 +19,7 @@ module.exports = {
         // not needed for vue 3
         "vue/no-multiple-template-root": "off",
 
-
+        // typescript is already checking this
+        "no-undef": "off",
     },
 }

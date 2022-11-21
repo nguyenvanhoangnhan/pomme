@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 import { ref } from "vue"
-defineProps<{}>()
 const subscribeEmail = ref("")
 const handleSubscribe = () => {
     console.log(subscribeEmail.value)
@@ -52,9 +51,9 @@ const handleSubscribe = () => {
                     <h2 class="title">Liên hệ</h2>
                     <ul>
                         <li>Email góp ý</li>
-                        <li>nguyen.vh.nhan@gmail.com</li>
+                        <li>xxxyyyzzz@ttt.com</li>
                         <li>Hotline</li>
-                        <li>+84 854 xxx xxx</li>
+                        <li>+84 xxx xxx xxx</li>
                     </ul>
                 </section>
             </div>

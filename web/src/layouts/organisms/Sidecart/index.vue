@@ -23,7 +23,7 @@ const toggleSideCart = () => {
                     <ul class="cart__items py-[10px] flex flex-col max-h-[312px] overflow-y-scroll">
                         <li v-for="item in cart.items" :key="item.id" class="list-none">
                             <div class="flex">
-                                <img :src="item.thumbnailUrl" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
+                                <img :src="item.images.find((item) => item.is_thumbnail)?.url" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
                                 <div class="item-info w-[180px] h-[80px] flex flex-col justify-between">
                                     <div class="name font-bold text-base leading-[1.1] text-2-line">{{ item.name }}</div>
                                     <div class="text-[12px] leading-[1.1]">

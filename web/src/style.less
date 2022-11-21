@@ -111,6 +111,7 @@ html body {
 
 .divider {
     &--solid {
+        @apply w-full;
         border-top: 3px solid black;
     }
 
@@ -119,4 +120,20 @@ html body {
         height: 2px;
         background: url("@/assets/images/bg_divider_dashed.png") repeat-x 7px;
     }
+}
+
+.ant-steps-item-icon {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item-description {
+    max-width: 200px !important;
+}
+
+.ant-tag {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
