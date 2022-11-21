@@ -21,7 +21,7 @@ jobs:
       - run: pip install --user -r api/requirements.txt
       - run: 
           name: Lint check
-          command: PYTHONPATH=$(pwd) pylint --load-plugins pylint_django --django-settings-module=api.settings .
+          command: export PYTHONPATH=`pwd` && echo $PYTHONPATH && pylint --load-plugins pylint_django --django-settings-module=api.settings .
   jslint:
     docker:
       - image: cimg/node:17.4.0
