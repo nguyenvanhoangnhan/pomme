@@ -11,6 +11,7 @@ class Product(models.Model):
     salePercent = models.FloatField(default=0)
     in_stock = models.PositiveBigIntegerField(default=0)
     sold = models.PositiveBigIntegerField(default=0)
+    
 
     def __str__(self) -> str:
         return str(self.name)
@@ -93,6 +94,7 @@ class Order(models.Model):
     order_at = models.DateTimeField
     shipping_at = models.DateTimeField
     delivered_at = models.DateTimeField
+    product = models.ManyToManyField(Product, related_name='orders', through='OrderProduct')
 
 
 class OrderProduct(models.Model):

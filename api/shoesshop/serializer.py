@@ -8,6 +8,8 @@ from shoesshop.models import (
     Accessory,
     UserCartProduct,
     UserLoveProduct,
+    Order,
+    OrderProduct,
 )
 
 
@@ -117,3 +119,9 @@ class LoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLoveProduct
         fields = "__all__"
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
+
