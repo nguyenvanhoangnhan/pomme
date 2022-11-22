@@ -90,6 +90,9 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     total = models.FloatField()
     discount = models.FloatField(default=0)
+    order_at = models.DateTimeField
+    shipping_at = models.DateTimeField
+    delivered_at = models.DateTimeField
 
 
 class OrderProduct(models.Model):
