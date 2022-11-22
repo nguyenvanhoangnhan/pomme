@@ -1,5 +1,5 @@
 from rest_framework import routers
-from shoesshop.views import ShoeView, UserView, ImageView
+from shoesshop.views import ShoeView, UserCartProductView, UserView, ImageView,UserLoveProductView
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -11,7 +11,8 @@ from rest_framework_simplejwt.views import (
 router = routers.SimpleRouter()
 router.register(r"user_profiles", UserView)
 router.register(r"shoe", ShoeView)
-
+router.register(r"user-cart-product", UserCartProductView)
+router.register(r"user-love-product", UserLoveProductView)
 urlpatterns = [
     path("register/", UserView.as_view({"post": "create"})),
     path("login/", TokenObtainPairView.as_view(), name="login"),
