@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from shoesshop.models import Shoe, Product, Image
+from shoesshop.models import Shoe, Product, Image,UserCartProduct,UserLoveProduct
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,7 +35,7 @@ class ShoeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):  
     class Meta:
         model = Product
         fields = "__all__"
@@ -45,3 +45,53 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = "__all__"
+        
+        
+class UserCartProductSerializer(serializers.ModelSerializer):
+    class ProductSerializer(serializers.ModelSerializer):  
+        images=ImageSerializer(many=True)
+        class Meta:
+            model = Product
+            fields = "__all__"
+            extra_kwargs = {
+                "images": {"read_only": True, "required": False},
+            }
+
+    product = ProductSerializer()
+    class Meta:
+        model = UserCartProduct
+        fields = "__all__"
+
+class CartSerializer(serializers.ModelSerializer):       
+    class Meta:
+        model = UserCartProduct
+        fields = "__all__"
+        extra_kwargs = {
+                "product": {"read_only": True},
+                "user": {"read_only": True},
+            }
+
+class UserLoveProductSerializer(serializers.ModelSerializer):
+    class ProductSerializer(serializers.ModelSerializer):  
+        images=ImageSerializer(many=True)
+        class Meta:
+            model = Product
+            fields = "__all__"
+            extra_kwargs = {
+                "images": {"read_only": True, "required": False},
+            }
+
+    product = ProductSerializer()
+    class Meta:
+        model = UserLoveProduct
+        fields = "__all__"
+
+class LoveSerializer(serializers.ModelSerializer):       
+    class Meta:
+        model = UserLoveProduct
+        fields = "__all__"
+        
+
+
+
+        
