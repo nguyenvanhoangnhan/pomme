@@ -103,20 +103,20 @@ class ImageView(APIView):
     @staticmethod
     def post(request):
         urls = []
-        try:
-            files = request.FILES.getlist("image")
-            for f in files:
-                upload_data = cloudinary.uploader.upload(f)
-                urls.append(upload_data["url"])
-            return Response(
-                {
-                    "message": "success",
-                    "data": urls,
-                },
-                status=201,
-            )
-        except:
-            return Response({"message": "error", "data": []}, status=400)
+        # try:
+        files = request.FILES.getlist("image")
+        for f in files:
+            upload_data = cloudinary.uploader.upload(f)
+            urls.append(upload_data["url"])
+        return Response(
+            {
+                "message": "success",
+                "data": urls,
+            },
+            status=201,
+        )
+        # except:
+        #     return Response({"message": "error", "data": []}, status=400)
 
     def createImage(data):
         serializer = ImageSerializer(data=data)
