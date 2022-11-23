@@ -7,8 +7,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ABreadcrumb: typeof import('ant-design-vue/es')['Breadcrumb']
+    ABreadcrumbItem: typeof import('ant-design-vue/es')['BreadcrumbItem']
     AButton: typeof import('ant-design-vue/es')['Button']
-    ACarousel: typeof import("ant-design-vue/es")["Carousel"]
+    ACarousel: typeof import('ant-design-vue/es')['Carousel']
     ADatePicker: typeof import("ant-design-vue/es")["DatePicker"]
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
@@ -38,5 +40,8 @@ declare module '@vue/runtime-core' {
     TagDelivery: typeof import("./src/components/atoms/TagDelivery.vue")["default"]
     TagProcessing: typeof import('./src/components/atoms/TagProcessing.vue')['default']
     TagShipping: typeof import('./src/components/atoms/TagShipping.vue')['default']
+    ViewdProductList: typeof import('./src/components/common/ViewdProductList.vue')['default']
+    ViewedProductList: typeof import('./src/components/common/ViewedProductList.vue')['default']
+    ViewedProducts: typeof import('./src/components/common/ViewedProducts.vue')['default']
   }
 }

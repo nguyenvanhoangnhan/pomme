@@ -87,9 +87,19 @@ const router = createRouter({
             component: () => import("@/views/products/index.vue"),
         },
         {
-            name: "Product Detail",
-            path: "/product/:id",
-            component: () => import("@/views/product/_id/index.vue"),
+            name: "Shoe Detail",
+            path: "/product/shoe/:id",
+            component: () => import("@/views/product/shoe/_id/index.vue"),
+        },
+        {
+            name: "Accessory Detail",
+            path: "/product/accessory/:id",
+            component: () => import("@/views/product/accessory/_id/index.vue"),
+        },
+        {
+            name: "Clothes Detail",
+            path: "/product/clothes/:id",
+            component: () => import("@/views/product/clothes/_id/index.vue"),
         },
         {
             name: "404",

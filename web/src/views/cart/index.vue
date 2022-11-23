@@ -22,7 +22,7 @@ const handleDeleteAll = () => {
             <div class="flex flex-col gap-4 mb-8">
                 <div class="cart__left__title uppercase font-bold text-lg bg-[#F1F1F1] py-2 px-4">Giỏ hàng</div>
                 <div class="cart__product-list flex flex-col">
-                    <div v-for="item in cart.items" :key="item.id">
+                    <div v-for="item in cart.items" :key="item.product_id">
                         <ProductItem :product="item" />
                         <div class="divider--dashed my-8"></div>
                     </div>
