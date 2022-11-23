@@ -72,6 +72,7 @@ class ClothesView(viewsets.ViewSet):
                 "salePercent": cloth.product.salePercent,
                 "in_stock": cloth.product.in_stock,
                 "sold": cloth.product.sold,
+                "type": cloth.product.type,
                 "image": images,
             }
             data = {
@@ -112,6 +113,7 @@ class ClothesView(viewsets.ViewSet):
                     "salePercent": c.product.salePercent,
                     "in_stock": c.product.in_stock,
                     "sold": c.product.sold,
+                    "type": c.product.type,
                     "image": images,
                 }
                 data.append(
@@ -208,6 +210,7 @@ class ClothesView(viewsets.ViewSet):
                     "salePercent": c.product.salePercent,
                     "in_stock": c.product.in_stock,
                     "sold": c.product.sold,
+                    "type": c.product.type,
                     "image": images,
                 }
                 data.append(

@@ -72,6 +72,7 @@ class AccessoryView(viewsets.ViewSet):
                 "salePercent": accessory.product.salePercent,
                 "in_stock": accessory.product.in_stock,
                 "sold": accessory.product.sold,
+                "type": accessory.product.type,
                 "image": images,
             }
             data = {
@@ -112,6 +113,7 @@ class AccessoryView(viewsets.ViewSet):
                     "salePercent": a.product.salePercent,
                     "in_stock": a.product.in_stock,
                     "sold": a.product.sold,
+                    "type": a.product.type,
                     "image": images,
                 }
                 data.append(
@@ -208,6 +210,7 @@ class AccessoryView(viewsets.ViewSet):
                     "salePercent": a.product.salePercent,
                     "in_stock": a.product.in_stock,
                     "sold": a.product.sold,
+                    "type": a.product.type,
                     "image": images,
                 }
                 data.append(
