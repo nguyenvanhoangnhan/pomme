@@ -10,8 +10,8 @@ const router = useRouter()
 </script>
 
 <template>
-    <li class="flex items-center gap-[6px] text-[#fff] hover:text-green-300 cursor-pointer" @click="router.push({ name: toViewName })">
-        <Icon :icon="icon" :width="20" :height="20" />
+    <li class="flex items-center gap-[6px] text-[#fff] hover:text-green-300 cursor-pointer text-xs" @click="router.push({ name: toViewName })">
+        <Icon :icon="icon" :width="18" :height="18" />
         <span>{{ title }}</span>
     </li>
 </template>
