@@ -4,7 +4,7 @@ import { Icon } from "@iconify/vue"
 
 <template>
     <div class="header__bottom flex flex-wrap justify-between">
-        <div class="header__bottom__left py-2 pl-24">
+        <div class="header__bottom__left py-4 pl-24">
             <RouterLink to="/" class="flex flex-col items-center justify-center">
                 <img src="/granny-smith-logo.svg" alt="logo" class="h-[60px]" />
             </RouterLink>
@@ -40,7 +40,6 @@ import { Icon } from "@iconify/vue"
                 <template #prefix>
                     <Icon icon="ph:magnifying-glass-bold" />
                 </template>
-
             </AInput>
         </div>
     </div>

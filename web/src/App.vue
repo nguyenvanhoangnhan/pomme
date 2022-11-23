@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/default/index.vue"
 import AdminLayout from "@/layouts/admin/index.vue"
 import AuthLayout from "@/layouts/auth/index.vue"
 import EmptyLayout from "@/layouts/empty/index.vue"
+import HomeLayout from "@/layouts/home/index.vue"
 
 // handle dynamic layout
 const route = useRoute()
@@ -13,6 +14,7 @@ const layouts = {
     auth: AuthLayout,
     admin: AdminLayout,
     empty: EmptyLayout,
+    home: HomeLayout,
 }
 const layout = ref()
 watch(

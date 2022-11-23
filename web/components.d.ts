@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     BuyMoreSuggest: typeof import("./src/components/page/cart/BuyMoreSuggest.vue")["default"]
     CartList: typeof import("./src/components/page/cart/CartList.vue")["default"]
     ExampleOrganismName: typeof import("./src/components/page_organisms/_example_page_name/ExampleOrganismName.vue")["default"]
+    HomeCarousel: typeof import('./src/components/page/home/HomeCarousel.vue')['default']
     NavButton: typeof import('./src/components/atoms/NavButton.vue')['default']
     Order: typeof import('./src/components/page/order/Order.vue')['default']
     OrderProduct: typeof import('./src/components/page/order/OrderProduct.vue')['default']

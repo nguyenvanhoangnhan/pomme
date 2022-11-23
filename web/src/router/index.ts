@@ -9,7 +9,7 @@ const router = createRouter({
             component: () => import("@/views/home/index.vue"),
             meta: {
                 title: "Home",
-                layout: "default",
+                layout: "home",
             },
         },
         {
