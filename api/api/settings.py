@@ -185,6 +185,6 @@ SIMPLE_JWT = {
 cloudinary.config(
     cloud_name=os.getenv("NAME"),
     api_key=os.getenv("KEY"),
-    api_secret=os.getenv("VALUE"),
+    api_secret=os.getenv("SECRET"),
 )
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

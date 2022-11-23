@@ -236,7 +236,6 @@ class ProductView(viewsets.ViewSet):
                 ]
             # not sale and asc price
             if sale == 0 and price == 1:
-                print("zoooo")
                 products = Product.objects.order_by("price")[fistItem : fistItem + 12]
             # not sale and dsc price
             if sale == 0 and price == 2:
