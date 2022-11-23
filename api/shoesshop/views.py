@@ -33,8 +33,8 @@ class UserView(viewsets.ViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-    def create(self, data):
-        serializer = UserSerializer(data=data)
+    def create(self, request):
+        serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(
