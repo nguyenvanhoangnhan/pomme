@@ -1,16 +1,14 @@
 from rest_framework import routers
-from .ProductOrderView import UserOrderView# OrderProductView
+from .ProductOrderView import UserOrderView  # OrderProductView
+from .accessoryView import AccessoryView
+from .productView import ProductView
+from .clothesView import ClothesView
+from .imageView import ImageView
+from .shoeView import ShoeView
 from shoesshop.views import (
-    ShoeView,
     UserView,
-    ImageView,
-    ProductView,
-    ProductView,
-    AccessoryView,
-    ClothesView,
     UserLoveProductView,
     UserCartProductView,
-    
 )
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
@@ -18,7 +16,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView,
 )
-
 
 router = routers.SimpleRouter()
 router.register(r"user_profiles", UserView)
@@ -49,15 +46,18 @@ urlpatterns = [
         AccessoryView.filterAccessory,
     ),
     # -----------------------------------------
+    path("product/<int:id>/", ProductView.getProductByID),
+    path("product/detail/<int:id>/", ProductView.getDetailTypeByID),
+    path("product/<int:id>/", ProductView.deleteProduct),
     path("product/page/<int:page>/", ProductView.getListProduct),
     path("product/page/<int:page>/<str:key>/", ProductView.searchProduct),
     path(
         "product/filter/page/<int:page>/<int:sale>/<int:price>/",
         ProductView.filterProduct,
     ),
+    # -------------------------------------------
     path("userorder/", UserOrderView.list),
-   # path("orderproduct/", OrderProductView.list),
-    path("userorder/<int:pk>/",UserOrderView.retrieve),
-    
+    # path("orderproduct/", OrderProductView.list),
+    path("userorder/<int:pk>/", UserOrderView.retrieve),
     path("", include(router.urls)),
 ]

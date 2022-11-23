@@ -12,7 +12,7 @@ class Product(models.Model):
     salePercent = models.FloatField(default=0)
     in_stock = models.PositiveBigIntegerField(default=0)
     sold = models.PositiveBigIntegerField(default=0)
-    
+    type = models.IntegerField()
 
     def __str__(self) -> str:
         return str(self.name)
@@ -92,10 +92,12 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     total = models.FloatField()
     discount = models.FloatField(default=0)
-    order_at = models.DateTimeField(default = now)
-    shipping_at = models.DateTimeField(default = now)
-    delivered_at = models.DateTimeField(default = now)
-    product = models.ManyToManyField(Product, related_name='orders', through='OrderProduct')
+    order_at = models.DateTimeField(default=now)
+    shipping_at = models.DateTimeField(default=now)
+    delivered_at = models.DateTimeField(default=now)
+    product = models.ManyToManyField(
+        Product, related_name="orders", through="OrderProduct"
+    )
 
 
 class OrderProduct(models.Model):
@@ -109,7 +111,6 @@ class OrderProduct(models.Model):
     price_at_order = models.PositiveBigIntegerField()
     quantity = models.PositiveBigIntegerField()
     size = models.PositiveIntegerField(null=True)
-
 
 
 class UserLoveProduct(models.Model):
