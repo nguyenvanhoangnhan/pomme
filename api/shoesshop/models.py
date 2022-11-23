@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -11,6 +12,7 @@ class Product(models.Model):
     salePercent = models.FloatField(default=0)
     in_stock = models.PositiveBigIntegerField(default=0)
     sold = models.PositiveBigIntegerField(default=0)
+    
 
     def __str__(self) -> str:
         return str(self.name)
@@ -90,6 +92,10 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     total = models.FloatField()
     discount = models.FloatField(default=0)
+    order_at = models.DateTimeField(default = now)
+    shipping_at = models.DateTimeField(default = now)
+    delivered_at = models.DateTimeField(default = now)
+    product = models.ManyToManyField(Product, related_name='orders', through='OrderProduct')
 
 
 class OrderProduct(models.Model):
