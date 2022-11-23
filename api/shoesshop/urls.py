@@ -1,4 +1,5 @@
 from rest_framework import routers
+from .ProductOrderView import UserOrderView# OrderProductView
 from shoesshop.views import (
     ShoeView,
     UserView,
@@ -9,6 +10,7 @@ from shoesshop.views import (
     ClothesView,
     UserLoveProductView,
     UserCartProductView,
+    
 )
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
@@ -53,5 +55,9 @@ urlpatterns = [
         "product/filter/page/<int:page>/<int:sale>/<int:price>/",
         ProductView.filterProduct,
     ),
+    path("userorder/", UserOrderView.list),
+   # path("orderproduct/", OrderProductView.list),
+    path("userorder/<int:pk>/",UserOrderView.retrieve),
+    
     path("", include(router.urls)),
 ]

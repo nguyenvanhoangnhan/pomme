@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 from shoesshop.models import (
     Shoe,
     Product,
@@ -37,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             user = User.objects.create_user(**validated_data)
         return user
+
 
 
 class ShoeSerializer(serializers.ModelSerializer):
@@ -125,3 +127,15 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
 
+class User_OrderSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        many=True
+        model = User
+        fields = (
+            'id',
+            'username',
+            'orders'
+        )
+        

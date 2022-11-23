@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -91,9 +92,9 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     total = models.FloatField()
     discount = models.FloatField(default=0)
-    order_at = models.DateTimeField
-    shipping_at = models.DateTimeField
-    delivered_at = models.DateTimeField
+    order_at = models.DateTimeField(default = now)
+    shipping_at = models.DateTimeField(default = now)
+    delivered_at = models.DateTimeField(default = now)
     product = models.ManyToManyField(Product, related_name='orders', through='OrderProduct')
 
 
