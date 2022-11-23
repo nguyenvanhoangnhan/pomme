@@ -33,6 +33,11 @@ urlpatterns = [
     path("upload-image/", ImageView.as_view()),
     # -----------------------------------------
     path("shoe/page/<int:page>/", ShoeView.getListShoe),
+    path("shoe/shoechild/<int:shoe>/", ShoeView.getShoeChild),
+    path(
+        "shoe/filter/page/<int:page>/<int:gender>/<int:shape>/<str:series>/<int:sale>/<int:price>/",
+        ShoeView.filterShoe,
+    ),
     # -----------------------------------------
     path("clothes/page/<int:page>/", ClothesView.getListClothes),
     path(

@@ -11,6 +11,7 @@ from shoesshop.models import (
     UserLoveProduct,
     Order,
     OrderProduct,
+    ShoeChild,
 )
 
 
@@ -40,10 +41,15 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-
 class ShoeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shoe
+        fields = "__all__"
+
+
+class ShoeChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeChild
         fields = "__all__"
 
 
@@ -122,20 +128,17 @@ class LoveSerializer(serializers.ModelSerializer):
         model = UserLoveProduct
         fields = "__all__"
 
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "__all__"
 
+
 class User_OrderSerializer(serializers.ModelSerializer):
     orders = OrderSerializer(many=True, read_only=True)
 
     class Meta:
-        many=True
+        many = True
         model = User
-        fields = (
-            'id',
-            'username',
-            'orders'
-        )
-        
+        fields = ("id", "username", "orders")
