@@ -46,6 +46,7 @@ class ShoeView(viewsets.ViewSet):
                 "salePercent": shoe.product.salePercent,
                 "in_stock": shoe.product.in_stock,
                 "sold": shoe.product.sold,
+                "type": shoe.product.type,
                 "image": images,
             }
             data = {
@@ -89,6 +90,7 @@ class ShoeView(viewsets.ViewSet):
                     "salePercent": s.product.salePercent,
                     "in_stock": s.product.in_stock,
                     "sold": s.product.sold,
+                    "type": s.product.type,
                     "image": images,
                 }
                 data.append(

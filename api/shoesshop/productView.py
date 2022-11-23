@@ -70,6 +70,7 @@ class ProductView(viewsets.ViewSet):
                 "salePercent": product.salePercent,
                 "in_stock": product.in_stock,
                 "sold": product.sold,
+                "type": product.type,
                 "image": images,
             }
             # serializer = ShoeSerializer(instance=shoe)
@@ -101,6 +102,7 @@ class ProductView(viewsets.ViewSet):
                 "salePercent": product.salePercent,
                 "in_stock": product.in_stock,
                 "sold": product.sold,
+                "type": product.type,
                 "image": images,
             }
             if product.type == 1:
@@ -157,6 +159,7 @@ class ProductView(viewsets.ViewSet):
                         "salePercent": product.salePercent,
                         "in_stock": product.in_stock,
                         "sold": product.sold,
+                        "type": product.type,
                         "images": images,
                     }
                 )
@@ -192,6 +195,7 @@ class ProductView(viewsets.ViewSet):
                         "salePercent": product.salePercent,
                         "in_stock": product.in_stock,
                         "sold": product.sold,
+                        "type": product.type,
                         "images": images,
                     }
                 )
@@ -247,6 +251,7 @@ class ProductView(viewsets.ViewSet):
                         "salePercent": product.salePercent,
                         "in_stock": product.in_stock,
                         "sold": product.sold,
+                        "type": product.type,
                         "images": images,
                     }
                 )
