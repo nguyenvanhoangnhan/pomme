@@ -22,6 +22,7 @@ const isShowMenus = ref({
     <div id="side-filter" class="w-[270px]">
         <div class="type font-extrabold uppercase text-2xl flex flex-col gap-4 text-secondary">
             <div class="cursor-pointer" :class="{ 'text-black': !query?.type || query?.type === TYPES.all }">Tất cả</div>
+            <div class="divider--dashed"></div>
             <div class="side-filter__shoe">
                 <div class="cursor-pointer" :class="{ 'text-black': query?.type === TYPES.shoe }">Giày</div>
                 <div v-show="query?.type === TYPES.shoe">

@@ -25,7 +25,8 @@
     "unplugin-vue-components": "^0.22.9",
     "vue": "^3.2.37",
     "vue-eslint-parser": "^9.1.0",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-carousel": "^0.2.5"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.14",

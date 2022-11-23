@@ -25,6 +25,30 @@ interface Shoe {
     product: Product
 }
 
+interface ShoeChild {
+    shoe_child_id: number
+    shoe_id: number
+    size: number
+    in_stock: number
+}
+
+interface Clothes {
+    clothes_id: number
+    product_id: number
+    category: 1 | 2 | 3
+    // 1: tee, 2: hoodie, 3:sweatshirt
+
+    product: Product
+}
+
+interface Accessory {
+    accessory_id: number
+    product_id: number
+    category: 1 | 2 | 3 | 4
+    // 1: shock, 2: tote, 3: backpack, 4: shoelace
+    product: Product
+}
+
 interface CartItem extends Product {
     quantity: number
 }
