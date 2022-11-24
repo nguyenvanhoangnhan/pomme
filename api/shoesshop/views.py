@@ -142,7 +142,8 @@ class UserCartProductView(viewsets.ViewSet):
             )
 
     def create(self, request):
-        serializer = CartSerializer(data=request.data)
+        data = request.data
+        serializer = UserCartProductSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
