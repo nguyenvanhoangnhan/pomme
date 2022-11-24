@@ -21,10 +21,14 @@ Vue 3 w/ Pinia + Django, deploy on DigitalOcean.
 
 ## TLDR
 ```
-docker compose up -d 
+# Start developing
+docker compose up
 # API at port 8000
 # Web at port 5173
 # Postgres DB at port 5432
+
+# Finish developing
+docker compose down # kill all container
 ```
 
 ## Installation
@@ -39,7 +43,7 @@ $ cd api && pip install - requirements.txt # api
 ```bash
 # development
 $ cd web && yarn dev # client
-$ cd api && python3 manage.py runserver 0.0.0.0:8000
+$ cd api && python3 manage.py runserver 0.0.0.0:8000 # api
 ```
 
 ## Lint
@@ -59,13 +63,22 @@ $ cd web && yarn format
 ## Environment variables
 
 ```bash
-# .env file
-API_ROOT=localhost:8000
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/shoeshop"
+# WEB .env file
+BASE_URL=http://localhost:8080
+
+# API .env file
+CLOUDINARY_NAME=
+CLOUDINARY_KEY=
+CLOUDINARY_VALUE=
+SENTRY_DSN=
+DJANGO_SECRET=
+ENVIRONMENT=
 ```
 
 ## Databases
-Use [PostgreSQL](https://www.postgresql.org/) for our database connection.
+Current: using SQLITE3
+
+Future plan: use [PostgreSQL](https://www.postgresql.org/) for our database connection.
 Database data is persistent at ./data directory (for local development purpose, don't push them to remote VCS)
 
 ```bash
@@ -73,4 +86,4 @@ Database data is persistent at ./data directory (for local development purpose, 
 ```
 
 
-Nest is [MIT licensed](LICENSE).
+License: [MIT licensed](LICENSE).
