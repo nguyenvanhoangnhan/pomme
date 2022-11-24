@@ -18,10 +18,13 @@ const handleDeleteAll = () => {
 <template>
     <div class="cart flex">
         <div class="cart__left flex-1 pr-10">
-            <SuggestBuyMore />
             <div class="flex flex-col gap-4 mb-8">
                 <div class="cart__left__title uppercase font-bold text-lg bg-[#F1F1F1] py-2 px-4">Giỏ hàng</div>
                 <div class="cart__product-list flex flex-col">
+                    <div v-if="cart.items.length === 0" class="flex flex-col items-center justify-center gap-3 p-8 mx-auto">
+                        <Icon icon="ph:heart-straight-break" :width="72" :height="72" />
+                        <h3 class="text-center text-xl font-bold w-36">Trong này chưa có gì cả bạn ơi!</h3>
+                    </div>
                     <div v-for="item in cart.items" :key="item.product_id">
                         <ProductItem :product="item" />
                         <div class="divider--dashed my-8"></div>
@@ -30,8 +33,8 @@ const handleDeleteAll = () => {
             </div>
 
             <div class="flex justify-between gap-32">
-                <AButton type="primary" size="large" block danger> <span class="uppercase font-semibold">Xóa hết</span> </AButton>
-                <AButton type="primary" size="large" block @click="$router.push({ name: 'Home' })"><span class="uppercase font-semibold">Quay lại mua hàng</span></AButton>
+                <AButton v-if="!(cart.items.length === 0)" type="primary" size="large" block danger> <span class="uppercase font-semibold">Xóa hết</span> </AButton>
+                <AButton type="primary" size="large" block @click="$router.push({ name: 'Products' })"><span class="uppercase font-semibold">Quay lại mua hàng</span></AButton>
             </div>
         </div>
 
@@ -60,7 +63,7 @@ const handleDeleteAll = () => {
                 <div class="divider--dashed my-8"></div>
                 <div class="order-form__total flex justify-between uppercase font-bold text-lg">
                     <span>Tạm tính</span>
-                    <span>{{ Number(9999999).toLocaleString() }} VNĐ</span>
+                    <span>{{ Number(cart.total).toLocaleString() }} VNĐ</span>
                 </div>
                 <div class="order-form__order-button mt-6">
                     <NavButton :on-click="handleOrder"> Tiếp tục thanh toán </NavButton>

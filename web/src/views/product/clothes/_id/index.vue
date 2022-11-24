@@ -1,59 +1,18 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { Icon } from "@iconify/vue"
 import { useRoute } from "vue-router"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
 import "vue3-carousel/dist/carousel.css"
+import { useViewedProductsStore } from "@/stores/viewedProducts"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
+import api from "@/api"
+import noImg from "@/assets/NoImage"
 defineProps<{}>()
 // get the product id from the route
 const productId = useRoute().params.id
-
-const clothes = ref<Clothes | null>({
-    clothes_id: 1,
-    product_id: 1,
-    category: 1,
-    product: {
-        product_id: 1,
-        name: "Tee shirt #1",
-        price: 99999999,
-        sale_percent: 0,
-        in_stock: 100,
-        images: [
-            {
-                product_id: 1,
-                image_id: 1,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/pro_AGT0020_4-1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/pro_AGT0020_4-1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 3,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/pro_AGT0020_4-1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 4,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/pro_AGT0020_4-1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 5,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/pro_AGT0020_4-1.jpg",
-            },
-        ],
-        type: 2,
-    },
-})
+const isFetched = ref(false)
+const clothes = ref<Clothes | null>()
 const currentSlide = ref(0)
 
 const slideTo = (val: number) => {
@@ -66,6 +25,22 @@ const CATEGORIES = {
     2: "Áo hoodie",
     3: "Áo dài tay",
 }
+
+const fetchData = async () => {
+    const { data } = await api.get(`/product/detail/${productId}/`)
+    clothes.value = data.data as Clothes
+    if (clothes.value.product.images.length == 0) {
+        clothes.value.product.images = [...noImg]
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    isFetched.value = true
+}
+onMounted(async () => {
+    await fetchData()
+    if (clothes.value) {
+        useViewedProductsStore().addProduct(clothes.value.product)
+    }
+})
 </script>
 
 <template>
@@ -86,7 +61,15 @@ const CATEGORIES = {
         </div>
         <div class="product__detail flex-col lg:flex-row flex w-full gap-12">
             <div class="product__detail__left w-full lg:w-[640px]">
-                <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" class="p-1">
+                <div v-if="!isFetched" class="skeleton flex flex-col gap-2">
+                    <a-skeleton-avatar :active="true" :size="640" shape="square" />
+                    <div class="flex gap-2">
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                    </div>
+                </div>
+                <Carousel v-if="isFetched" id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" class="p-1">
                     <Slide v-for="index in clothes?.product.images.length || 0" :key="index - 1" :index="index">
                         <div class="carousel__item w-full aspect-square p-1">
                             <img :src="clothes?.product.images[index - 1].url" alt="#" class="w-full aspect-square object-cover" />
@@ -97,7 +80,7 @@ const CATEGORIES = {
                     </template>
                 </Carousel>
 
-                <Carousel id="thumbnails" :wrap-around="true" :items-to-show="3" :mouse-drag="false" v-model="currentSlide" class="p-1">
+                <Carousel v-if="isFetched" id="thumbnails" :wrap-around="true" :items-to-show="3" :mouse-drag="false" v-model="currentSlide" class="p-1">
                     <Slide v-for="index in clothes?.product.images.length || 0" :key="index - 1" :index="index">
                         <div class="carousel__item" @click="slideTo(index - 1)">
                             <img :src="clothes?.product.images[index - 1].url" alt="#" class="p-1" />

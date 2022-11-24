@@ -103,7 +103,7 @@ class ProductView(viewsets.ViewSet):
                 "in_stock": product.in_stock,
                 "sold": product.sold,
                 "type": product.type,
-                "image": images,
+                "images": images,
             }
             if product.type == 1:
                 shoe = Shoe.objects.filter(product_id=id)[0]
@@ -115,19 +115,21 @@ class ProductView(viewsets.ViewSet):
                     "product": productDT,
                 }
             if product.type == 2:
+                accessory = Accessory.objects.filter(product_id=id)[0]
+                print(accessory)
+                data = {
+                    "accessory_id": accessory.accessory_id,
+                    "category": accessory.category,
+                    "product": productDT,
+                }
+            if product.type == 3:
                 cloth = Clothes.objects.filter(product_id=id)[0]
                 data = {
                     "clothes_id": cloth.clothes_id,
                     "category": cloth.category,
                     "product": productDT,
                 }
-            if product.type == 3:
-                accessory = Accessory.objects.filter(product_id=id)[0]
-                data = {
-                    "accessory_id": accessory.accessory_id,
-                    "category": accessory.category,
-                    "product": productDT,
-                }
+
             return Response(
                 {
                     "data": data,
@@ -148,7 +150,7 @@ class ProductView(viewsets.ViewSet):
             page = page
             fistItem = (page - 1) * 12
             data = []
-            products = Product.objects.all()[fistItem : fistItem + 12]
+            products = Product.objects.all()[fistItem: fistItem + 12]
             for product in products:
                 images = ImageView.getListImage(product.product_id)
                 data.append(
@@ -183,7 +185,7 @@ class ProductView(viewsets.ViewSet):
             fistItem = (page - 1) * 12
             data = []
             products = Product.objects.filter(name__contains=key)[
-                fistItem : fistItem + 12
+                fistItem: fistItem + 12
             ]
             for product in products:
                 images = ImageView.getListImage(product.product_id)
@@ -222,24 +224,26 @@ class ProductView(viewsets.ViewSet):
             # sale and asc price
             if sale == 1 and price == 1:
                 products = Product.objects.filter(salePercent__gt=0).order_by("price")[
-                    fistItem : fistItem + 12
+                    fistItem: fistItem + 12
                 ]
             # sale and dsc price
             if sale == 1 and price == 2:
                 products = Product.objects.filter(salePercent__gt=0).order_by("-price")[
-                    fistItem : fistItem + 12
+                    fistItem: fistItem + 12
                 ]
             # sale and not sort by price
             if sale == 1 and price == 0:
                 products = Product.objects.filter(salePercent__gt=0)[
-                    fistItem : fistItem + 12
+                    fistItem: fistItem + 12
                 ]
             # not sale and asc price
             if sale == 0 and price == 1:
-                products = Product.objects.order_by("price")[fistItem : fistItem + 12]
+                products = Product.objects.order_by(
+                    "price")[fistItem: fistItem + 12]
             # not sale and dsc price
             if sale == 0 and price == 2:
-                products = Product.objects.order_by("-price")[fistItem : fistItem + 12]
+                products = Product.objects.order_by(
+                    "-price")[fistItem: fistItem + 12]
             for product in products:
                 images = ImageView.getListImage(product.product_id)
                 data.append(
