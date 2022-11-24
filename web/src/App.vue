@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { markRaw, ref, watch } from "vue"
+import { markRaw, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import DefaultLayout from "@/layouts/default/index.vue"
 import AdminLayout from "@/layouts/admin/index.vue"
 import AuthLayout from "@/layouts/auth/index.vue"
 import EmptyLayout from "@/layouts/empty/index.vue"
 import HomeLayout from "@/layouts/home/index.vue"
+import axios from "axios"
+import { useViewedProductsStore } from "@/stores/viewedProducts"
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest"
+axios.defaults.headers.common["Accept"] = "application/json"
 
 // handle dynamic layout
 const route = useRoute()
@@ -37,6 +43,9 @@ const isLoadingLayout = ref(true)
 setTimeout(() => {
     isLoadingLayout.value = false
 }, 400)
+onMounted(() => {
+    useViewedProductsStore().getFromLocalStorage()
+})
 </script>
 
 <template>

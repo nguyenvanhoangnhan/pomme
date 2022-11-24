@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-
+import api from "@/api"
 export const useAuthStore = defineStore({
     id: "auth",
     state: () => ({
@@ -15,7 +15,7 @@ export const useAuthStore = defineStore({
     },
     actions: {
         login() {
-            console.log("login")
+            // handle login
         },
         logout() {
             this.token = ""

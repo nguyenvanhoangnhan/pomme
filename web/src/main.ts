@@ -4,8 +4,10 @@ import "./style.less"
 import App from "./App.vue"
 import router from "./router"
 import { createPinia } from "pinia"
+const app = createApp(App);
 
-createApp(App)
-    .use(router)
-    .use(createPinia())
-    .mount("#app")
+app.use(router)
+app.use(createPinia())
+app.mount("#app")
+
+

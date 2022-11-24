@@ -23,6 +23,11 @@ const addLove = () => {
 const removeLove = () => {
     console.log("remove love")
 }
+
+const productThumbnail = (product: Product) => {
+    const img = product.images.find((image) => image.is_thumbnail)?.url;
+    return img ? img : "https://via.placeholder.com/500?text=No+Image"
+}
 </script>
 
 <template>
@@ -30,7 +35,7 @@ const removeLove = () => {
         <div class="w-full group border-[3px] border-white hover:border-primary transition-all duration-250">
             <div @click="$router.push({ name: productType + ' Detail', params: { id: product.product_id } })">
                 <div class="w-full aspect-square overflow-hidden relative cursor-pointer">
-                    <img :src="product.images.find((image) => image.is_thumbnail)?.url" :alt="product.name" class="w-full aspect-square cover group-hover:scale-110 transition-all duration-[0.4s]" />
+                    <img :src="productThumbnail(product)" :alt="product.name" class="w-full aspect-square cover group-hover:scale-110 transition-all duration-[0.4s]" />
                     <div v-if="true" @click.stop="addLove" class="love-icon hover:text-primary">
                         <Icon icon="ph:heart-bold" :width="32" :height="32" />
                     </div>

@@ -49,7 +49,7 @@ class ShoeView(viewsets.ViewSet):
                 "in_stock": shoe.product.in_stock,
                 "sold": shoe.product.sold,
                 "type": shoe.product.type,
-                "image": images,
+                "images": images,
             }
             data = {
                 "shoe_id": shoe.shoe_id,
@@ -80,7 +80,7 @@ class ShoeView(viewsets.ViewSet):
             page = page
             fistItem = (page - 1) * 12
             data = []
-            shoes = Shoe.objects.all()[fistItem : fistItem + 12].select_related(
+            shoes = Shoe.objects.all()[fistItem: fistItem + 12].select_related(
                 "product"
             )
             for s in shoes:
@@ -93,7 +93,7 @@ class ShoeView(viewsets.ViewSet):
                     "in_stock": s.product.in_stock,
                     "sold": s.product.sold,
                     "type": s.product.type,
-                    "image": images,
+                    "images": images,
                 }
                 data.append(
                     {
@@ -163,11 +163,11 @@ class ShoeView(viewsets.ViewSet):
     def getShoeChild(request, shoe=None):
         try:
             shoe = shoe
-            shoeChild = ShoeChild.objects.filter(shoe=shoe)[0]
-            serializer = ShoeChildSerializer(instance=shoeChild)
+            childs = ShoeChildSerializer(
+                instance=ShoeChild.objects.filter(shoe=shoe), many=True).data
             return Response(
                 {
-                    "data": serializer.data,
+                    "data": childs,
                 },
                 status=status.HTTP_202_ACCEPTED,
             )
@@ -233,7 +233,7 @@ class ShoeView(viewsets.ViewSet):
                 "in_stock": s.product.in_stock,
                 "sold": s.product.sold,
                 "type": s.product.type,
-                "image": images,
+                "images": images,
             }
             data.append(
                 {

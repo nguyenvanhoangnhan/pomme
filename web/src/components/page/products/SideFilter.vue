@@ -2,7 +2,9 @@
 import { reactive, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
-import type { LocationQuery } from "vue-router"
+import { useProductsStore } from "@/stores/products"
+
+const productsStore = useProductsStore()
 const router = useRouter()
 const route = useRoute()
 const queryRef = ref(route.query)
@@ -58,31 +60,38 @@ if (queryRef.value?.type == TYPES.clothes && "category" in queryRef.value) {
     isShowMenus.clothesCategory = true
 }
 const handleQueries = (attr: string, val: string | null) => {
-    if (val == "Tất cả") {
-        val = null
-    }
-    router.replace({
-        query: {
-            ...queryRef.value,
-            [attr]: val,
-        },
-    })
-    queryRef.value = {
-        ...queryRef.value,
-        [attr]: val,
-    }
+    alert("Filter is not implemented yet")
+    return
+
+    // if (val == "Tất cả") {
+    //     val = null
+    // }
+    // router.replace({
+    //     query: {
+    //         ...queryRef.value,
+    //         [attr]: val,
+    //     },
+    // })
+    // queryRef.value = {
+    //     ...queryRef.value,
+    //     [attr]: val,
+    // }
 }
 const handleQueryType = (type: string) => {
-    if (type.length === 0) {
-        router.replace({ query: {} })
-        queryRef.value = {}
-    }
-    router.replace({
-        query: { type: type },
-    })
-    queryRef.value = { type: type }
+    alert("Filter is not implemented yet")
+    return
+
+    // if (type.length === 0) {
+    //     router.replace({ query: {} })
+    //     queryRef.value = {}
+    // }
+    // router.replace({
+    //     query: { type: type },
+    // })
+    // queryRef.value = { type: type }
 }
 watch(queryRef, (newVal) => {
+    productsStore.updateQueries(queryRef.value)
     if ("series" in newVal) {
         isShowMenus.series = true
     }

@@ -49,8 +49,13 @@ interface Accessory {
     product: Product
 }
 
-interface CartItem extends Product {
+interface UserCartProduct {
+    user_cart_product_id: number
+    user_id: number
+    product_id: number
     quantity: number
+    size: number | null
+    product: Product
 }
 
 interface OrderProduct {
