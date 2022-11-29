@@ -15,10 +15,13 @@ class Shoe extends Model
         'shape',
     ];
 
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    public function children() {
+
+    public function children()
+    {
         return $this->hasMany(ShoeChild::class, 'shoe_id', 'id');
     }
 }

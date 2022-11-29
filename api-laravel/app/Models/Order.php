@@ -29,4 +29,4 @@ class Order extends Model
             ->withPivot('price_at_order', 'quantity', 'size')
             ->withTimestamps();
     }
-}   
+}

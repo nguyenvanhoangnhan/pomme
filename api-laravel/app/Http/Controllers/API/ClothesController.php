@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\UserLoveProduct;
+use App\Http\Controllers\Controller;
+use App\Models\Clothes;
 use Illuminate\Http\Request;
 
-class UserLoveProductController extends Controller
+class ClothesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class UserLoveProductController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,62 +24,56 @@ class UserLoveProductController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserLoveProduct  $userLoveProduct
+     * @param  \App\Models\Clothes $clothes
      * @return \Illuminate\Http\Response
      */
-    public function show(UserLoveProduct $userLoveProduct)
+    public function show(Clothes $clothes)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\UserLoveProduct  $userLoveProduct
+     * @param  \App\Models\Clothes $clothes
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserLoveProduct $userLoveProduct)
+    public function edit(Clothes $clothes)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserLoveProduct  $userLoveProduct
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Clothes      $clothes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserLoveProduct $userLoveProduct)
+    public function update(Request $request, Clothes $clothes)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserLoveProduct  $userLoveProduct
+     * @param  \App\Models\Clothes $clothes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserLoveProduct $userLoveProduct)
+    public function destroy(Clothes $clothes)
     {
-        //
     }
 }

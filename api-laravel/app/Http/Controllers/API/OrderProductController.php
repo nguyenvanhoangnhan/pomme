@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Clothes;
+use App\Http\Controllers\Controller;
+use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 
-class ClothesController extends Controller
+class OrderProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class ClothesController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class ClothesController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class ClothesController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Clothes  $clothes
+     * @param  \App\Models\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
-    public function show(Clothes $clothes)
+    public function show(OrderProduct $orderProduct)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Clothes  $clothes
+     * @param  \App\Models\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
-    public function edit(Clothes $clothes)
+    public function edit(OrderProduct $orderProduct)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Clothes  $clothes
+     * @param  \App\Models\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Clothes $clothes)
+    public function update(Request $request, OrderProduct $orderProduct)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Clothes  $clothes
+     * @param  \App\Models\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Clothes $clothes)
+    public function destroy(OrderProduct $orderProduct)
     {
-        //
     }
 }

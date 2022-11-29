@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Shoe;
+use App\Http\Controllers\Controller;
+use App\Models\UserLoveProduct;
 use Illuminate\Http\Request;
 
-class ShoeController extends Controller
+class UserLoveProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class ShoeController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class ShoeController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class ShoeController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Shoe  $shoe
+     * @param  \App\Models\UserLoveProduct  $userLoveProduct
      * @return \Illuminate\Http\Response
      */
-    public function show(Shoe $shoe)
+    public function show(UserLoveProduct $userLoveProduct)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Shoe  $shoe
+     * @param  \App\Models\UserLoveProduct  $userLoveProduct
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shoe $shoe)
+    public function edit(UserLoveProduct $userLoveProduct)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shoe  $shoe
+     * @param  \App\Models\UserLoveProduct  $userLoveProduct
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shoe $shoe)
+    public function update(Request $request, UserLoveProduct $userLoveProduct)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Shoe  $shoe
+     * @param  \App\Models\UserLoveProduct  $userLoveProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shoe $shoe)
+    public function destroy(UserLoveProduct $userLoveProduct)
     {
-        //
     }
 }
