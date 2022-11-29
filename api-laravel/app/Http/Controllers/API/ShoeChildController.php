@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Accessory;
+use App\Http\Controllers\Controller;
+use App\Models\ShoeChild;
 use Illuminate\Http\Request;
 
-class AccessoryController extends Controller
+class ShoeChildController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class AccessoryController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class AccessoryController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class AccessoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Accessory  $accessory
+     * @param  \App\Models\ShoeChild  $shoeChild
      * @return \Illuminate\Http\Response
      */
-    public function show(Accessory $accessory)
+    public function show(ShoeChild $shoeChild)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Accessory  $accessory
+     * @param  \App\Models\ShoeChild  $shoeChild
      * @return \Illuminate\Http\Response
      */
-    public function edit(Accessory $accessory)
+    public function edit(ShoeChild $shoeChild)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Accessory  $accessory
+     * @param  \App\Models\ShoeChild  $shoeChild
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Accessory $accessory)
+    public function update(Request $request, ShoeChild $shoeChild)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Accessory  $accessory
+     * @param  \App\Models\ShoeChild  $shoeChild
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Accessory $accessory)
+    public function destroy(ShoeChild $shoeChild)
     {
-        //
     }
 }

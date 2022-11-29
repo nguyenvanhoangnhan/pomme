@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\OrderProduct;
+use App\Http\Controllers\Controller;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
-class OrderProductController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class OrderProductController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class OrderProductController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class OrderProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderProduct $orderProduct)
+    public function show(Image $image)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function edit(OrderProduct $orderProduct)
+    public function edit(Image $image)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderProduct $orderProduct)
+    public function update(Request $request, Image $image)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderProduct $orderProduct)
+    public function destroy(Image $image)
     {
-        //
     }
 }

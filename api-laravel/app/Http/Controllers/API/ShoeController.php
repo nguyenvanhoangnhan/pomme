@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\ShoeChild;
+use App\Http\Controllers\Controller;
+use App\Models\Shoe;
 use Illuminate\Http\Request;
 
-class ShoeChildController extends Controller
+class ShoeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class ShoeChildController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class ShoeChildController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class ShoeChildController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ShoeChild  $shoeChild
+     * @param  \App\Models\Shoe  $shoe
      * @return \Illuminate\Http\Response
      */
-    public function show(ShoeChild $shoeChild)
+    public function show(Shoe $shoe)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ShoeChild  $shoeChild
+     * @param  \App\Models\Shoe  $shoe
      * @return \Illuminate\Http\Response
      */
-    public function edit(ShoeChild $shoeChild)
+    public function edit(Shoe $shoe)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ShoeChild  $shoeChild
+     * @param  \App\Models\Shoe  $shoe
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShoeChild $shoeChild)
+    public function update(Request $request, Shoe $shoe)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ShoeChild  $shoeChild
+     * @param  \App\Models\Shoe  $shoe
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ShoeChild $shoeChild)
+    public function destroy(Shoe $shoe)
     {
-        //
     }
 }

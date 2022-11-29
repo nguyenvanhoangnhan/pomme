@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Product;
+use App\Http\Controllers\Controller;
+use App\Models\UserCartProduct;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class UserCartProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +24,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,51 +34,46 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\UserCartProduct  $userCartProduct
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(UserCartProduct $userCartProduct)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\UserCartProduct  $userCartProduct
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(UserCartProduct $userCartProduct)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\UserCartProduct  $userCartProduct
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, UserCartProduct $userCartProduct)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\UserCartProduct  $userCartProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(UserCartProduct $userCartProduct)
     {
-        //
     }
 }
