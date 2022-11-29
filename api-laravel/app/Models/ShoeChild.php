@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ShoeChild extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'shoe_id',
+        'size',
+        'in_stock',
+    ];
 }
