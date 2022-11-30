@@ -1,0 +1,140 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.5.0
+
+parameters:
+  run-api-ci:
+    type: boolean
+    default: false
+  run-web-ci:
+    type: boolean
+    default: false
+
+jobs:
+  pylint:
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - run: pip install --user pylint pylint-django
+      - run: pip install --user -r api/requirements.txt
+      - run: 
+          name: Lint check
+          command: cd api && PYTHONPATH=$(pwd) pylint --load-plugins pylint_django --django-settings-module=api.settings .
+  jslint:
+    docker:
+      - image: cimg/node:17.4.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: cd web && yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+          paths:
+            - ./web/node_modules
+      - run:
+          name: Format code
+          command: cd web && yarn format
+      - run:
+          name: Lint check
+          command: cd web && yarn lint:js
+
+  build-and-deploy-api-image:
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - run: cd web
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: api
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Login Dockerhub
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build -t $DOCKER_USER/shoe-shop-api:latest api/
+            docker build -t $DOCKER_USER/shoe-shop-api:$TAG api/
+      - run:
+          name: Check images
+          command: docker images
+      - run:
+          name: Push images
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/shoe-shop-api:latest
+            docker push $DOCKER_USER/shoe-shop-api:$TAG
+
+  build-and-deploy-web-image:
+    docker:
+      - image: cimg/node:17.4.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command:  cd web && yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "web/package-lock.json" }}
+          paths:
+            - ./web/node_modules
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Login Dockerhub
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build -t $DOCKER_USER/shoe-shop-web:latest web/
+            docker build -t $DOCKER_USER/shoe-shop-web:$TAG web/
+      - run:
+          name: Check images
+          command: docker images
+      - run:
+          name: Push images
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/shoe-shop-web:latest
+            docker push $DOCKER_USER/shoe-shop-web:$TAG
+ 
+workflows:
+  ci-api:
+    when: << pipeline.parameters.run-api-ci >>
+    jobs:
+      - pylint
+      - build-and-deploy-api-image:
+          requires:
+            - pylint
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+
+  ci-web:
+    when: << pipeline.parameters.run-web-ci >>
+    jobs:
+      - jslint
+      - build-and-deploy-web-image:
+          requires:
+            - jslint 
+          filters:
+            branches:
+              only:
+                - develop
+                - main

@@ -1,0 +1,123 @@
+import { createRouter, createWebHistory } from "vue-router"
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes: [
+        {
+            name: "Home",
+            path: "/",
+            component: () => import("@/views/home/index.vue"),
+            meta: {
+                title: "Home",
+                layout: "home",
+            },
+        },
+        {
+            name: "Login",
+            path: "/login",
+            component: () => import("@/views/login/index.vue"),
+            meta: {
+                title: "Đăng nhập",
+                layout: "auth",
+            },
+        },
+        {
+            name: "Register",
+            path: "/register",
+            component: () => import("@/views/register/index.vue"),
+            meta: {
+                title: "Đăng ký",
+                layout: "auth",
+            },
+        },
+        {
+            name: "Reset Password",
+            path: "/reset-password",
+            component: () => import("@/views/reset-password/index.vue"),
+            meta: {
+                title: "Khôi phục mật khẩu",
+                layout: "auth",
+            },
+            children: [
+                {
+                    name: "Reset Password OTP",
+                    path: "auth-otp",
+                    component: () => import("@/views/reset-password/auth-otp/index.vue"),
+                    meta: {
+                        title: "Xác thực OTP",
+                    },
+                },
+            ],
+        },
+        {
+            name: "About",
+            path: "/about",
+            component: () => import("@/views/about/index.vue"),
+        },
+        {
+            name: "Cart",
+            path: "/cart",
+            component: () => import("@/views/cart/index.vue"),
+            meta: {
+                title: "Giỏ hàng",
+                layout: "default",
+            },
+        },
+        {
+            name: "Order List",
+            path: "/orders",
+            component: () => import("@/views/orders/index.vue"),
+            meta: {
+                title: "Danh sách đơn hàng",
+                layout: "default",
+            },
+        },
+        {
+            name: "Order Detail",
+            path: "/order/:id",
+            component: () => import("@/views/order/_id/index.vue"),
+            meta: {
+                title: "Chi tiết đơn hàng",
+                layout: "default",
+            },
+        },
+        {
+            name: "Products",
+            path: "/products",
+            component: () => import("@/views/products/index.vue"),
+        },
+        {
+            name: "Shoe Detail",
+            path: "/product/shoe/:id",
+            component: () => import("@/views/product/shoe/_id/index.vue"),
+        },
+        {
+            name: "Accessory Detail",
+            path: "/product/accessory/:id",
+            component: () => import("@/views/product/accessory/_id/index.vue"),
+        },
+        {
+            name: "Clothes Detail",
+            path: "/product/clothes/:id",
+            component: () => import("@/views/product/clothes/_id/index.vue"),
+        },
+        {
+            name: "404",
+            path: "/:pathMatch(.*)*",
+            component: () => import("@/views/404/index.vue"),
+            meta: {
+                title: "404",
+                layout: "empty",
+            },
+        },
+    ],
+})
+
+const DEFAULT_TITLE = "Pomme"
+router.afterEach((to, from) => {
+    // Use next tick to handle router history correctly
+    // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+    document.title = to.meta.title ? "Pomme | " + to.meta.title : DEFAULT_TITLE
+})
+
+export default router
