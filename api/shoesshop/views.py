@@ -5,6 +5,9 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 import cloudinary.uploader
 from rest_framework import status, viewsets
 from django.contrib.auth.models import User
+from rest_framework_swagger.views import get_swagger_view
+
+
 from shoesshop.models import (
     Shoe,
     Product,

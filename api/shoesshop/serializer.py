@@ -45,6 +45,8 @@ class ShoeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shoe
         fields = "__all__"
+        
+
 
 
 class ShoeChildSerializer(serializers.ModelSerializer):
@@ -142,3 +144,10 @@ class User_OrderSerializer(serializers.ModelSerializer):
         many = True
         model = User
         fields = ("id", "username", "orders")
+
+class Shoe_ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Shoe
+        fields = ("shoe_id", "gender")
+

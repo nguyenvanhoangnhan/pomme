@@ -6,6 +6,7 @@ import cloudinary.uploader
 from rest_framework import status, viewsets
 from django.contrib.auth.models import User
 from .imageView import ImageView
+from django.forms.models import model_to_dict
 from shoesshop.models import (
     Shoe,
     Product,
@@ -62,6 +63,7 @@ class ProductView(viewsets.ViewSet):
         try:
             id = id
             product = Product.objects.get(product_id=id)
+            shoe = Shoe.objects.filter(product = product)
             images = ImageView.getListImage(product.product_id)
             product = {
                 "product_id": product.product_id,
@@ -72,6 +74,7 @@ class ProductView(viewsets.ViewSet):
                 "sold": product.sold,
                 "type": product.type,
                 "image": images,
+                "shoe" : model_to_dict(shoe)
             }
             # serializer = ShoeSerializer(instance=shoe)
             return Response(
