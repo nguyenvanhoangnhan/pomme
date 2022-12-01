@@ -20,6 +20,7 @@ class Order extends Model
         'discount',
         'shipping_at',
         'delivered_at',
+        'image_url',
     ];
 
     public function products()
