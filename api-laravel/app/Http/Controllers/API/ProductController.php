@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -11,10 +12,89 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $priceSort = $request->has('price_sort') ? strtoupper($request->price_sort) : 'default';
+        $products = Product::with('thumbnail');
+        if ($priceSort === 'ASC' || $priceSort === 'DESC') {
+            $products = $products->orderBy('price', $priceSort);
+        }
+
+        $sale = $request->has('sale') ? $request->sale : false;
+        if ($sale) {
+            $products = $products->where('discount_percent', '>', 0);
+        }
+
+        $type = $request->has('type') ? strtoupper($request->type) : false;
+        if ($type === 'SHOE') {
+            $products = $products->where('type', $type);
+            $products = filterShoe($request, $products);
+        }
+
+        if ($type === 'CLOTHES') {
+                $products = $products->where('type', $type);
+                $products = filterClothes($request, $products);
+        }
+
+        if ($type === 'ACCESSORY') {
+            $products = $products->where('type', $type);
+            $products = filterAccessory($request, $products);
+        }
+
+        return response()->json($products->get());
+    }
+
+    /**
+     * Filter the shoe products based on the request and return the filtered products
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Builder $products
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function filterShoe(Builder $products, Request $request)
+    {
+        $gender = $request->has('gender') ? $request->gender : false;
+        $series = $request->has('series') ? $request->series : false;
+        $shape = $request->has('shape') ? $request->shape : false;
+
+        $series ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('series', $series)) : '';
+        $gender ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('gender', $gender)) : '';
+        $shape ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('shape', $shape)) : '';
+
+        return $products;
+    }
+
+    /**
+     * Filter the clothes products based on the request and return the filtered products
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Builder $products
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function filterClothes(Builder $products, Request $request)
+    {
+        $category = $request->has('category') ? $request->category : false;
+        $products = $products->whereHas('clothes', fn(Builder $query) => $category ? $query->where('category', $category) : '');
+
+        return $products;
+    }
+
+    /**
+     * Filter the accessory products based on the request and return the filtered products
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Builder $products
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function filterAccessory(Builder $products, Request $request)
+    {
+        $category = $request->has('category') ? $request->category : false;
+        $products = $products->whereHas('accessory', fn(Builder $query) => $category ? $query->where('category', $category) : '');
+
+        return $products;
     }
 
     /**
@@ -70,10 +150,25 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \Illumniate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found',
+            ], 400);
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted successfully',
+        ]);
     }
 }

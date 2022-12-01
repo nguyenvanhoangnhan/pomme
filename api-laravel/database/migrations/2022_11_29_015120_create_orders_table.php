@@ -21,12 +21,13 @@ class CreateOrdersTable extends Migration
             $table->string('district_code');
             $table->string('commune_code');
             $table->string('phone');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->unsignedBigInteger('total');
             $table->unsignedBigInteger('discount')->default(0);
             $table->timestamps();
             $table->dateTime('shipping_at')->nullable();
             $table->dateTime('delivered_at')->nullable();
+            $table->string('image_url')->nullable()->default('https://via.placeholder.com/500/41B883/ffffff?text=Image');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

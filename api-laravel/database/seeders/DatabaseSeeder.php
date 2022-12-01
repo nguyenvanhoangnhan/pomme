@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         $shoes = [
-            // [name, price, discount%, instock, sold, gender, series, shape]
+            // [name, price, discount%, in_stock, sold, gender, series, shape]
             ['GSmith #1', 500000, 0, 100, 0, 2, 'GSmith', 0],
             ['GSmith #2', 600000, 0, 100, 0, 2, 'GSmith', 0],
             ['GSmith #3', 700000, 0, 100, 0, 2, 'GSmith', 1],
