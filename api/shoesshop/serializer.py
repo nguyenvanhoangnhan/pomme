@@ -101,10 +101,7 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCartProduct
         fields = "__all__"
-        extra_kwargs = {
-            "product": {"read_only": True},
-            "user": {"read_only": True},
-        }
+       
 
 
 class UserLoveProductSerializer(serializers.ModelSerializer):
@@ -151,3 +148,23 @@ class Shoe_ProductSerializer(serializers.ModelSerializer):
         model = Shoe
         fields = ("shoe_id", "gender")
 
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    class Meta:
+        model = OrderProduct
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Order
+        fields = "__all__"
+        depth = 1
+    def get_products(self, obj):
+
+        query_set = OrderProduct.objects.filter(order=obj)
+
+        return [OrderProductSerializer(item).data for item in query_set]   

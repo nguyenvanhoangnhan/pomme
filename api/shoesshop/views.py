@@ -219,7 +219,7 @@ class UserLoveProductView(viewsets.ViewSet):
         except:
             return Response(
                 {
-                    "message": "Cart item not found!",
+                    "message": "love-product item not found!",
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

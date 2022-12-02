@@ -1,5 +1,11 @@
 from rest_framework import routers
-from .ProductOrderView import UserOrderView  # OrderProductView
+from .ProductOrderView import (
+        UserOrderView,
+        OrderProductList,
+        OrderProductDetail,
+        
+)
+  # OrderProductView
 from .accessoryView import AccessoryView
 from .productView import ProductView
 from .clothesView import ClothesView
@@ -80,8 +86,15 @@ urlpatterns = [
         ProductView.filterProduct,
     ),
     # -------------------------------------------
-    path("userorder/", UserOrderView.list),
+    path("order-products/", OrderProductList.as_view()),
+    path("order-products/<int:pk>/", OrderProductDetail.as_view()),
+    
+    
+    
+    
+    path("user-order/", UserOrderView.list),
+    
     # path("orderproduct/", OrderProductView.list),
-    path("userorder/<int:pk>/", UserOrderView.retrieve),
+    path("user-order/<int:pk>/", UserOrderView.retrieve),
     path("", include(router.urls)),
 ]
