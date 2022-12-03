@@ -17,7 +17,6 @@ RUN php artisan config:clear
 RUN docker-php-ext-install pdo_mysql
 
 RUN php artisan optimize
-RUN php artisan migrate:fresh --seed
 RUN php artisan key:generate
 RUN php artisan config:cache
 RUN php artisan route:clear
