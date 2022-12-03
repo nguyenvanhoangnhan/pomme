@@ -119,6 +119,7 @@ workflows:
   ci-api:
     when: << pipeline.parameters.run-api-ci >>
     jobs:
+      - phplint
       - build-and-deploy-api-image:
           requires:
             - phplint 
