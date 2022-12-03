@@ -12,16 +12,6 @@ parameters:
     default: false
 
 jobs:
-  pylint:
-    docker:
-      - image: cimg/python:3.10.2
-    steps:
-      - checkout
-      - run: pip install --user pylint pylint-django
-      - run: pip install --user -r api/requirements.txt
-      - run: 
-          name: Lint check
-          command: cd api && PYTHONPATH=$(pwd) pylint --load-plugins pylint_django --django-settings-module=api.settings .
   jslint:
     docker:
       - image: cimg/node:17.4.0
@@ -45,13 +35,9 @@ jobs:
 
   build-and-deploy-api-image:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/php:8.1.13
     steps:
       - checkout
-      - run: cd web
-      - python/install-packages:
-          pkg-manager: pip
-          app-dir: api
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
@@ -116,10 +102,7 @@ workflows:
   ci-api:
     when: << pipeline.parameters.run-api-ci >>
     jobs:
-      - pylint
       - build-and-deploy-api-image:
-          requires:
-            - pylint
           filters:
             branches:
               only:
