@@ -19,6 +19,7 @@ RUN docker-php-ext-install pdo_mysql
 RUN php artisan optimize
 RUN php artisan config:cache
 RUN php artisan route:clear
+RUN mv .env.example .env
 EXPOSE 8000
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
