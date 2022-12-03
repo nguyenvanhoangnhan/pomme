@@ -20,8 +20,8 @@ jobs:
           name: Install dependencies
           command: |
             cd api-laravel/
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=~/project/api-laravel --filename=composer
-            ~/project/api-laravel/composer update
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=./ --filename=composer
+            ./composer update
       - save_cache:
           key: dependency-cache-{{ checksum "api-laravel/composer.lock" }}
           paths:
