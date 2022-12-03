@@ -209,7 +209,7 @@ class DatabaseSeeder extends Seeder
         $cartProducts = \App\Models\Product::inRandomOrder()->limit(5)->get();
         foreach ($cartProducts as $product) {
             \App\Models\UserCartProduct::create([
-                'user_id' => 1,
+                'user_id' => 2,
                 'product_id' => $product->id,
                 'quantity' => rand(1, 5),
                 'size' => $product->type === 'shoe' ? rand(35, 46) : null,
@@ -221,7 +221,7 @@ class DatabaseSeeder extends Seeder
         $wishlistProducts = \App\Models\Product::inRandomOrder()->limit(5)->get();
         foreach ($wishlistProducts as $product) {
             \App\Models\UserLoveProduct::create([
-                'user_id' => 1,
+                'user_id' => 2,
                 'product_id' => $product->id,
             ]);
         }
@@ -236,7 +236,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $order = \App\Models\Order::create([
-            'user_id' => 1,
+            'user_id' => 2,
             'status' => 'shipping',
             'shipping_at' => Carbon::now()->addDays(3),
             'total' => $orderTotal,

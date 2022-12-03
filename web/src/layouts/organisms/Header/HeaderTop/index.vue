@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth"
-import { useCartStore } from "@/stores/cart";
+import { useCartStore } from "@/stores/cart"
 import { computed } from "@vue/reactivity"
 import HeaderTopItem from "@/layouts/organisms/Header/HeaderTop/HeaderTopItem/index.vue"
 const auth = useAuthStore()
 const cart = useCartStore()
-const fullname = computed(() => auth.fullname)
-
+const fullname = computed(() => auth.data?.user?.name)
+const handleLogout = async () => {
+    await auth.logout()
+    window.location.reload()
+}
 </script>
 
 <template>
@@ -18,7 +21,7 @@ const fullname = computed(() => auth.fullname)
         <HeaderTopItem v-if="!fullname" title="Đăng nhập" icon="ph:user-bold" to-view-name="Login" />
         <div v-else class="flex gap-6">
             <HeaderTopItem :title="fullname" icon="ph:user-bold" to-view-name="" />
-            <div @click="auth.logout()">
+            <div @click="handleLogout">
                 <HeaderTopItem title="Đăng xuất" icon="ph:sign-out-bold" to-view-name="" />
             </div>
         </div>

@@ -90,7 +90,7 @@ class OrderController extends Controller
      */
     public function show(Request $request)
     {
-        $order = Order::find($request->id);
+        $order = Order::with('products')->find($request->id);
         if (!$order) {
             return response()->json([
                 'status' => 'error',

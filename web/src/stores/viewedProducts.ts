@@ -7,7 +7,7 @@ export const useViewedProductsStore = defineStore({
     getters: {},
     actions: {
         addProduct(product: Product) {
-            if (!this.products.find((p) => p.product_id === product.product_id)) {
+            if (!this.products.find((p) => p.id === product.id)) {
                 this.products.push(product)
             }
             if (this.products.length > 10) {

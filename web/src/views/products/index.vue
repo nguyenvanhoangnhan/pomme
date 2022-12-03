@@ -5,7 +5,7 @@ import api from "@/api"
 import { useRoute } from "vue-router"
 defineProps<{}>()
 const route = useRoute()
-const products = ref<Product[]>([])
+const products = ref<ProductWithThumbnail[]>([])
 const pagination = reactive({
     isFetchingNextPage: false,
     current: 1,
@@ -46,7 +46,7 @@ window.addEventListener("scroll", async () => {
                 <img src="/images/image5.jpg" alt="#" class="w-full h-full object-cover object-top" />
             </div>
             <div class="flex w-full flex-wrap">
-                <ProductCard v-for="product in products" :key="product.product_id" :product="product" />
+                <ProductCard v-for="product in products" :key="product.id" :product="product" />
                 <template v-if="pagination.isFetchingNextPage">
                     <div v-for="index in 3" :key="index" class="product-skeleton px-2 pt-[3px] mb-4 w-1/3 flex flex-col items-center gap-2">
                         <a-skeleton-avatar :active="true" :size="282" shape="square" />

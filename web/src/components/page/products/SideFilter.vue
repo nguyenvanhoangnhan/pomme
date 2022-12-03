@@ -9,21 +9,21 @@ const router = useRouter()
 const route = useRoute()
 const queryRef = ref(route.query)
 const TYPES = {
-    all: "0",
-    shoe: "1",
-    accessory: "2",
-    clothes: "3",
+    all: "",
+    shoe: "shoe",
+    accessory: "accessory",
+    clothes: "clothes",
 }
 const ACCESSORY_CATEGORIES = {
-    Tất: "1",
-    "Túi tote": "2",
-    Balo: "3",
-    "Dây giày": "4",
+    Tất: "shock",
+    "Túi tote": "tote",
+    Balo: "backpack",
+    "Dây giày": "shoelace",
 }
 const CLOTHES_CATEGORIES = {
-    "Áo phông": "1",
-    Hoodie: "2",
-    Sweatshirt: "3",
+    "Áo phông": "tee",
+    Hoodie: "hoodie",
+    Sweatshirt: "sweatshirt",
 }
 const SHOE_SERIES = { GSmith: "GSmith", Crispin: "Crispin", Shizuka: "Shizuka", Rhode: "Rhode" }
 const SHOE_GENDERS = {
@@ -63,32 +63,32 @@ const handleQueries = (attr: string, val: string | null) => {
     alert("Filter is not implemented yet")
     return
 
-    // if (val == "Tất cả") {
-    //     val = null
-    // }
-    // router.replace({
-    //     query: {
-    //         ...queryRef.value,
-    //         [attr]: val,
-    //     },
-    // })
-    // queryRef.value = {
-    //     ...queryRef.value,
-    //     [attr]: val,
-    // }
+    if (val == "Tất cả") {
+        val = null
+    }
+    router.replace({
+        query: {
+            ...queryRef.value,
+            [attr]: val,
+        },
+    })
+    queryRef.value = {
+        ...queryRef.value,
+        [attr]: val,
+    }
 }
 const handleQueryType = (type: string) => {
     alert("Filter is not implemented yet")
     return
 
-    // if (type.length === 0) {
-    //     router.replace({ query: {} })
-    //     queryRef.value = {}
-    // }
-    // router.replace({
-    //     query: { type: type },
-    // })
-    // queryRef.value = { type: type }
+    if (type.length === 0) {
+        router.replace({ query: {} })
+        queryRef.value = {}
+    }
+    router.replace({
+        query: { type: type },
+    })
+    queryRef.value = { type: type }
 }
 watch(queryRef, (newVal) => {
     productsStore.updateQueries(queryRef.value)

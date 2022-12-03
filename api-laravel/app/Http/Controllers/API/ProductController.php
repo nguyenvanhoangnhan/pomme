@@ -44,7 +44,7 @@ class ProductController extends Controller
             $products = $this->filterAccessory($products, $request);
         }
 
-        return response()->json($products->get());
+        return response()->json($products->paginate(12));
     }
 
     /**

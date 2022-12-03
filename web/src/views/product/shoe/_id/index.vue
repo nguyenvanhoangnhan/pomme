@@ -13,10 +13,8 @@ defineProps<{}>()
 // get the product id from the route
 const productId = useRoute().params.id
 
-const shoe = ref<Shoe | null>(null)
+const shoe = ref<ShoeWithProductAndChild | null>(null)
 const isFetched = ref(false)
-
-const shoeChilds = ref<ShoeChild[] | null>([])
 
 const currentSlide = ref(0)
 
@@ -107,7 +105,7 @@ onMounted(async () => {
                 <div class="font-black text-3xl uppercase mb-4">
                     {{ shoe?.product.name }}
                 </div>
-                <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product.product_id }}</div>
+                <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product.id }}</div>
                 <div class="text-2xl font-bold text-primary">{{ Number(shoe?.product.price).toLocaleString() }} VNĐ</div>
                 <!--  -->
                 <div class="divider--dashed my-6"></div>
@@ -124,8 +122,8 @@ onMounted(async () => {
                     <div class="font-black text-2xl uppercase">Size</div>
                     <div class="font-black text-2xl uppercase">Số lượng</div>
                     <ASelect placeholder="Size" class="w-full" size="large">
-                        <ASelectOption v-for="shoeChild in shoeChilds" :key="shoeChild.shoe_child_id" :value="shoeChild.size">
-                            {{ shoeChild.size }}
+                        <ASelectOption v-for="child in shoe?.children" :key="child.id" :value="child.size" :disabled="child.in_stock <= 0">
+                            {{ child.size }}
                         </ASelectOption>
                     </ASelect>
                     <AInputNumber min="0" style="width: 100%" size="large" />

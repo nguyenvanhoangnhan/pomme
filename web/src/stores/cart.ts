@@ -1,9 +1,10 @@
 import { defineStore } from "pinia"
+import api from "@/api"
 
 export const useCartStore = defineStore({
     id: "cart",
     state: () => ({
-        items: [] as CartItem[],
+        items: [] as UserCartProduct[],
     }),
     getters: {
         total(): number {
@@ -11,24 +12,55 @@ export const useCartStore = defineStore({
         },
     },
     actions: {
-        addItem(item: CartItem) {
-            this.items.push(item)
+        async fetchCart() {
+            try {
+                const response = await api.get("cart")
+                return response.data
+            } catch (error) {
+                console.log(error)
+            }
+            return []
         },
-        removeItem(item: CartItem) {
-            this.items = this.items.filter((i) => i.id !== item.id)
+        async updateCart() {
+            this.items = await this.fetchCart()
         },
-        changeQuantity(item: CartItem, quantity: number) {
-            const index = this.items.findIndex((i) => i.id === item.id)
-            this.items[index].quantity = quantity
+        async addItem(productId: number, quantity: number, size?: string) {
+            const formData = {
+                product_id: productId,
+                quantity: quantity,
+                size: size,
+            }
+            try {
+                await api.post("cart", formData)
+            } catch (error) {
+                console.log(error)
+            }
+            await this.updateCart()
         },
-        upQuantity(item: CartItem) {
-            this.changeQuantity(item, item.quantity + 1)
+        async removeItem(productId: number) {
+            try {
+                await api.post(`cart/${productId}`)
+            } catch (error) {
+                console.log(error)
+            }
+            await this.updateCart()
         },
-        downQuantity(item: CartItem) {
-            this.changeQuantity(item, item.quantity - 1)
+        async updateItem(productId: number, quantity: number, size?: string) {
+            const formData = {
+                quantity: quantity,
+                size: size,
+            }
+            try {
+                await api.put(`cart/${productId}`, formData)
+            } catch (error) {
+                console.log(error)
+            }
+            await this.updateCart()
         },
         clear() {
+            
             this.items = []
+
         },
     },
 })

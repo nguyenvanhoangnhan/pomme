@@ -85,8 +85,9 @@ Route::group([
 ], function ($router) {
     Route::get('/', [UserController::class, 'cartProducts']);
     Route::post('/', [UserController::class, 'addToCart']);
-    Route::put('{product_id}', [UserController::class, 'updateCartPivot'])
+    Route::post('{product_id}', [UserController::class, 'updateCartPivot'])
         ->where('product_id', '[0-9]+');
+    Route::delete('/', [UserController::class, 'clearCart']);
     Route::delete('{product_id}', [UserController::class, 'removeFromCart'])
         ->where('id', '[0-9]+');
 });
