@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@1.5.0
-
 parameters:
   run-api-ci:
     type: boolean
@@ -12,6 +9,26 @@ parameters:
     default: false
 
 jobs:
+  phplint:
+    docker:
+      - image: cimg/php:8.1.13
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "api-laravel/composer.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            cd api-laravel/
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+            composer update
+      - save_cache:
+          key: dependency-cache-{{ checksum "api-laravel/composer.lock" }}
+          paths:
+            - ./api-laravel/vendor
+      - run:
+          name: Lint check
+          command: cd api-laravel/ && vendor/bin/phpcs --standard=SunAsterisk .
   jslint:
     docker:
       - image: cimg/node:17.4.0
@@ -103,6 +120,8 @@ workflows:
     when: << pipeline.parameters.run-api-ci >>
     jobs:
       - build-and-deploy-api-image:
+          requires:
+            - phplint 
           filters:
             branches:
               only:
