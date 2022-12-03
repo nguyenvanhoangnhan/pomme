@@ -106,8 +106,8 @@ class ShoeController extends Controller
      */
     public function update(Request $request, Shoe $shoe)
     {
-        $validator = Validator::make([
-            'product_id' => $request->product_id,
+        $validator = Validator::make($request->all(), [
+            'shoe_id' => 'required|exists:shoes,id',
             'name' => 'nullable',
             'price' => 'nullable|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
@@ -115,7 +115,7 @@ class ShoeController extends Controller
             'gender' => 'nullable|in:0,1,2',
             'series' => 'nullable',
             'shape' => 'nullable|numeric',
-        ], $request->all());
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -125,8 +125,9 @@ class ShoeController extends Controller
             ], 400);
         }
 
+        $shoe = Shoe::find($request->shoe_id);
+
         $product = Product::find($shoe->product_id);
-        $shoe = Shoe::where('product_id', $request->product_id)->first();
         if ($request->name) {
             $product->name = $request->name;
         }
@@ -157,6 +158,9 @@ class ShoeController extends Controller
 
         $product->save();
         $shoe->save();
+        $shoe = Shoe::with('product')->find($request->shoe_id);
+
+        return response()->json($shoe, 202);
     }
 
     /**

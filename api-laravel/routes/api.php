@@ -71,21 +71,6 @@ Route::group([
         ->where('id', '[0-9]+');
 });
 
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'orders',
-
-], function ($router) {
-    Route::get('/', [OrderController::class, 'index']);
-    Route::get('{id}', [OrderController::class, 'show']);
-    Route::post('/', [OrderController::class, 'store']);
-    Route::post('cancel/{id}', [OrderController::class, 'cancel'])
-        ->where('id', '[0-9]+');
-
-    Route::put('{id}/status', [OrderController::class, 'changeStatus'])
-        ->where('id', '[0-9]+');
-});
-
 
 Route::group([
     'middleware' => 'api',
