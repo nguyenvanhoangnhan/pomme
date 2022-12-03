@@ -28,7 +28,7 @@ jobs:
             - ./api-laravel/vendor
       - run:
           name: Lint check
-          command:|
+          command: |
             cd api-laravel/
             vendor/bin/phpcs --config-set show_warnings 0
             vendor/bin/phpcs
