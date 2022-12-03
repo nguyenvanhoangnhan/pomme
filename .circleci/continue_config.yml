@@ -28,7 +28,7 @@ jobs:
             - ./api-laravel/vendor
       - run:
           name: Lint check
-          command: cd api-laravel/ && vendor/bin/phpcs --standard=SunAsterisk .
+          command: cd api-laravel/ && vendor/bin/phpcs .
   jslint:
     docker:
       - image: cimg/node:17.4.0
