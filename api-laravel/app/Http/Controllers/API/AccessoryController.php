@@ -99,14 +99,14 @@ class AccessoryController extends Controller
      */
     public function update(Request $request)
     {
-        $validator = Validator::make([
-            'product_id' => 'required|numeric',
+        $validator = Validator::make($request->all(), [
+            'accessory_id' => 'required|exists:accessories,id',
             'name' => 'nullable',
             'price' => 'nullable|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
             'category' => 'nullable|string',
-        ], $request->all());
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -116,8 +116,8 @@ class AccessoryController extends Controller
             ], 400);
         }
 
-        $product = Product::find($request->product_id);
-        $accessory = Accessory::where('product_id', $request->product_id)->first();
+        $accessory = Accessory::find($request->accessory_id);
+        $product = Product::find($accessory->product_id);
         if ($request->name) {
             $product->name = $request->name;
         }
@@ -140,6 +140,9 @@ class AccessoryController extends Controller
 
         $product->save();
         $accessory->save();
+        $accessory = Accessory::with('product')->find($request->accessory_id);
+
+        return response()->json($accessory, 202);
     }
 
     /**

@@ -31,17 +31,17 @@ class ProductController extends Controller
         $type = $request->has('type') ? strtoupper($request->type) : false;
         if ($type === 'SHOE') {
             $products = $products->where('type', $type);
-            $products = filterShoe($request, $products);
+            $products = $this->filterShoe($products, $request);
         }
 
         if ($type === 'CLOTHES') {
                 $products = $products->where('type', $type);
-                $products = filterClothes($request, $products);
+                $products = $this->filterClothes($products, $request);
         }
 
         if ($type === 'ACCESSORY') {
             $products = $products->where('type', $type);
-            $products = filterAccessory($request, $products);
+            $products = $this->filterAccessory($products, $request);
         }
 
         return response()->json($products->get());

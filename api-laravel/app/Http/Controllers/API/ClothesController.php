@@ -99,14 +99,14 @@ class ClothesController extends Controller
      */
     public function update(Request $request)
     {
-        $validator = Validator::make([
-            'product_id' => 'required|numeric',
+        $validator = Validator::make($request->all(), [
+            'clothes_id' => 'required|exists:clothes,id',
             'name' => 'nullable',
             'price' => 'nullable|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
             'category' => 'nullable|string',
-        ], $request->all());
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -116,8 +116,8 @@ class ClothesController extends Controller
             ], 400);
         }
 
-        $product = Product::find($request->product_id);
-        $clothes = Clothes::where('product_id', $request->product_id)->first();
+        $clothes = Clothes::find($request->clothes_id);
+        $product = Product::find($clothes->product_id);
         if ($request->name) {
             $product->name = $request->name;
         }
@@ -140,6 +140,9 @@ class ClothesController extends Controller
 
         $product->save();
         $clothes->save();
+        $clothes = Clothes::with('product')->find($request->clothes_id);
+
+        return response()->json($clothes, 202);
     }
 
     /**
