@@ -1,28 +1,25 @@
 version: '3.1'
 
 services:
-  api: 
-    container_name: api
-    build: ./api
-    ports: 
-      - 8000:8000
   web:
-    container_name: web
     build: ./web
     ports:
       - 5173:5173
     volumes:
       - ./web:/app
       - /app/node_modules
+    environment:
+      BASE_URL: http://localhost:8000
   db:
-    container_name: db
-    image: postgres
+    image: mysql
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
-    volumes:
-      - ./data:/data/postgres
+      MYSQL_DATABASE: pomme
+      MYSQL_ROOT_PASSWORD: password123
     ports:
-      - 5432:5432
+      - 3306:3306
+  api: 
+    build: ./api-laravel
+    ports: 
+      - 8000:8000
+    env_file: ./api-laravel/.env
