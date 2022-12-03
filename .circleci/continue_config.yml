@@ -28,7 +28,10 @@ jobs:
             - ./api-laravel/vendor
       - run:
           name: Lint check
-          command: cd api-laravel/ && vendor/bin/phpcs
+          command:|
+            cd api-laravel/
+            vendor/bin/phpcs --config-set show_warnings 0
+            vendor/bin/phpcs
   jslint:
     docker:
       - image: cimg/node:17.4.0
