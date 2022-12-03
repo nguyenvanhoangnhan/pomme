@@ -77,7 +77,8 @@ class ProductController extends Controller
     public function filterClothes(Builder $products, Request $request)
     {
         $category = $request->has('category') ? $request->category : false;
-        $products = $products->whereHas('clothes', fn(Builder $query) => $category ? $query->where('category', $category) : '');
+        $products = $products
+            ->whereHas('clothes', fn(Builder $query) => $category ? $query->where('category', $category) : '');
 
         return $products;
     }
@@ -92,7 +93,8 @@ class ProductController extends Controller
     public function filterAccessory(Builder $products, Request $request)
     {
         $category = $request->has('category') ? $request->category : false;
-        $products = $products->whereHas('accessory', fn(Builder $query) => $category ? $query->where('category', $category) : '');
+        $products = $products
+            ->whereHas('accessory', fn(Builder $query) => $category ? $query->where('category', $category) : '');
 
         return $products;
     }
