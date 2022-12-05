@@ -25,7 +25,7 @@ const handleDeleteAll = () => {
                         <Icon icon="ph:heart-straight-break" :width="72" :height="72" />
                         <h3 class="text-center text-xl font-bold w-36">Trong này chưa có gì cả bạn ơi!</h3>
                     </div>
-                    <div v-for="item in cart.items" :key="item.product_id">
+                    <div v-for="item in cart.items" :key="item.id">
                         <ProductItem :product="item" />
                         <div class="divider--dashed my-8"></div>
                     </div>

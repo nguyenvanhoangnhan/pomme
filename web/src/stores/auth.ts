@@ -7,8 +7,8 @@ export const useAuthStore = defineStore({
         data: {} as AuthData,
     }),
     getters: {
-        isAuthenticated(state) {
-            return !!state.data.access_token
+        isLoggedIn(state) {
+            return !!state.data.user
         },
     },
     actions: {
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore({
                 console.log(error)
                 notification.error({
                     message: "Đăng nhập thất bại",
-                    description: error.response.data.message || "Đã có lỗi xảy ra",
+                    description: error.message || "Đã có lỗi xảy ra",
                 })
             }
         },

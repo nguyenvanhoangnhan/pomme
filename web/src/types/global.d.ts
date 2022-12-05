@@ -48,14 +48,7 @@ interface UserCartPivot {
     quantity: number
     size: number | null
 }
-interface UserCartProduct {
-    id: number
-    name: string
-    price: number
-    discount_percent: number
-    in_stock: number
-    sold: number
-    type: string
+interface UserCartProduct extends ProductWithThumbnail {
     pivot: UserCartPivot
 }
 

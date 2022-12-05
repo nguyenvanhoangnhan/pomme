@@ -13,17 +13,17 @@ const toggleSideCart = () => {
 <template>
     <div class="side-cart fixed top-56 right-0 hidden lg:flex z-[555]" :class="isShow ? 'side-cart--show-menu' : 'side-cart--hide-menu'">
         <div class="side-cart__menu overflow-hidden">
-            <div class="bg-[#C6E7D8] text-black flex flex-col px-[15px]">
-                <div class="cart__title py-[10px] uppercase font-bold flex justify-between">
+            <div class="bg-[#C6E7D8] text-black flex flex-col">
+                <div class="cart__title py-[10px] uppercase font-bold flex justify-between px-[15px]">
                     <span> Giỏ hàng ({{ cart.items.length }}) </span>
                     <span class="caret"></span>
                 </div>
                 <template v-if="cart.items.length">
-                    <div class="divider--solid my-4"></div>
-                    <ul class="cart__items py-[10px] flex flex-col max-h-[312px] overflow-y-scroll">
+                    <div class="divider--solid my-4 mx-[15px]"></div>
+                    <ul class="cart__items py-[10px] flex flex-col max-h-[312px] overflow-y-scroll px-[15px]">
                         <li v-for="item in cart.items" :key="item.id" class="list-none">
                             <div class="flex">
-                                <img :src="item.images.find((item) => item.is_thumbnail)?.url" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
+                                <img :src="item?.thumbnail?.url" alt="#" class="item-thumbnail w-20 h-20 object-cover mr-[10px]" />
                                 <div class="item-info w-[180px] h-[80px] flex flex-col justify-between">
                                     <div class="name font-bold text-base leading-[1.1] text-2-line">{{ item.name }}</div>
                                     <div class="text-[12px] leading-[1.1]">
@@ -33,7 +33,7 @@ const toggleSideCart = () => {
                                         </div>
                                         <div class="quantity flex w-full justify-between">
                                             <span>Số lượng</span>
-                                            <span>{{ item.quantity }}</span>
+                                            <span>{{ item.pivot.quantity }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -41,14 +41,16 @@ const toggleSideCart = () => {
                             <div class="divider--dashed my-4"></div>
                         </li>
                     </ul>
-                    <div class="divider--solid mb-4"></div>
-                    <div class="cart__total flex justify-between py-[5px] font-bold text-base">
+                    <div class="divider--solid my-4 mx-[15px]"></div>
+                    <div class="cart__total flex justify-between py-[5px] px-[15px] font-bold text-base">
                         <div>Total:</div>
                         <div class="text-love">{{ cart.total.toLocaleString() }} VNĐ</div>
                     </div>
                     <div class="cart__pay-btn-container py-[5px]"></div>
-                    <div class="pt-[5px] pb-[10px]">
-                        <AButton class="uppercase font-bold" type="primary" size="large" block>THANH TOÁN</AButton>
+                    <div class="pt-[5px] pb-[10px] px-[15px]">
+                        <RouterLink :to="{ name: 'Cart' }">
+                            <AButton class="uppercase font-bold" type="primary" size="large" block>THANH TOÁN</AButton>
+                        </RouterLink>
                     </div>
                 </template>
                 <template v-else>
@@ -70,7 +72,7 @@ const toggleSideCart = () => {
 .side-cart {
     &__menu,
     &__menu--empty {
-        height: 472px;
+        height: 524px;
         transition: height ease-in-out 0.5s;
     }
     &--show-menu > &__menu,

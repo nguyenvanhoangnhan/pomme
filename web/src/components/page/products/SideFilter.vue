@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
 import { useProductsStore } from "@/stores/products"
 
-const productsStore = useProductsStore()
+const products = useProductsStore()
+
 const router = useRouter()
 const route = useRoute()
 const queryRef = ref(route.query)
+
 const TYPES = {
     all: "",
     shoe: "shoe",
@@ -27,9 +29,8 @@ const CLOTHES_CATEGORIES = {
 }
 const SHOE_SERIES = { GSmith: "GSmith", Crispin: "Crispin", Shizuka: "Shizuka", Rhode: "Rhode" }
 const SHOE_GENDERS = {
-    Nam: "1",
-    Nữ: "2",
-    Unisex: "3",
+    Nam: "0",
+    Nữ: "1",
 }
 const SHOE_SHAPES = {
     "Low Top": "0",
@@ -60,11 +61,9 @@ if (queryRef.value?.type == TYPES.clothes && "category" in queryRef.value) {
     isShowMenus.clothesCategory = true
 }
 const handleQueries = (attr: string, val: string | null) => {
-    alert("Filter is not implemented yet")
-    return
-
     if (val == "Tất cả") {
-        val = null
+        removeQuery(attr)
+        return
     }
     router.replace({
         query: {
@@ -77,10 +76,19 @@ const handleQueries = (attr: string, val: string | null) => {
         [attr]: val,
     }
 }
+const removeQuery = (attr: string) => {
+    const newQuery = Object.keys(queryRef.value).reduce((acc, key) => {
+        if (key !== attr) {
+            acc[key] = queryRef.value[key]
+        }
+        return acc
+    }, {})
+    router.replace({
+        query: newQuery,
+    })
+    queryRef.value = newQuery
+}
 const handleQueryType = (type: string) => {
-    alert("Filter is not implemented yet")
-    return
-
     if (type.length === 0) {
         router.replace({ query: {} })
         queryRef.value = {}
@@ -90,8 +98,10 @@ const handleQueryType = (type: string) => {
     })
     queryRef.value = { type: type }
 }
-watch(queryRef, (newVal) => {
-    productsStore.updateQueries(queryRef.value)
+
+router.afterEach(async () => {
+    queryRef.value = route.query
+    const newVal = route.query
     if ("series" in newVal) {
         isShowMenus.series = true
     }
@@ -107,17 +117,39 @@ watch(queryRef, (newVal) => {
     if (newVal.type == TYPES.clothes && "category" in newVal) {
         isShowMenus.clothesCategory = true
     }
+    products.resetPagination()
+    await products.fetchProducts(newVal)
 })
 </script>
 
 <template>
     <div id="side-filter" class="w-[270px]">
+        <div class="side-filter__secondary flex flex-col gap-1">
+            <div
+                class="secondary-filter price-asc"
+                :class="{ 'secondary-filter--active': $route.query?.price_sort === 'asc' }"
+                @click="handleQueries('price_sort', $route.query?.price_sort === 'asc' ? 'Tất cả' : 'asc')"
+            >
+                <Icon icon="ph:arrow-circle-up" :width="20" :height="20" /> Giá tăng dần
+            </div>
+            <div
+                class="secondary-filter price-desc"
+                :class="{ 'secondary-filter--active': $route.query?.price_sort === 'desc' }"
+                @click="handleQueries('price_sort', $route.query?.price_sort === 'desc' ? 'Tất cả' : 'desc')"
+            >
+                <Icon icon="ph:arrow-circle-down" :width="20" :height="20" /> Giá giảm dần
+            </div>
+            <div class="secondary-filter sale" :class="{ 'secondary-filter--active': $route.query?.sale === '1' }" @click="handleQueries('sale', $route.query?.sale === '1' ? 'Tất cả' : '1')">
+                <Icon icon="ps:sale-tag" :width="20" :height="20" /> Đang giảm giá
+            </div>
+        </div>
+        <div class="divider--dashed py-6"></div>
         <div class="side-filter__types font-extrabold uppercase text-2xl flex flex-col gap-4 text-secondary">
             <div class="cursor-pointer transition-all" :class="{ 'text-black': !$route.query?.type || $route.query?.type === TYPES.all }" @click="handleQueryType('')">Tất cả</div>
             <div class="divider--dashed"></div>
             <div class="side-filter__shoe">
                 <div class="cursor-pointer transition-all" :class="{ 'text-black': $route.query?.type === TYPES.shoe }" @click="handleQueryType(TYPES.shoe)">Giày</div>
-                <div v-show="$route.query?.type === TYPES.shoe" class="transition-all">
+                <div v-show="$route.query?.type === TYPES.shoe" class="transition-all ml-3">
                     <div class="filter" :class="{ 'filter--minimize': !isShowMenus.series }">
                         <div class="filter__title" @click="() => (isShowMenus.series = !isShowMenus.series)">
                             Dòng sản phẩm
@@ -201,7 +233,7 @@ watch(queryRef, (newVal) => {
             <div class="divider--dashed"></div>
             <div class="side-filter__accessory">
                 <div class="cursor-pointer transition-all" :class="{ 'text-black': $route.query?.type === TYPES.accessory }" @click="handleQueryType(TYPES.accessory)">Phụ kiện</div>
-                <div v-show="$route.query?.type === TYPES.accessory" class="transition-all">
+                <div v-show="$route.query?.type === TYPES.accessory" class="transition-all ml-3">
                     <div class="filter" :class="{ 'filter--minimize': !isShowMenus.accessoryCategory }">
                         <div class="filter__title" @click="() => (isShowMenus.accessoryCategory = !isShowMenus.accessoryCategory)">
                             Loại phụ kiện
@@ -233,7 +265,7 @@ watch(queryRef, (newVal) => {
             <div class="divider--dashed"></div>
             <div class="side-filter__clothes">
                 <div class="cursor-pointer transition-all" :class="{ 'text-black': $route.query?.type === TYPES.clothes }" @click="handleQueryType(TYPES.clothes)">Áo quần</div>
-                <div v-show="$route.query?.type === TYPES.clothes" class="transition-all">
+                <div v-show="$route.query?.type === TYPES.clothes" class="transition-all ml-3">
                     <div class="filter" :class="{ 'filter--minimize': !isShowMenus.clothesCategory }">
                         <div class="filter__title" @click="() => (isShowMenus.clothesCategory = !isShowMenus.clothesCategory)">
                             Loại áo quần
@@ -272,6 +304,19 @@ watch(queryRef, (newVal) => {
     width: 2px;
     height: 20px;
 }
+.secondary-filter {
+    @apply py-1 font-bold justify-center flex gap-2 bg-secondary text-white transition-all duration-200;
+    cursor: pointer;
+    &:hover {
+        @apply bg-green-700;
+    }
+    &--active {
+        @apply bg-primary;
+        &:hover {
+            @apply line-through bg-green-700;
+        }
+    }
+}
 .filter {
     &__title {
         @apply text-primary text-lg flex items-center gap-2 cursor-pointer transition-all;
@@ -293,6 +338,9 @@ watch(queryRef, (newVal) => {
 .filter.filter--minimize {
     .filter__title {
         @apply text-black;
+        &:hover {
+            @apply text-primary;
+        }
     }
     .filter__menu {
         height: 0 !important;

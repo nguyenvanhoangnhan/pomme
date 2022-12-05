@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
+import { onMounted, ref } from "vue"
 import { Icon } from "@iconify/vue"
 import { useRoute } from "vue-router"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
 import "vue3-carousel/dist/carousel.css"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
 import { useViewedProductsStore } from "@/stores/viewedProducts"
+import router from "@/router"
 
 import NoImg from "@/assets/NoImage"
 import api from "@/api"
@@ -13,7 +14,7 @@ defineProps<{}>()
 // get the product id from the route
 const productId = useRoute().params.id
 
-const accessory = ref<Accessory | null>()
+const accessory = ref<AccessoryWithProduct | null>()
 const currentSlide = ref(0)
 const isFetched = ref(false)
 
@@ -21,24 +22,25 @@ const slideTo = (val: number) => {
     currentSlide.value = val
 }
 
-// 1: shock, 2: tote, 3: backpack, 4: shoelace
-const CATEGORIES = {
-    0: "N/A",
-    1: "Tất",
-    2: "Túi tote",
-    3: "Balo",
-    4: "Dây giày",
+const fetchData = async () => {
+    try {
+        const { data } = await api.get(`/products/accessories/${productId}/`)
+        accessory.value = data as AccessoryWithProduct
+        if (accessory.value.product.images.length == 0) {
+            accessory.value.product.images = [...NoImg]
+        }
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        isFetched.value = true
+    } catch (err) {
+        console.log(err)
+        router.replace("/404")
+    }
 }
 
-const fetchData = async () => {
-    const { data } = await api.get(`/product/detail/${productId}/`)
-    accessory.value = data.data as Accessory
-    if (accessory.value.product.images.length == 0) {
-        accessory.value.product.images = [...NoImg]
-    }
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    isFetched.value = true
+const toCapFirst = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
 onMounted(async () => {
     await fetchData()
     if (accessory.value) {
@@ -52,11 +54,11 @@ onMounted(async () => {
         <div class="product__breadcrumb text-lg px-1">
             <div>
                 <a-breadcrumb>
-                    <a-breadcrumb-item><a href="/products?type=2">Phụ kiện</a></a-breadcrumb-item>
+                    <a-breadcrumb-item><a href="/products?type=accessory">Phụ kiện</a></a-breadcrumb-item>
                     <a-breadcrumb-item
-                        ><a href="#">{{ CATEGORIES[accessory?.category === undefined ? 0 : accessory?.category] }}</a></a-breadcrumb-item
+                        ><a href="#">{{ toCapFirst(accessory?.product?.name || "#") }}</a></a-breadcrumb-item
                     >
-                    <a-breadcrumb-item>{{ accessory?.product?.name }}</a-breadcrumb-item>
+                    <a-breadcrumb-item>{{ accessory?.product.name }}</a-breadcrumb-item>
                 </a-breadcrumb>
             </div>
         </div>
@@ -131,7 +133,7 @@ onMounted(async () => {
                 <div class="my-8">
                     <div class="font-bold text-xl text-primary uppercase">Thông tin sản phẩm</div>
                     <ul>
-                        <li>Loại sản phẩm: {{ CATEGORIES[accessory?.category === undefined ? 4 : accessory?.category] }}</li>
+                        <li>Loại sản phẩm: {{ accessory?.category }}</li>
                     </ul>
                 </div>
             </div>

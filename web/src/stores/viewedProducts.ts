@@ -1,12 +1,11 @@
 import { defineStore } from "pinia"
-export const useViewedProductsStore = defineStore({
-    id: "products",
+export const useViewedProductsStore = defineStore("viewed-products", {
     state: () => ({
-        products: [] as Product[],
+        products: [] as ProductWithImages[],
     }),
     getters: {},
     actions: {
-        addProduct(product: Product) {
+        addProduct(product: ProductWithImages) {
             if (!this.products.find((p) => p.id === product.id)) {
                 this.products.push(product)
             }
@@ -15,7 +14,7 @@ export const useViewedProductsStore = defineStore({
             }
             this.saveToLocalStorage()
         },
-        getFromLocalStorage() {
+        loadFromLocalStorage() {
             const products = localStorage.getItem("viewedProducts")
             if (products) {
                 this.products = JSON.parse(products)

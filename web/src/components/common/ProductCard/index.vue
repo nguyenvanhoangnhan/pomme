@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 import { computed } from "@vue/reactivity"
-
+import { useProductsStore } from "@/stores/products"
+import { useLoadingStore } from "@/stores/loading"
+import { useAuthStore } from "@/stores/auth"
 const props = defineProps<{
     product: ProductWithThumbnail
 }>()
+const products = useProductsStore()
+const auth = useAuthStore()
 
 const productType = computed(() => {
     return props.product.type.charAt(0).toUpperCase() + props.product.type.slice(1)
 })
 
-const addLove = () => {
-    
+const toggleLove = async () => {
+    useLoadingStore().loadingOn()
+    await products.toggleLoveProduct(props.product.id)
+    useLoadingStore().loadingOff()
 }
-const removeLove = () => {
-    console.log("remove love")
-}
+const isLoved = computed(() => {
+    return products.isLoved(props.product.id)
+})
 </script>
 
 <template>
@@ -24,10 +30,10 @@ const removeLove = () => {
             <div @click="$router.push({ name: productType + ' Detail', params: { id: product.id } })">
                 <div class="w-full aspect-square overflow-hidden relative cursor-pointer">
                     <img :src="product.thumbnail.url" :alt="product.name" class="w-full aspect-square cover group-hover:scale-110 transition-all duration-[0.4s]" />
-                    <div v-if="true" @click.stop="addLove" class="love-icon hover:text-primary">
+                    <div v-if="!isLoved && auth.$state.data.user" @click.stop="toggleLove" class="love-icon hover:text-primary">
                         <Icon icon="ph:heart-bold" :width="32" :height="32" />
                     </div>
-                    <div v-else @click.stop="removeLove" class="love-icon text-primary hover:text-secondary">
+                    <div v-else-if="auth.$state.data.user" @click.stop="toggleLove" class="love-icon text-primary hover:text-secondary">
                         <Icon icon="ph:heart-duotone" :width="32" :height="32" />
                     </div>
                 </div>
