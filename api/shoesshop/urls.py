@@ -90,10 +90,12 @@ urlpatterns = [
         ProductView.filterProduct,
     ),
     # -------------------------------------------
+    
+    # Order 
     path("order/",OrderView.list),
     path("order/<int:pk>/",OrderView.retrieve),
     
-    
+    # Order Product
     
     
     path("order-products/", OrderedProductList.as_view()),
