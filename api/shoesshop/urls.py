@@ -1,5 +1,12 @@
 from rest_framework import routers
-from .ProductOrderView import UserOrderView  # OrderProductView
+from .ProductOrderView import (
+        UserOrderView,
+        OrderedProductList,
+        OrderedProductDetail,
+        OrderView,
+        
+)
+  # OrderProductView
 from .accessoryView import AccessoryView
 from .productView import ProductView
 from .clothesView import ClothesView
@@ -11,10 +18,24 @@ from shoesshop.views import (
     UserCartProductView,
 )
 from django.urls import path, include
+from drf_yasg.views import get_schema_view as swagger_get_schema_view
+from drf_yasg import openapi
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenBlacklistView,
+)
+
+schema_view = swagger_get_schema_view(
+    openapi.Info(
+        title="ShoeShopAPI",
+        default_version='1.0.0',
+        description= "API documentation of App"
+        
+        
+    ),
+    public= True
+    
 )
 
 router = routers.SimpleRouter()
@@ -24,7 +45,11 @@ router.register(r"clothes", ClothesView)
 router.register(r"accessory", AccessoryView)
 router.register(r"user-cart-product", UserCartProductView)
 router.register(r"user-love-product", UserLoveProductView)
+router.register(r"Order", OrderView)
+
+
 urlpatterns = [
+    path('swagger/schema/',schema_view.with_ui('swagger',cache_timeout=0),name =" swagger-schema"),
     path("register/", UserView.as_view({"post": "create"})),
     path("login/", TokenObtainPairView.as_view(), name="login"),
     path("login-refresh/", TokenRefreshView.as_view(), name="login_refresh"),
@@ -33,6 +58,9 @@ urlpatterns = [
     path("upload-image/", ImageView.as_view()),
     # -----------------------------------------
     path("shoe/page/<int:page>/", ShoeView.getListShoe),
+    path("shoe_product/", ShoeView.getShoeByProductId),
+    
+    
     path("shoe/shoechild/<int:shoe>/", ShoeView.getShoeChild),
     path(
         "shoe/filter/page/<int:page>/<int:gender>/<int:shape>/<str:series>/<int:sale>/<int:price>/",
@@ -52,6 +80,7 @@ urlpatterns = [
     ),
     # -----------------------------------------
     path("product/<int:id>/", ProductView.getProductByID),
+    
     path("product/detail/<int:id>/", ProductView.getDetailTypeByID),
     path("product/<int:id>/", ProductView.deleteProduct),
     path("product/page/<int:page>/", ProductView.getListProduct),
@@ -61,8 +90,25 @@ urlpatterns = [
         ProductView.filterProduct,
     ),
     # -------------------------------------------
-    path("userorder/", UserOrderView.list),
-    # path("orderproduct/", OrderProductView.list),
-    path("userorder/<int:pk>/", UserOrderView.retrieve),
+    
+    # Order 
+    path("order/",OrderView.list),
+    path("order/<int:pk>/",OrderView.retrieve),
+    
+    # Order Product
+    
+    
+    path("order-products/", OrderedProductList.as_view()),
+    path("order-products/<int:pk>/", OrderedProductDetail.as_view()),
+    
+    
+    
+    
+
+    # View order by user
+    path("user-order/", UserOrderView.list),
+    path("user-order/<int:pk>/", UserOrderView.retrieve),
+    
+    
     path("", include(router.urls)),
 ]

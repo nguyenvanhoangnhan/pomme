@@ -45,6 +45,8 @@ class ShoeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shoe
         fields = "__all__"
+        
+
 
 
 class ShoeChildSerializer(serializers.ModelSerializer):
@@ -99,10 +101,7 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCartProduct
         fields = "__all__"
-        extra_kwargs = {
-            "product": {"read_only": True},
-            "user": {"read_only": True},
-        }
+       
 
 
 class UserLoveProductSerializer(serializers.ModelSerializer):
@@ -142,3 +141,29 @@ class User_OrderSerializer(serializers.ModelSerializer):
         many = True
         model = User
         fields = ("id", "username", "orders")
+
+class Shoe_ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Shoe
+        fields = ("shoe_id", "gender")
+
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        fields = '__all__'
+
+class OrderedSerializer(serializers.ModelSerializer):
+    ProductsOrdered = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Order
+        fields = ("order_id","user","status","ProductsOrdered","address","province_id","district_id","commune_id","total","discount","order_at","shipping_at","delivered_at")
+        depth = 1
+    def get_ProductsOrdered(self, obj):
+
+        query_set = OrderProduct.objects.filter(order=obj)
+
+        return [OrderProductSerializer(item).data for item in query_set]   

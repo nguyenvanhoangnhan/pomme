@@ -5,6 +5,9 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 import cloudinary.uploader
 from rest_framework import status, viewsets
 from django.contrib.auth.models import User
+from rest_framework_swagger.views import get_swagger_view
+
+
 from shoesshop.models import (
     Shoe,
     Product,
@@ -120,7 +123,7 @@ class UserCartProductView(viewsets.ViewSet):
         serializer = UserCartProductSerializer(instance=cart, many=True)
         return Response(
             {"data": serializer.data},
-            status=status.HTTP_404_NOT_FOUND,
+            status=status.HTTP_200_OK,
         )
 
     def retrieve(self, request, pk=None):
@@ -200,7 +203,7 @@ class UserLoveProductView(viewsets.ViewSet):
         serializer = UserLoveProductSerializer(instance=love, many=True)
         return Response(
             {"data": serializer.data},
-            status=status.HTTP_404_NOT_FOUND,
+            status=status.HTTP_200_OK,
         )
 
     def retrieve(self, request, pk=None):
@@ -216,7 +219,7 @@ class UserLoveProductView(viewsets.ViewSet):
         except:
             return Response(
                 {
-                    "message": "Cart item not found!",
+                    "message": "love-product item not found!",
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

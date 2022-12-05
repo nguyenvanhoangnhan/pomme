@@ -30,6 +30,7 @@ from shoesshop.serializer import (
     ClothesSerializer,
     User_OrderSerializer,
     ShoeChildSerializer,
+    Shoe_ProductSerializer
 )
 
 
@@ -250,3 +251,39 @@ class ShoeView(viewsets.ViewSet):
             },
             status=status.HTTP_200_OK,
         )
+    @api_view(["GET"])
+    def getShoeByProductId(self, request, pk=None):
+        try:
+            shoe = Shoe.objects.get(pk=pk)
+            images = ImageView.getListImage(shoe.product.product_id)
+            product = {
+                "product_id": shoe.product.product_id,
+                "name": shoe.product.name,
+                "price": shoe.product.price,
+                "salePercent": shoe.product.salePercent,
+                "in_stock": shoe.product.in_stock,
+                "sold": shoe.product.sold,
+                "type": shoe.product.type,
+                "image": images,
+            }
+            data = {
+                "shoe_id": shoe.shoe_id,
+                "gender": shoe.gender,
+                "series": shoe.series,
+                "shape": shoe.shape,
+                "product": product,
+            }
+            # serializer = ShoeSerializer(instance=shoe)
+            return Response(
+                {
+                    "data": data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except:
+            return Response(
+                {
+                    "message": "Shoe not found!",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
