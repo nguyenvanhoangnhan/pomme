@@ -1,81 +1,142 @@
 interface Image {
-    image_id: number
+    id: number
     product_id: number
     is_thumbnail: boolean
     url: string
 }
 
 interface Product {
-    product_id: number
+    id: number
     name: string
     price: number
-    sale_percent: number
+    sold: number
+    discount_percent: number
     in_stock: number
-    images: Image[]
-    type: 1 | 2 | 3
-    // 1: shoe | 2: accessory | 3: clothes
+    type: string
 }
 
 interface Shoe {
-    shoe_id: number
+    id: number
     product_id: number
     gender: 0 | 1 | 2
-    series: String
+    series: string
     shape: 0 | 1
-    product: Product
 }
 
 interface ShoeChild {
-    shoe_child_id: number
+    id: number
     shoe_id: number
     size: number
     in_stock: number
 }
 
 interface Clothes {
-    clothes_id: number
+    id: number
     product_id: number
-    category: 1 | 2 | 3
-    // 1: tee, 2: hoodie, 3:sweatshirt
-
-    product: Product
+    category: string
 }
 
 interface Accessory {
-    accessory_id: number
+    id: number
     product_id: number
-    category: 1 | 2 | 3 | 4
-    // 1: shock, 2: tote, 3: backpack, 4: shoelace
-    product: Product
+    category: string
 }
 
-interface CartItem extends Product {
+interface UserCartPivot {
+    user_id: number
+    product_id: number
     quantity: number
+    size: number | null
+}
+interface UserCartProduct {
+    id: number
+    name: string
+    price: number
+    discount_percent: number
+    in_stock: number
+    sold: number
+    type: string
+    pivot: UserCartPivot
 }
 
-interface OrderProduct {
-    order_product_id: number
+interface OrderProductPivot {
     order_id: number
     product_id: number
     price_at_order: number
     quantity: number
-    product: Product
     size: number | null
+}
+interface OrderProduct {
+    id: number
+    name: string
+    price: number
+    discount_percent: number
+    in_stock: number
+    sold: number
+    type: string
+    pivot: OrderProductPivot
 }
 
 interface Order {
-    order_id: number
+    id: number
     user_id: number
     address: string
-    province_id: number
-    district_id: number
-    commune_id: number
-    status: 0 | 1 | 2
-    // 0 = in progress, 1 = shipping, 2 = delivered
+    province_id: string
+    district_id: string
+    commune_id: string
+    status: string
+    phone: string
     total: number
     discount: number
     created_at: string
     shipping_at: string
     delivered_at: string
+    image_url: string
+}
+
+interface ProductWithImages extends Product {
+    images: Image[]
+}
+
+interface ProductWithThumbnail extends Product {
+    thumbnail: Image
+}
+
+interface ShoeWithProduct extends Shoe {
+    product: ProductWithImages
+}
+
+interface ShoeWithProductAndChild extends ShoeWithProduct {
+    children: ShoeChild[]
+}
+
+interface AccessoryWithProduct extends Accessory {
+    product: ProductWithImages
+}
+
+interface ClothesWithProduct extends Clothes {
+    product: ProductWithImages
+}
+
+interface OrderWithProducts extends Order {
     products: OrderProduct[]
+}
+
+interface LoginForm {
+    email: string
+    password: string
+}
+
+interface AuthData {
+    access_token: string
+    token_type: string
+    expires_at: number
+    user: User
+}
+
+interface User {
+    id: number
+    email: string
+    name: string
+    role: string
 }

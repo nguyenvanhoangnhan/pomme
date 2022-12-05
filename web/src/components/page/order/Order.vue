@@ -12,7 +12,7 @@ defineProps<{
             </div>
             <div class="flex flex-col gap-2 p-4" style="width: calc(100% - 180px - 16px - 60px)">
                 <div class="order__name font-bold text-xl text-ellipsis overflow-hidden whitespace-nowrap">
-                    <span v-for="product in order.products" :key="product.product_id">
+                    <span v-for="product in order.products" :key="product.id">
                         {{ product.product.name }}
                         <span v-if="product !== order.products[order.products.length - 1]">, </span>
                     </span>

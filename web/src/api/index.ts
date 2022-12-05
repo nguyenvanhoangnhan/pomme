@@ -1,12 +1,13 @@
 import axios from "axios"
-const BASE_URL = import.meta.env.BASE_URL
+
+const authData = localStorage.getItem("authData")
+const data = authData ? JSON.parse(authData) : {}
 
 const api = axios.create({
-    baseURL: BASE_URL,
-    withCredentials: true,
+    baseURL: import.meta.env.VITE_API_URL,
+    headers: {
+        Authorization: `Bearer ${data.access_token}`,
+    },
 })
-
-api.defaults.headers.common["Content-Type"] = "application/json"
-// (...)
 
 export default api

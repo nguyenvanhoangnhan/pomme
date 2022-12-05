@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@1.5.0
-
 parameters:
   run-api-ci:
     type: boolean
@@ -12,16 +9,29 @@ parameters:
     default: false
 
 jobs:
-  pylint:
+  phplint:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/php:8.1.13
     steps:
       - checkout
-      - run: pip install --user pylint pylint-django
-      - run: pip install --user -r api/requirements.txt
-      - run: 
+      - restore_cache:
+          key: dependency-cache-{{ checksum "api-laravel/composer.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            cd api-laravel/
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=./ --filename=composer
+            ./composer update
+      - save_cache:
+          key: dependency-cache-{{ checksum "api-laravel/composer.lock" }}
+          paths:
+            - ./api-laravel/vendor
+      - run:
           name: Lint check
-          command: cd api && PYTHONPATH=$(pwd) pylint --load-plugins pylint_django --django-settings-module=api.settings .
+          command: |
+            cd api-laravel/
+            vendor/bin/phpcs --config-set show_warnings 0
+            vendor/bin/phpcs
   jslint:
     docker:
       - image: cimg/node:17.4.0
@@ -45,13 +55,9 @@ jobs:
 
   build-and-deploy-api-image:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/php:8.1.13
     steps:
       - checkout
-      - run: cd web
-      - python/install-packages:
-          pkg-manager: pip
-          app-dir: api
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
@@ -63,8 +69,8 @@ jobs:
           name: Build docker image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build -t $DOCKER_USER/shoe-shop-api:latest api/
-            docker build -t $DOCKER_USER/shoe-shop-api:$TAG api/
+            docker build -t $DOCKER_USER/shoe-shop-api:latest api-laravel/
+            docker build -t $DOCKER_USER/shoe-shop-api:$TAG api-laravel/
       - run:
           name: Check images
           command: docker images
@@ -116,10 +122,10 @@ workflows:
   ci-api:
     when: << pipeline.parameters.run-api-ci >>
     jobs:
-      - pylint
+      - phplint
       - build-and-deploy-api-image:
           requires:
-            - pylint
+            - phplint 
           filters:
             branches:
               only:

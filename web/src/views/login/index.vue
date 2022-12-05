@@ -3,29 +3,27 @@ import { useAuthStore } from "@/stores/auth"
 import { reactive } from "vue"
 import { useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
-interface LoginFormState {
-    email: string
-    password: string
-}
 
 defineProps<{}>()
 const auth = useAuthStore()
 const router = useRouter()
-if (auth.token) {
-    // push back to home "/"
+if (auth.data.access_token) {
     router.push("/")
 }
 
 //handle form
-const loginFormState = reactive<LoginFormState>({
+const loginFormState = reactive<LoginForm>({
     email: "",
     password: "",
 })
-const onFinish = () => {
-    // login
+const onFinish = async () => {
+    await auth.login(loginFormState)
+    if (auth.data.access_token) {
+        window.location.replace("/")
+    }
 }
 const onFinishFailed = (errInfo: any) => {
-    // handle error
+    console.log("Failed:", errInfo)
 }
 </script>
 

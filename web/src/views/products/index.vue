@@ -1,228 +1,39 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, reactive, ref } from "vue"
+// import axios from "axios"
+import api from "@/api"
+import { useRoute } from "vue-router"
 defineProps<{}>()
-const products = ref<Product[]>([
-    {
-        product_id: 1,
-        name: "Shoe #1",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 1,
-                product_id: 1,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 2,
-                product_id: 1,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-    {
-        product_id: 1,
-        name: "Shoe #2",
-        price: 100000,
-        sale_percent: 0,
-        in_stock: 10,
-        images: [
-            {
-                image_id: 3,
-                product_id: 2,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-            {
-                image_id: 4,
-                product_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-            },
-        ],
-        type: 1,
-    },
-])
+const route = useRoute()
+const products = ref<ProductWithThumbnail[]>([])
+const pagination = reactive({
+    isFetchingNextPage: false,
+    current: 1,
+    isEnd: false,
+})
+
+onMounted(async () => {
+    const { data } = await api.get("/product/page/1/")
+    pagination.current += 1
+    products.value = data.data as Product[]
+})
+
+// on scroll to bottom fetch more data
+window.addEventListener("scroll", async () => {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+        if (pagination.isEnd) return
+        pagination.isFetchingNextPage = true
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        const { data } = await api.get(`/product/page/${pagination.current}/`)
+        pagination.isFetchingNextPage = false
+        if (data.data.length > 0) {
+            pagination.current += 1
+            products.value = [...products.value, ...data.data]
+        } else {
+            pagination.isEnd = true
+        }
+    }
+})
 </script>
 
 <template>
@@ -235,7 +46,13 @@ const products = ref<Product[]>([
                 <img src="/images/image5.jpg" alt="#" class="w-full h-full object-cover object-top" />
             </div>
             <div class="flex w-full flex-wrap">
-                <ProductCard v-for="product in products" :key="product.product_id" :product="product" />
+                <ProductCard v-for="product in products" :key="product.id" :product="product" />
+                <template v-if="pagination.isFetchingNextPage">
+                    <div v-for="index in 3" :key="index" class="product-skeleton px-2 pt-[3px] mb-4 w-1/3 flex flex-col items-center gap-2">
+                        <a-skeleton-avatar :active="true" :size="282" shape="square" />
+                        <a-skeleton-button :active="true"></a-skeleton-button>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

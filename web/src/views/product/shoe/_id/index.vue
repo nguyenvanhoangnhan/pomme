@@ -1,88 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { Icon } from "@iconify/vue"
 import { useRoute } from "vue-router"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
 import "vue3-carousel/dist/carousel.css"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
+import { useViewedProductsStore } from "@/stores/viewedProducts"
+import api from "@/api"
+import noImg from "@/assets/NoImage"
+import router from "@/router"
 defineProps<{}>()
 // get the product id from the route
 const productId = useRoute().params.id
 
-const shoe = ref<Shoe | null>({
-    shoe_id: 1,
-    product_id: 1,
-    gender: 2,
-    series: "GSmith",
-    shape: 0,
-    product: {
-        product_id: 1,
-        name: "Shoe #1",
-        price: 1000000,
-        sale_percent: 0,
-        in_stock: 100,
-        images: [
-            {
-                product_id: 1,
-                image_id: 1,
-                is_thumbnail: true,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 2,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 3,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 4,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1.jpg",
-            },
-            {
-                product_id: 1,
-                image_id: 5,
-                is_thumbnail: false,
-                url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1.jpg",
-            },
-        ],
-        type: 1,
-    },
-})
-
-const shoeChilds = ref<ShoeChild[] | null>([
-    {
-        shoe_child_id: 1,
-        shoe_id: 1,
-        size: 35,
-        in_stock: 100,
-    },
-    {
-        shoe_child_id: 2,
-        shoe_id: 1,
-        size: 36,
-        in_stock: 100,
-    },
-    {
-        shoe_child_id: 3,
-        shoe_id: 1,
-        size: 37,
-        in_stock: 100,
-    },
-    {
-        shoe_child_id: 4,
-        shoe_id: 1,
-        size: 38,
-        in_stock: 100,
-    },
-])
+const shoe = ref<ShoeWithProductAndChild | null>(null)
+const isFetched = ref(false)
 
 const currentSlide = ref(0)
 
@@ -95,6 +27,27 @@ const GENDERS = {
     1: "Nữ",
     2: "Unisex",
 }
+const fetchData = async () => {
+    try {
+        const { data } = await api.get(`/product/detail/${productId}/`)
+        shoe.value = data.data as Shoe
+        const { data: childs } = await api.get(`/shoe/shoechild/${shoe.value.shoe_id}`)
+        shoeChilds.value = childs.data as ShoeChild[]
+        if (shoe.value.product.images.length == 0) {
+            shoe.value.product.images = [...noImg]
+        }
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        isFetched.value = true
+    } catch (e) {
+        router.replace("/404")
+    }
+}
+onMounted(async () => {
+    await fetchData()
+    if (shoe.value) {
+        useViewedProductsStore().addProduct(shoe.value.product)
+    }
+})
 </script>
 
 <template>
@@ -104,7 +57,7 @@ const GENDERS = {
                 <a-breadcrumb>
                     <a-breadcrumb-item><a href="/products?type=1">Giày</a></a-breadcrumb-item>
                     <a-breadcrumb-item
-                        ><a href="#">{{ shoe?.series }}</a></a-breadcrumb-item
+                        ><a href="products?type=1">{{ shoe?.series }}</a></a-breadcrumb-item
                     >
                     <a-breadcrumb-item>{{ shoe?.product?.name }}</a-breadcrumb-item>
                 </a-breadcrumb>
@@ -113,9 +66,19 @@ const GENDERS = {
         <div class="px-1">
             <div class="divider--solid mt-2 mb-6"></div>
         </div>
+
         <div class="product__detail flex-col lg:flex-row flex w-full gap-12">
             <div class="product__detail__left w-full lg:w-[640px]">
-                <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" class="p-1">
+                <div v-if="!isFetched" class="skeleton flex flex-col gap-2">
+                    <a-skeleton-avatar :active="true" :size="640" shape="square" />
+                    <div class="flex gap-2">
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                        <a-skeleton-avatar :active="true" :size="208" shape="square" />
+                    </div>
+                </div>
+
+                <Carousel v-if="isFetched" id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" class="p-1">
                     <Slide v-for="index in shoe?.product.images.length || 0" :key="index - 1" :index="index">
                         <div class="carousel__item w-full aspect-square p-1">
                             <img :src="shoe?.product.images[index - 1].url" alt="#" class="w-full aspect-square object-cover" />
@@ -126,8 +89,8 @@ const GENDERS = {
                     </template>
                 </Carousel>
 
-                <Carousel id="thumbnails" :wrap-around="true" :items-to-show="3" :mouse-drag="false" v-model="currentSlide" class="p-1">
-                    <Slide v-for="index in shoe?.product.images.length || 0" :key="index - 1" :index="index">
+                <Carousel v-if="isFetched" id="thumbnails" :wrap-around="true" :items-to-show="3" :mouse-drag="false" v-model="currentSlide" class="p-1">
+                    <Slide v-for="index in shoe?.product.images.length" :key="index - 1" :index="index">
                         <div class="carousel__item" @click="slideTo(index - 1)">
                             <img :src="shoe?.product.images[index - 1].url" alt="#" class="p-1" />
                         </div>
@@ -142,7 +105,7 @@ const GENDERS = {
                 <div class="font-black text-3xl uppercase mb-4">
                     {{ shoe?.product.name }}
                 </div>
-                <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product_id }}</div>
+                <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product.id }}</div>
                 <div class="text-2xl font-bold text-primary">{{ Number(shoe?.product.price).toLocaleString() }} VNĐ</div>
                 <!--  -->
                 <div class="divider--dashed my-6"></div>
@@ -159,8 +122,8 @@ const GENDERS = {
                     <div class="font-black text-2xl uppercase">Size</div>
                     <div class="font-black text-2xl uppercase">Số lượng</div>
                     <ASelect placeholder="Size" class="w-full" size="large">
-                        <ASelectOption v-for="shoeChild in shoeChilds" :key="shoeChild.shoe_child_id" :value="shoeChild.size">
-                            {{ shoeChild.size }}
+                        <ASelectOption v-for="child in shoe?.children" :key="child.id" :value="child.size" :disabled="child.in_stock <= 0">
+                            {{ child.size }}
                         </ASelectOption>
                     </ASelect>
                     <AInputNumber min="0" style="width: 100%" size="large" />

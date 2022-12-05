@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sentry_sdk.init(
-    dsn="https://0f46d5fb566c4a239bf41011045ba42e@o4504197595136000.ingest.sentry.io/4504197597691904",
+    dsn=os.getenv("SENTRY_DSN"),
     integrations=[
         DjangoIntegration(),
     ],
@@ -34,6 +34,7 @@ sentry_sdk.init(
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True,
+    environment=os.getenv("ENVIRONMENT", "dev"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,13 +45,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-+hg2=wkk53r@(t=10-f$-)x229kpykftzvr3q7we*4(lx=vmvx"
+SECRET_KEY = os.getenv("DJANGO_SECRET", "unsecure_key_for_django")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "shoesshop.apps.ShoesshopConfig",
     "django.contrib.admin",
     "django.contrib.auth",
+    "corsheaders",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -184,8 +186,10 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 cloudinary.config(
-    cloud_name=os.getenv("NAME"),
-    api_key=os.getenv("KEY"),
-    api_secret=os.getenv("SECRET"),
+    cloud_name=os.getenv("CLOUDINARY_NAME"),
+    api_key=os.getenv("CLOUDINARY_KEY"),
+    api_secret=os.getenv("CLOUDINARY_SECRET"),
 )
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+CORS_ORIGIN_ALLOW_ALL = True
