@@ -8,18 +8,29 @@ export const useCartStore = defineStore({
     }),
     getters: {
         total(): number {
-            return this.items.reduce((total: number, item: CartItem) => total + item.price * item.quantity, 0)
+            return this.items.reduce((total: number, item: UserCartProduct) => {
+                return total + item.pivot.quantity * item.price
+            }, 0)
         },
     },
     actions: {
         async fetchCart() {
             try {
                 const response = await api.get("cart")
-                return response.data
+                this.items = response.data
+                localStorage.setItem("cart", JSON.stringify(response.data))
             } catch (error) {
                 console.log(error)
             }
             return []
+        },
+        async loadFromLocalStorage() {
+            const JSONData = localStorage.getItem("cart")
+            if (JSONData) {
+                this.items = JSON.parse(JSONData)
+            } else {
+                await this.fetchCart()
+            }
         },
         async updateCart() {
             this.items = await this.fetchCart()
@@ -58,9 +69,7 @@ export const useCartStore = defineStore({
             await this.updateCart()
         },
         clear() {
-            
             this.items = []
-
         },
     },
 })

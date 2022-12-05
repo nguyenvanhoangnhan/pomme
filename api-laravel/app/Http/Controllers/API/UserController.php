@@ -39,7 +39,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        $products  = $user->cartProducts()->get();
+        $products  = $user->cartProducts()->with('thumbnail')->get();
 
         return response()->json($products);
     }

@@ -8,19 +8,32 @@ import AuthLayout from "@/layouts/auth/index.vue"
 import EmptyLayout from "@/layouts/empty/index.vue"
 import HomeLayout from "@/layouts/home/index.vue"
 import { useViewedProductsStore } from "@/stores/viewedProducts"
+import { useProductsStore } from "./stores/products"
+import { useCartStore } from "./stores/cart"
+import { useLoadingStore } from "./stores/loading"
 
 const auth = useAuthStore()
+const cart = useCartStore()
+const loading = useLoadingStore()
+const products = useProductsStore()
+const viewedProducts = useViewedProductsStore()
 auth.loadAuthData()
+
+if (auth.isLoggedIn) {
+    cart.loadFromLocalStorage()
+    products.loadFromLocalStorage()
+}
 
 // handle dynamic layout
 const route = useRoute()
+const isLoadingLayout = ref(true)
 const layouts = {
     default: DefaultLayout,
     auth: AuthLayout,
     admin: AdminLayout,
     empty: EmptyLayout,
     home: HomeLayout,
-}
+} as Record<string, typeof DefaultLayout>
 const layout = ref()
 watch(
     () => route.meta.layout as string | undefined,
@@ -38,18 +51,21 @@ watch(
     { immediate: true }
 )
 
-const isLoadingLayout = ref(true)
 setTimeout(() => {
     isLoadingLayout.value = false
 }, 400)
+
 onMounted(() => {
-    useViewedProductsStore().getFromLocalStorage()
+    viewedProducts.loadFromLocalStorage()
 })
 </script>
 
 <template>
-    <div v-if="isLoadingLayout" class="loading bg-white text-primary w-screen h-screen flex justify-center items-center fixed z-[999]">
+    <div v-if="isLoadingLayout" class="loading-pomme bg-white text-primary w-screen h-screen flex justify-center items-center fixed z-[999]">
         <img src="/granny-smith-logo.svg" alt="logo" class="w-[10vw]" />
+    </div>
+    <div v-if="loading.$state.isLoading" class="loading bg-black bg-opacity-20 w-screen h-screen flex justify-center items-center fixed z-[999]">
+        <a-spin size="large"></a-spin>
     </div>
     <Transition name="fade">
         <component v-if="!isLoadingLayout" :is="layout">
@@ -60,8 +76,8 @@ onMounted(() => {
 
 <style scoped>
 /*
-  Enter and leave animations can use different
-  durations and timing functions.
+    Enter and leave animations can use different
+    durations and timing functions.
 */
 .fade-enter-active {
     transition: all 0.3s ease;

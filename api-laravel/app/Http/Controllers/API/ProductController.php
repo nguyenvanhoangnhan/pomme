@@ -57,11 +57,16 @@ class ProductController extends Controller
     public function filterShoe(Builder $products, Request $request)
     {
         $gender = $request->has('gender') ? $request->gender : false;
+        error_log($gender);
         $series = $request->has('series') ? $request->series : false;
         $shape = $request->has('shape') ? $request->shape : false;
 
         $series ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('series', $series)) : '';
-        $gender ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('gender', $gender)) : '';
+        if ($gender === '0' || $gender === '1') {
+            $products = $products
+                ->whereHas('shoe', fn(Builder $query) => $query->where('gender', $gender)->orWhere('gender', '2'));
+        }
+
         $shape ? $products = $products->whereHas('shoe', fn(Builder $query) => $query->where('shape', $shape)) : '';
 
         return $products;

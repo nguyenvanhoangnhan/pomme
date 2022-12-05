@@ -18,21 +18,21 @@ import { Icon } from "@iconify/vue"
             </li>
             <li class="nav__separate-line"></li>
             <li class="nav__item">
-                <RouterLink :to="{ name: 'Products' }" class="nav__item__link">
+                <RouterLink :to="{ name: 'Products', query: { type: 'shoe', gender: 0 } }" class="nav__item__link">
                     Nam
                     <Icon icon="ph:caret-down-bold" :width="20" :height="20" />
                 </RouterLink>
             </li>
             <li class="nav__separate-line"></li>
             <li class="nav__item">
-                <RouterLink :to="{ name: 'Products', query: { type: 'shoe', gender: 0 } }" class="nav__item__link">
+                <RouterLink :to="{ name: 'Products', query: { type: 'shoe', gender: 1 } }" class="nav__item__link">
                     Nữ
                     <Icon icon="ph:caret-down-bold" :width="20" :height="20" />
                 </RouterLink>
             </li>
             <li class="nav__separate-line"></li>
             <li class="nav__item">
-                <RouterLink :to="{ name: 'Products' }" class="nav__item__link"> Sale off </RouterLink>
+                <RouterLink :to="{ name: 'Products', query: { type: 'shoe', sale: 1 } }" class="nav__item__link"> Sale off </RouterLink>
             </li>
         </ul>
         <div class="header__bottom_right flex items-center justify-center pr-8">

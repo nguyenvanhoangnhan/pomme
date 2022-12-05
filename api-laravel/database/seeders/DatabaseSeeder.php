@@ -183,11 +183,11 @@ class DatabaseSeeder extends Seeder
         foreach (\App\Models\Product::all() as $product) {
             \App\Models\Image::create([
                 'is_thumbnail' => true,
-                'url' => 'https://via.placeholder.com/500/41B883/ffffff?text=Thumbnail',
+                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Thumbnail',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://via.placeholder.com/500/41B883/ffffff?text=Image+1',
+                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Image+1',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
@@ -195,7 +195,7 @@ class DatabaseSeeder extends Seeder
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://via.placeholder.com/500/41B883/ffffff?text=Image+3',
+                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Image+3',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([

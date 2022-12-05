@@ -3,7 +3,7 @@ import { useAuthStore } from "@/stores/auth"
 import { reactive } from "vue"
 import { useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
-
+import { useProductsStore } from "@/stores/products"
 defineProps<{}>()
 const auth = useAuthStore()
 const router = useRouter()
@@ -16,13 +16,13 @@ const loginFormState = reactive<LoginForm>({
     email: "",
     password: "",
 })
-const onFinish = async () => {
+const handleLogin = async () => {
     await auth.login(loginFormState)
     if (auth.data.access_token) {
-        window.location.replace("/")
+        window.location.replace("/products")
     }
 }
-const onFinishFailed = (errInfo: any) => {
+const handleLoginFailed = (errInfo: any) => {
     console.log("Failed:", errInfo)
 }
 </script>
@@ -33,7 +33,7 @@ const onFinishFailed = (errInfo: any) => {
         <h1 class="login__title font-black text-5xl mb-16">Đăng nhập</h1>
 
         <!-- Login form -->
-        <AForm class="login__form" :model="loginFormState" layout="vertical" @finish="onFinish" @finishFailed="onFinishFailed">
+        <AForm class="login__form" :model="loginFormState" layout="vertical" @finish="handleLogin" @finishFailed="handleLoginFailed">
             <AFormItem name="email" :rules="[{ required: true, message: 'Xin vui lòng nhập email!' }]">
                 <AInput type="text" size="large" v-model:value="loginFormState.email" placeholder="Email" auto-complete="off">
                     <template #prefix> <Icon icon="ph:envelope-simple-bold" /> </template

@@ -84,7 +84,15 @@ class ShoeController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Shoe::with('product.images', 'children')->where('product_id', $request->product_id)->get());
+        $shoe = Shoe::with('product.images', 'children')->where('product_id', $request->product_id)->first();
+        if (!$shoe) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Shoe not found',
+            ], 404);
+        }
+
+        return response()->json($shoe);
     }
 
     /**

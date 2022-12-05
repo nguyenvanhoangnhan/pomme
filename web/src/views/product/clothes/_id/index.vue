@@ -8,32 +8,32 @@ import { useViewedProductsStore } from "@/stores/viewedProducts"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
 import api from "@/api"
 import noImg from "@/assets/NoImage"
+import router from "@/router"
+
 defineProps<{}>()
 // get the product id from the route
 const productId = useRoute().params.id
 const isFetched = ref(false)
-const clothes = ref<Clothes | null>()
+const clothes = ref<ClothesWithProduct | null>()
 const currentSlide = ref(0)
 
 const slideTo = (val: number) => {
     currentSlide.value = val
 }
 
-const CATEGORIES = {
-    0: "N/A",
-    1: "Áo thun",
-    2: "Áo hoodie",
-    3: "Áo dài tay",
-}
-
 const fetchData = async () => {
-    const { data } = await api.get(`/product/detail/${productId}/`)
-    clothes.value = data.data as Clothes
-    if (clothes.value.product.images.length == 0) {
-        clothes.value.product.images = [...noImg]
+    try {
+        const { data } = await api.get(`/products/clothes/${productId}/`)
+        clothes.value = data as ClothesWithProduct
+        if (clothes.value.product.images.length == 0) {
+            clothes.value.product.images = [...noImg]
+        }
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        isFetched.value = true
+    } catch (e) {
+        console.log(e)
+        router.replace("/404")
     }
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    isFetched.value = true
 }
 onMounted(async () => {
     await fetchData()
@@ -48,9 +48,9 @@ onMounted(async () => {
         <div class="product__breadcrumb text-lg px-1">
             <div>
                 <a-breadcrumb>
-                    <a-breadcrumb-item><a href="/products?type=2">Phụ kiện</a></a-breadcrumb-item>
+                    <a-breadcrumb-item><a href="/products?type=clothes">Phụ kiện</a></a-breadcrumb-item>
                     <a-breadcrumb-item
-                        ><a href="#">{{ CATEGORIES[clothes?.category === undefined ? 0 : clothes?.category] }}</a></a-breadcrumb-item
+                        ><a href="#"> {{ clothes?.category }}</a></a-breadcrumb-item
                     >
                     <a-breadcrumb-item>{{ clothes?.product?.name }}</a-breadcrumb-item>
                 </a-breadcrumb>
@@ -70,7 +70,7 @@ onMounted(async () => {
                     </div>
                 </div>
                 <Carousel v-if="isFetched" id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" class="p-1">
-                    <Slide v-for="index in clothes?.product.images.length || 0" :key="index - 1" :index="index">
+                    <Slide v-for="index in clothes?.product?.images.length || 0" :key="index - 1" :index="index">
                         <div class="carousel__item w-full aspect-square p-1">
                             <img :src="clothes?.product.images[index - 1].url" alt="#" class="w-full aspect-square object-cover" />
                         </div>
@@ -127,7 +127,7 @@ onMounted(async () => {
                 <div class="my-8">
                     <div class="font-bold text-xl text-primary uppercase">Thông tin sản phẩm</div>
                     <ul>
-                        <li>Loại sản phẩm: {{ CATEGORIES[clothes?.category === undefined ? 0 : clothes?.category] }}</li>
+                        <li>Loại sản phẩm: {{ clothes?.category }}</li>
                     </ul>
                 </div>
             </div>

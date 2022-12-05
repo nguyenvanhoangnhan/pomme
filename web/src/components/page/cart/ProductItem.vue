@@ -3,19 +3,23 @@ import { Icon } from "@iconify/vue"
 
 defineProps<{
     // eslint-disable-next-line no-undef
-    product: CartItem
+    product: UserCartProduct
 }>()
+
+const handleChangeQuantity = (e) => {
+    console.log(e)
+}
 </script>
 
 <template>
     <div class="flex gap-8">
         <div class="w-[180px]">
-            <img class="w-[180px] h-[180px] object-cover" :src="product.images.find((item) => item.is_thumbnail)?.url" />
+            <img class="w-[180px] h-[180px] object-cover" :src="product?.thumbnail.url" />
         </div>
         <div class="flex-1 flex flex-col justify-between">
             <div class="flex justify-between text-lg font-bold">
                 <span class="">{{ product.name }}</span>
-                <span class="text-primary">{{ Number(product.price * product.quantity).toLocaleString() }} VNĐ</span>
+                <span class="text-primary">{{ Number(product.price * product.pivot.quantity).toLocaleString() }} VNĐ</span>
             </div>
             <div class="flex justify-between">
                 <span>Giá: {{ Number(product.price).toLocaleString() }} </span>
@@ -42,7 +46,7 @@ defineProps<{
                     </div>
                     <div>
                         <div class="font-bold ml-[2px]">Số lượng</div>
-                        <AInputNumber style="width: 96px" defaultValue="1" min="1" max="12" />
+                        <AInputNumber style="width: 96px" defaultValue="1" min="1" max="12" :value="product.pivot.quantity" @change="handleChangeQuantity" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-4">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
-import { Icon } from "@iconify/vue"
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
+import { Icon } from "@iconify/vue"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
 import "vue3-carousel/dist/carousel.css"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
@@ -9,39 +9,48 @@ import { useViewedProductsStore } from "@/stores/viewedProducts"
 import api from "@/api"
 import noImg from "@/assets/NoImage"
 import router from "@/router"
+import { useLoadingStore } from "@/stores/loading"
+import { useProductsStore } from "@/stores/products"
+import { computed } from "@vue/reactivity"
 defineProps<{}>()
-// get the product id from the route
-const productId = useRoute().params.id
+const GENDERS = {
+    0: "Nam",
+    1: "Nữ",
+} as Record<number, string>
 
+const products = useProductsStore()
+const productId = useRoute().params.id
 const shoe = ref<ShoeWithProductAndChild | null>(null)
 const isFetched = ref(false)
 
 const currentSlide = ref(0)
-
 const slideTo = (val: number) => {
     currentSlide.value = val
 }
 
-const GENDERS = {
-    0: "Nam",
-    1: "Nữ",
-    2: "Unisex",
-}
 const fetchData = async () => {
     try {
-        const { data } = await api.get(`/product/detail/${productId}/`)
-        shoe.value = data.data as Shoe
-        const { data: childs } = await api.get(`/shoe/shoechild/${shoe.value.shoe_id}`)
-        shoeChilds.value = childs.data as ShoeChild[]
+        const { data } = await api.get(`/products/shoes/${productId}/`)
+        shoe.value = data as ShoeWithProductAndChild
         if (shoe.value.product.images.length == 0) {
             shoe.value.product.images = [...noImg]
         }
         await new Promise((resolve) => setTimeout(resolve, 500))
         isFetched.value = true
     } catch (e) {
+        console.log(e)
         router.replace("/404")
     }
 }
+const toggleLove = async () => {
+    useLoadingStore().loadingOn()
+    await products.toggleLoveProduct(Number(productId))
+    useLoadingStore().loadingOff()
+}
+const isLoved = computed(() => {
+    return products.isLoved(Number(productId))
+})
+
 onMounted(async () => {
     await fetchData()
     if (shoe.value) {
@@ -55,7 +64,7 @@ onMounted(async () => {
         <div class="product__breadcrumb text-lg px-1">
             <div>
                 <a-breadcrumb>
-                    <a-breadcrumb-item><a href="/products?type=1">Giày</a></a-breadcrumb-item>
+                    <a-breadcrumb-item><a href="/products?type=shoe">Giày</a></a-breadcrumb-item>
                     <a-breadcrumb-item
                         ><a href="products?type=1">{{ shoe?.series }}</a></a-breadcrumb-item
                     >
@@ -131,8 +140,8 @@ onMounted(async () => {
                 <!--  -->
                 <div class="grid grid-row-2 grid-cols-4 gap-x-2 gap-y-2">
                     <div class="col-span-3 button bg-black text-white">Thêm vào giỏ hàng</div>
-                    <div class="col-span-1 button bg-black text-primary">
-                        <Icon icon="ph:heart-straight-fill" color="white" :width="30" :height="30" />
+                    <div class="col-span-1 button bg-black text-primary" @click="toggleLove">
+                        <Icon icon="ph:heart-straight-fill" :color="isLoved ? '#44AF7D' : 'white'" :width="30" :height="30" />
                     </div>
                     <div class="col-span-4 button bg-primary text-white">Thanh toán</div>
                 </div>

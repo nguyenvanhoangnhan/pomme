@@ -23,6 +23,7 @@ declare module '@vue/runtime-core' {
     ASkeleton: typeof import('ant-design-vue/es')['Skeleton']
     ASkeletonAvatar: typeof import('ant-design-vue/es')['SkeletonAvatar']
     ASkeletonButton: typeof import('ant-design-vue/es')['SkeletonButton']
+    ASpin: typeof import('ant-design-vue/es')['Spin']
     AStep: typeof import('ant-design-vue/es')['Step']
     ASteps: typeof import('ant-design-vue/es')['Steps']
     ATag: typeof import('ant-design-vue/es')['Tag']
