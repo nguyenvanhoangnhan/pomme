@@ -1,8 +1,9 @@
 from rest_framework import routers
 from .ProductOrderView import (
         UserOrderView,
-        OrderProductList,
-        OrderProductDetail,
+        OrderedProductList,
+        OrderedProductDetail,
+        OrderView,
         
 )
   # OrderProductView
@@ -44,6 +45,9 @@ router.register(r"clothes", ClothesView)
 router.register(r"accessory", AccessoryView)
 router.register(r"user-cart-product", UserCartProductView)
 router.register(r"user-love-product", UserLoveProductView)
+router.register(r"Order", OrderView)
+
+
 urlpatterns = [
     path('swagger/schema/',schema_view.with_ui('swagger',cache_timeout=0),name =" swagger-schema"),
     path("register/", UserView.as_view({"post": "create"})),
@@ -86,15 +90,23 @@ urlpatterns = [
         ProductView.filterProduct,
     ),
     # -------------------------------------------
-    path("order-products/", OrderProductList.as_view()),
-    path("order-products/<int:pk>/", OrderProductDetail.as_view()),
+    path("order/",OrderView.list),
+    path("order/<int:pk>/",OrderView.retrieve),
     
     
     
     
+    path("order-products/", OrderedProductList.as_view()),
+    path("order-products/<int:pk>/", OrderedProductDetail.as_view()),
+    
+    
+    
+    
+
+    # View order by user
     path("user-order/", UserOrderView.list),
-    
-    # path("orderproduct/", OrderProductView.list),
     path("user-order/<int:pk>/", UserOrderView.retrieve),
+    
+    
     path("", include(router.urls)),
 ]

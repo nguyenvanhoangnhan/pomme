@@ -29,8 +29,10 @@ from shoesshop.serializer import (
     UserLoveProductSerializer,
     AccessorySerializer,
     ClothesSerializer,
-    OrderSerializer,
+    OrderedSerializer,
+    OrderProductSerializer,
     User_OrderSerializer,
+    OrderSerializer
     
 )
 
@@ -69,17 +71,17 @@ class UserOrderView(viewsets.ViewSet):
             },
             status=status.HTTP_200_OK,
         )
-class OrderProductList(APIView):
+class OrderedProductList(APIView):
     def get(self,request):
         orders = Order.objects.all()
-        serializer = OrderSerializer(orders,many = True)
+        serializer = OrderedSerializer(orders,many = True)
         return Response({
           "data" :   serializer.data
         },
             status= status.HTTP_200_OK
             )
     def post(self,request,format= None):
-        serializer = OrderSerializer(data=request.data)
+        serializer = OrderProductSerializer(data=request.data)
 
         if serializer.is_valid():
 
@@ -90,10 +92,10 @@ class OrderProductList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 
-class OrderProductDetail(APIView):
+class OrderedProductDetail(APIView):
     def get(self,request,pk):
         order = get_object_or_404(Order,pk=pk)
-        serializer = OrderSerializer(order)
+        serializer = OrderedSerializer(order)
         return Response({
           "data" :   serializer.data
         },
@@ -103,4 +105,63 @@ class OrderProductDetail(APIView):
         order = get_object_or_404(Order,pk=pk)
         order.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
+
+
+# CRUD Order 
+class OrderView(viewsets.ViewSet):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def create(self, request):
+        serializer = OrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {
+                "data": serializer.data,
+                "message": "order Created Successfully",
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    def update(self, request, pk=None):
+        order = Order.objects.get(pk=pk)
+        serializer = OrderSerializer(instance=order, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {
+                "data": serializer.data,
+                "message": "order updated Successfully!",
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+    def retrieve(self, request, pk=None):
+        try:
+            order = Order.objects.get(pk=pk)
+            serializer = OrderSerializer(instance=order)
+            return Response(
+                {
+                    "data": serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except:
+            return Response(
+                {
+                    "message": "order is invalid!",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    def list(self, request):
+        orders = Order.objects.all()
+        serializer = OrderSerializer(instance=orders, many=True)
+        return Response(
+            {
+                "data": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )

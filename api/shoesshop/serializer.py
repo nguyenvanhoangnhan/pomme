@@ -151,19 +151,18 @@ class Shoe_ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()
     class Meta:
         model = OrderProduct
         fields = '__all__'
 
-class OrderSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField()
+class OrderedSerializer(serializers.ModelSerializer):
+    ProductsOrdered = serializers.SerializerMethodField()
     
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = ("order_id","user","status","ProductsOrdered","address","province_id","district_id","commune_id","total","discount","order_at","shipping_at","delivered_at")
         depth = 1
-    def get_products(self, obj):
+    def get_ProductsOrdered(self, obj):
 
         query_set = OrderProduct.objects.filter(order=obj)
 

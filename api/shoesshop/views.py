@@ -123,7 +123,7 @@ class UserCartProductView(viewsets.ViewSet):
         serializer = UserCartProductSerializer(instance=cart, many=True)
         return Response(
             {"data": serializer.data},
-            status=status.HTTP_404_NOT_FOUND,
+            status=status.HTTP_200_OK,
         )
 
     def retrieve(self, request, pk=None):
@@ -203,7 +203,7 @@ class UserLoveProductView(viewsets.ViewSet):
         serializer = UserLoveProductSerializer(instance=love, many=True)
         return Response(
             {"data": serializer.data},
-            status=status.HTTP_404_NOT_FOUND,
+            status=status.HTTP_200_OK,
         )
 
     def retrieve(self, request, pk=None):
