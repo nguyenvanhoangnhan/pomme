@@ -13,7 +13,7 @@ interface RegisterFormState {
 defineProps<{}>()
 const auth = useAuthStore()
 const router = useRouter()
-if (auth.token) {
+if (auth.data.user) {
     // push back to home "/"
     router.push("/")
 }

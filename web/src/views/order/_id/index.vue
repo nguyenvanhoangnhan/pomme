@@ -10,14 +10,14 @@ defineProps<{}>()
 // get route param
 const route = useRoute()
 const { id } = route.params
-const order = ref<OrderWithProducts>({})
+const order = ref<OrderWithProducts | null>()
 
 onMounted(async () => {
     useLoadingStore().loadingOn()
     try {
         const { data } = await api.get(`/orders/${id}`)
         order.value = await data
-    } catch (error) {
+    } catch (error: any) {
         router.push("/404")
     }
     useLoadingStore().loadingOff()
