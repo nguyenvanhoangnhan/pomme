@@ -11,7 +11,7 @@ export const useCartStore = defineStore({
     getters: {
         total(): number {
             return this.items.reduce((total: number, item: UserCartProduct) => {
-                return total + item.pivot.quantity * item.price
+                return total + item.pivot.quantity * ((item.price * (100 - item.discount_percent)) / 100)
             }, 0)
         },
     },

@@ -2,6 +2,7 @@
 import { useCartStore } from "@/stores/cart"
 import { useLoadingStore } from "@/stores/loading"
 import { Icon } from "@iconify/vue"
+import { computed } from "@vue/reactivity"
 
 const props = defineProps<{
     product: UserCartProduct
@@ -19,6 +20,10 @@ const TYPE = {
     clothes: "Quần áo",
     accessory: "Phụ Kiện",
 } as Record<string, string>
+
+const priceAfterDiscount = computed(() => {
+    return (props.product.price * (100 - props.product.discount_percent)) / 100
+})
 </script>
 
 <template>
@@ -33,11 +38,14 @@ const TYPE = {
                 <RouterLink :to="{ name: product.type.charAt(0).toUpperCase() + product.type.slice(1) + ' Detail', params: { id: product.id } }">
                     <span class="">{{ product.name }}</span>
                 </RouterLink>
-                <span class="text-primary">{{ Number(product.price * product.pivot.quantity).toLocaleString() }}₫</span>
+                <span class="text-primary">{{ Number(priceAfterDiscount * product.pivot.quantity).toLocaleString() }}₫</span>
             </div>
             <span class="font-bold"> {{ TYPE[product.type] }} </span>
             <div class="flex justify-between">
-                <span>Giá: {{ Number(product.price).toLocaleString() }} </span>
+                <div class="flex gap-3">
+                    <span>Giá: {{ Number(priceAfterDiscount).toLocaleString() }}₫ </span>
+                    <span class="line-through" v-if="product.discount_percent"> {{ Number(product.price).toLocaleString() }}₫</span>
+                </div>
                 <span class="text-primary" v-if="product.in_stock > 0">Còn hàng</span>
                 <span class="text-red-600" v-else>Hết hàng</span>
             </div>

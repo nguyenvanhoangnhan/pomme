@@ -22,26 +22,26 @@ import NavButton from "@/components/atoms/NavButton.vue"
             <div class="home__catalogy home-bg-catalogy-1">
                 <div class="bg-black bg-opacity-30 w-full h-full text-center">
                     <div class="pt-4 lg:pt-16">
-                        <RouterLink to="#"> Giày </RouterLink>
+                        <RouterLink :to="{ name: 'Products', query: { type: 'shoe' } }"> Giày </RouterLink>
                     </div>
                     <ul>
-                        <li><RouterLink to="#"> GSmith </RouterLink></li>
-                        <li><RouterLink to="#"> Crispin </RouterLink></li>
-                        <li><RouterLink to="#"> Shizuka </RouterLink></li>
-                        <li><RouterLink to="#"> Rhode </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'shoe', series: 'GSmith' } }"> GSmith </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'shoe', series: 'Crispin' } }"> Crispin </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'shoe', series: 'Shizuka' } }"> Shizuka </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'shoe', series: 'Rhode' } }"> Rhode </RouterLink></li>
                     </ul>
                 </div>
             </div>
             <div class="home__catalogy home-bg-catalogy-2">
                 <div class="bg-black bg-opacity-30 w-full h-full text-center">
                     <div class="pt-4 lg:pt-16">
-                        <RouterLink to="#"> Phụ kiện </RouterLink>
+                        <RouterLink :to="{ name: 'Products', query: { type: 'accessory' } }"> Phụ kiện </RouterLink>
                     </div>
                     <ul>
-                        <li><RouterLink to="#"> Tất </RouterLink></li>
-                        <li><RouterLink to="#"> Túi </RouterLink></li>
-                        <li><RouterLink to="#"> Balo </RouterLink></li>
-                        <li><RouterLink to="#"> Dây giày </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'accessory', category: 'shock' } }"> Tất </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'accessory', category: 'tote' } }"> Túi Tote </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'accessory', category: 'backpack' } }"> Balo </RouterLink></li>
+                        <li><RouterLink :to="{ name: 'Products', query: { type: 'accessory', category: 'shoelace' } }"> Dây giày </RouterLink></li>
                     </ul>
                 </div>
             </div>
@@ -49,12 +49,12 @@ import NavButton from "@/components/atoms/NavButton.vue"
                 <div class="bg-black bg-opacity-30 w-full h-full text-center">
                     <div class="bg-black bg-opacity-30 w-full h-full text-center">
                         <div class="pt-4 lg:pt-16">
-                            <RouterLink to="#"> Áo </RouterLink>
+                            <RouterLink :to="{ name: 'Products', query: { type: 'clothes' } }"> Áo quần </RouterLink>
                         </div>
                         <ul>
-                            <li><RouterLink to="#"> Áo thun </RouterLink></li>
-                            <li><RouterLink to="#"> Hoodie </RouterLink></li>
-                            <li><RouterLink to="#"> Áo dài tay </RouterLink></li>
+                            <li><RouterLink :to="{ name: 'Products', query: { type: 'clothes', category: 'tee' } }"> Áo thun </RouterLink></li>
+                            <li><RouterLink :to="{ name: 'Products', query: { type: 'clothes', category: 'hoodie' } }"> Hoodie </RouterLink></li>
+                            <li><RouterLink :to="{ name: 'Products', query: { type: 'clothes', category: 'sweatshirt' } }"> Áo dài tay </RouterLink></li>
                         </ul>
                     </div>
                 </div>

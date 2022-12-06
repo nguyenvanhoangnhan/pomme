@@ -144,7 +144,11 @@ onMounted(async () => {
                     {{ shoe?.product.name }}
                 </div>
                 <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product.id }}</div>
-                <div class="text-2xl font-bold text-primary">{{ Number(shoe?.product.price).toLocaleString() }}₫</div>
+                <div class="flex gap-2 items-center">
+                    <span class="text-2xl font-bold text-primary"> {{ Number((Number(shoe?.product.price) * (100 - Number(shoe?.product.discount_percent))) / 100).toLocaleString() }}₫ </span>
+                    <span class="text-lg font-light text-secondary line-through">{{ Number(shoe?.product.price).toLocaleString() }}₫</span>
+                </div>
+
                 <!--  -->
                 <div class="divider--dashed my-6"></div>
                 <!--  -->
