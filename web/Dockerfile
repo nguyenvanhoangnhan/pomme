@@ -4,5 +4,6 @@ COPY package*.json ./
 RUN yarn install
 COPY . .
 EXPOSE 5173
+RUN yarn build
 ENTRYPOINT ["yarn"]
-CMD ["dev"]
+CMD ["preview"]
