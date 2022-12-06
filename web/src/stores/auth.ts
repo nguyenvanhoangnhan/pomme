@@ -21,7 +21,7 @@ export const useAuthStore = defineStore({
                     message: "Thành công",
                     description: "Bạn đã đăng nhập thành công.",
                 })
-            } catch (error) {
+            } catch (error: any) {
                 console.log(error)
                 notification.error({
                     message: "Đăng nhập thất bại",
@@ -32,9 +32,9 @@ export const useAuthStore = defineStore({
         async logout() {
             try {
                 await api.post("/auth/logout")
-                this.data = {}
+                this.data = {} as AuthData
                 localStorage.removeItem("authData")
-            } catch (error) {
+            } catch (error: any) {
                 console.log(error)
             }
         },

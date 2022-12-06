@@ -11,13 +11,19 @@ const router = useRouter()
 const isSuccess = ref(false)
 const isHandling = ref(false)
 const email = ref("")
-if (auth.token) {
+if (auth.data.user) {
     // push back to home "/"
     router.push("/")
 }
 onMounted(() => {
-    const resetPwd = JSON.parse(localStorage.getItem("resetPwd"))
-    if (!resetPwd || resetPwd.expiredAt < new Date().getTime() || !resetPwd?.email) {
+    const resetPwdStringified = localStorage.getItem("resetPwd")
+    if (!resetPwdStringified) {
+        router.push("/reset-password")
+        return
+    }
+    const resetPwd = JSON.parse(resetPwdStringified)
+
+    if (!resetPwd || resetPwd?.expiredAt < new Date().getTime() || !resetPwd?.email) {
         localStorage.removeItem("resetPwd")
         router.push("/reset-password")
         return

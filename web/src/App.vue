@@ -8,7 +8,6 @@ import AuthLayout from "@/layouts/auth/index.vue"
 import EmptyLayout from "@/layouts/empty/index.vue"
 import HomeLayout from "@/layouts/home/index.vue"
 import { useViewedProductsStore } from "@/stores/viewedProducts"
-import { useProductsStore } from "./stores/products"
 import { useCartStore } from "./stores/cart"
 import { useLoadingStore } from "./stores/loading"
 import { useLovedProductsStore } from "./stores/lovedProducts"
@@ -68,6 +67,7 @@ onMounted(() => {
     <div v-if="loading.$state.isLoading" class="loading bg-black bg-opacity-20 w-screen h-screen flex justify-center items-center fixed z-[999]">
         <a-spin size="large"></a-spin>
     </div>
+
     <Transition name="fade">
         <component v-if="!isLoadingLayout" :is="layout">
             <RouterView />

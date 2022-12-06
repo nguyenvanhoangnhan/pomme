@@ -15,27 +15,27 @@ const TYPES = {
     shoe: "shoe",
     accessory: "accessory",
     clothes: "clothes",
-}
+} as Record<string, string>
 const ACCESSORY_CATEGORIES = {
     Tất: "shock",
     "Túi tote": "tote",
     Balo: "backpack",
     "Dây giày": "shoelace",
-}
+} as Record<string, string>
 const CLOTHES_CATEGORIES = {
     "Áo phông": "tee",
     Hoodie: "hoodie",
     Sweatshirt: "sweatshirt",
-}
-const SHOE_SERIES = { GSmith: "GSmith", Crispin: "Crispin", Shizuka: "Shizuka", Rhode: "Rhode" }
+} as Record<string, string>
+const SHOE_SERIES = { GSmith: "GSmith", Crispin: "Crispin", Shizuka: "Shizuka", Rhode: "Rhode" } as Record<string, string>
 const SHOE_GENDERS = {
     Nam: "0",
     Nữ: "1",
-}
+} as Record<string, string>
 const SHOE_SHAPES = {
     "Low Top": "0",
     "High Top": "1",
-}
+} as Record<string, string>
 
 const isShowMenus = reactive({
     series: false,
@@ -77,7 +77,7 @@ const handleQueries = (attr: string, val: string | null) => {
     }
 }
 const removeQuery = (attr: string) => {
-    const newQuery = Object.keys(queryRef.value).reduce((acc, key) => {
+    const newQuery = Object.keys(queryRef.value).reduce((acc: any, key) => {
         if (key !== attr) {
             acc[key] = queryRef.value[key]
         }
@@ -99,7 +99,10 @@ const handleQueryType = (type: string) => {
     queryRef.value = { type: type }
 }
 
-router.afterEach(async () => {
+router.afterEach(async (to) => {
+    if (to.path !== "/products") {
+        return
+    }
     queryRef.value = route.query
     const newVal = route.query
     if ("series" in newVal) {

@@ -21,7 +21,7 @@ export const useCartStore = defineStore({
                 const response = await api.get("cart")
                 this.items = response.data
                 this.updateLocalStore()
-            } catch (error) {
+            } catch (error: any) {
                 console.log(error)
             }
             return []
@@ -43,7 +43,7 @@ export const useCartStore = defineStore({
                 const { data } = await api.post("cart", item)
                 this.items = data
                 this.updateLocalStore()
-            } catch (error) {
+            } catch (error: any) {
                 notification.error({
                     message: "Error",
                     description: error?.message || "Lỗi không xác định",
@@ -77,7 +77,7 @@ export const useCartStore = defineStore({
             try {
                 const { data } = await api.put(`cart/${productId}`, formData)
                 this.items = data
-            } catch (error) {
+            } catch (error: any) {
                 console.log(error)
             }
             useLoadingStore().loadingOff()
