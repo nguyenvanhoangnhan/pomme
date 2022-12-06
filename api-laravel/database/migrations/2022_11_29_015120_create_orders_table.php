@@ -16,13 +16,15 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('name');
             $table->string('address');
             $table->string('province_code');
             $table->string('district_code');
             $table->string('commune_code');
             $table->string('phone');
             $table->string('status')->default('pending');
-            $table->unsignedBigInteger('total');
+            $table->unsignedBigInteger('total_price');
+            $table->unsignedBigInteger('delivery_fee');
             $table->unsignedBigInteger('discount')->default(0);
             $table->timestamps();
             $table->dateTime('shipping_at')->nullable();

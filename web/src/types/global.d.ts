@@ -43,6 +43,7 @@ interface Accessory {
 }
 
 interface UserCartPivot {
+    id: number
     user_id: number
     product_id: number
     quantity: number
@@ -59,19 +60,13 @@ interface OrderProductPivot {
     quantity: number
     size: number | null
 }
-interface OrderProduct {
-    id: number
-    name: string
-    price: number
-    discount_percent: number
-    in_stock: number
-    sold: number
-    type: string
+interface OrderProduct extends ProductWithThumbnail {
     pivot: OrderProductPivot
 }
 
 interface Order {
     id: number
+    name: string
     user_id: number
     address: string
     province_id: string
@@ -79,12 +74,17 @@ interface Order {
     commune_id: string
     status: string
     phone: string
-    total: number
+    total_price: number
+    delivery_fee: number
     discount: number
     created_at: string
     shipping_at: string
     delivered_at: string
     image_url: string
+}
+
+interface OrderWithProducts extends Order {
+    products: OrderProduct[]
 }
 
 interface ProductWithImages extends Product {
@@ -111,15 +111,6 @@ interface ClothesWithProduct extends Clothes {
     product: ProductWithImages
 }
 
-interface OrderWithProducts extends Order {
-    products: OrderProduct[]
-}
-
-interface LoginForm {
-    email: string
-    password: string
-}
-
 interface AuthData {
     access_token: string
     token_type: string
@@ -132,4 +123,15 @@ interface User {
     email: string
     name: string
     role: string
+}
+
+interface LoginForm {
+    email: string
+    password: string
+}
+
+interface CartAddingForm {
+    product_id: number
+    quantity: number
+    size?: number
 }

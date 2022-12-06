@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SideFilter: typeof import('./src/components/page/products/SideFilter.vue')['default']
     SuggestBuyMore: typeof import("./src/components/page/cart/SuggestBuyMore.vue")["default"]
+    TagCanceled: typeof import('./src/components/atoms/TagCanceled.vue')['default']
     TagDelivered: typeof import('./src/components/atoms/TagDelivered.vue')['default']
     TagDelivery: typeof import("./src/components/atoms/TagDelivery.vue")["default"]
     TagProcessing: typeof import('./src/components/atoms/TagProcessing.vue')['default']
