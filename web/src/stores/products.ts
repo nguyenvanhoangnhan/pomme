@@ -40,47 +40,5 @@ export const useProductsStore = defineStore("products", {
                 this.isFetchingNextPage = false
             }
         },
-        async toggleLoveProduct(product_id: number) {
-            try {
-                await api.post(`love/${product_id}`)
-                // fetch loved products
-                await this.fetchLovedProducts()
-                console.log("Toggled love product")
-            } catch (error: any) {
-                notification.error({
-                    message: "Error!",
-                    description: error.message || "Đã có lỗi xảy ra",
-                })
-            }
-            return false
-        },
-        async fetchLovedProducts() {
-            try {
-                const response = await api.get(`love`)
-                this.lovedProducts = response.data
-                localStorage.setItem("lovedProducts", JSON.stringify(response.data))
-            } catch (error: any) {
-                throw new Error(error)
-            }
-            return []
-        },
-        async loadFromLocalStorage() {
-            const JSONData = localStorage.getItem("lovedProducts")
-            if (JSONData) {
-                this.lovedProducts = JSON.parse(JSONData)
-            } else {
-                try {
-                    await this.fetchLovedProducts()
-                } catch (error: any) {
-                    notification.error({
-                        message: "Error!",
-                        description: error.message || "Đã có lỗi xảy ra",
-                    })
-                }
-            }
-        },
-        isLoved(productId: number): boolean {
-            return this.lovedProducts.some((product) => product.id === productId)
-        },
     },
 })

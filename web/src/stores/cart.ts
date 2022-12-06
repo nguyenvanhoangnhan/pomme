@@ -1,4 +1,6 @@
+import { notification } from "ant-design-vue"
 import { defineStore } from "pinia"
+import { useLoadingStore } from "./loading"
 import api from "@/api"
 
 export const useCartStore = defineStore({
@@ -18,58 +20,82 @@ export const useCartStore = defineStore({
             try {
                 const response = await api.get("cart")
                 this.items = response.data
-                localStorage.setItem("cart", JSON.stringify(response.data))
+                this.updateLocalStore()
             } catch (error) {
                 console.log(error)
             }
             return []
         },
+        async updateLocalStore() {
+            localStorage.setItem("cart", JSON.stringify(this.items))
+        },
         async loadFromLocalStorage() {
             const JSONData = localStorage.getItem("cart")
-            if (JSONData) {
+            if (JSONData && JSON.parse(JSONData).length > 0) {
                 this.items = JSON.parse(JSONData)
             } else {
                 await this.fetchCart()
             }
         },
-        async updateCart() {
-            this.items = await this.fetchCart()
-        },
-        async addItem(productId: number, quantity: number, size?: string) {
-            const formData = {
-                product_id: productId,
-                quantity: quantity,
-                size: size,
-            }
+        async addItem(item: CartAddingForm) {
+            useLoadingStore().loadingOn()
             try {
-                await api.post("cart", formData)
+                const { data } = await api.post("cart", item)
+                this.items = data
+                this.updateLocalStore()
             } catch (error) {
+                notification.error({
+                    message: "Error",
+                    description: error?.message || "Lỗi không xác định",
+                })
                 console.log(error)
             }
-            await this.updateCart()
+            useLoadingStore().loadingOff()
         },
-        async removeItem(productId: number) {
+        async removeItem(cartProductId: number) {
+            useLoadingStore().loadingOn()
             try {
-                await api.post(`cart/${productId}`)
-            } catch (error) {
+                const { data } = await api.delete(`cart/${cartProductId}`)
+                console.log(data)
+                this.items = data
+                this.updateLocalStore()
+            } catch (error: any) {
+                notification.error({
+                    message: "Error",
+                    description: error?.message || "Lỗi không xác định",
+                })
                 console.log(error)
             }
-            await this.updateCart()
+            useLoadingStore().loadingOff()
         },
         async updateItem(productId: number, quantity: number, size?: string) {
+            useLoadingStore().loadingOn()
             const formData = {
                 quantity: quantity,
                 size: size,
             }
             try {
-                await api.put(`cart/${productId}`, formData)
+                const { data } = await api.put(`cart/${productId}`, formData)
+                this.items = data
             } catch (error) {
                 console.log(error)
             }
-            await this.updateCart()
+            useLoadingStore().loadingOff()
         },
-        clear() {
-            this.items = []
+        async clear() {
+            useLoadingStore().loadingOn()
+            try {
+                await api.delete(`cart`)
+                this.items = []
+                this.updateLocalStore()
+            } catch (error: any) {
+                notification.error({
+                    message: "Error",
+                    description: error.message || "Lỗi không xác định",
+                })
+                console.log(error.message)
+            }
+            useLoadingStore().loadingOff()
         },
     },
 })

@@ -1,26 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import { Icon } from "@iconify/vue"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
-import "vue3-carousel/dist/carousel.css"
 import ViewedProducts from "@/components/common/ViewedProducts.vue"
-import { useViewedProductsStore } from "@/stores/viewedProducts"
+import "vue3-carousel/dist/carousel.css"
 import api from "@/api"
 import noImg from "@/assets/NoImage"
 import router from "@/router"
+import { Modal } from "ant-design-vue"
+import { useViewedProductsStore } from "@/stores/viewedProducts"
 import { useLoadingStore } from "@/stores/loading"
-import { useProductsStore } from "@/stores/products"
-import { computed } from "@vue/reactivity"
+import { useLovedProductsStore } from "@/stores/lovedProducts"
+import { useCartStore } from "@/stores/cart"
 defineProps<{}>()
 const GENDERS = {
     0: "Nam",
     1: "Nữ",
 } as Record<number, string>
 
-const products = useProductsStore()
+const loveProducts = useLovedProductsStore()
+const cart = useCartStore()
 const productId = useRoute().params.id
 const shoe = ref<ShoeWithProductAndChild | null>(null)
+const size = ref<number>()
+const quantity = ref<number>(1)
 const isFetched = ref(false)
 
 const currentSlide = ref(0)
@@ -43,12 +47,37 @@ const fetchData = async () => {
     }
 }
 const toggleLove = async () => {
-    useLoadingStore().loadingOn()
-    await products.toggleLoveProduct(Number(productId))
-    useLoadingStore().loadingOff()
+    await loveProducts.toggleLoveProduct(Number(productId))
 }
+
+const addToCart = async () => {
+    if (!size.value) {
+        Modal.warning({
+            title: "Vui lòng chọn size!!",
+            content: "Bạn chưa chọn size cho sản phẩm này",
+            centered: true,
+        })
+        return
+    }
+
+    if (quantity.value <= 0) {
+        Modal.warning({
+            title: "Vui lòng chọn số lượng",
+            centered: true,
+        })
+        return
+    }
+
+    const item = {
+        product_id: shoe.value?.product.id,
+        size: size.value,
+        quantity: quantity.value,
+    } as CartAddingForm
+    await cart.addItem(item)
+}
+
 const isLoved = computed(() => {
-    return products.isLoved(Number(productId))
+    return loveProducts.isLoved(Number(productId))
 })
 
 onMounted(async () => {
@@ -64,9 +93,9 @@ onMounted(async () => {
         <div class="product__breadcrumb text-lg px-1">
             <div>
                 <a-breadcrumb>
-                    <a-breadcrumb-item><a href="/products?type=shoe">Giày</a></a-breadcrumb-item>
+                    <a-breadcrumb-item><RouterLink :to="{ name: 'Products', query: { type: 'shoe' } }">Giày</RouterLink></a-breadcrumb-item>
                     <a-breadcrumb-item
-                        ><a href="products?type=1">{{ shoe?.series }}</a></a-breadcrumb-item
+                        ><RouterLink :to="{ name: 'Products', query: { type: 'Shoe', series: shoe?.series } }">{{ shoe?.series }}</RouterLink></a-breadcrumb-item
                     >
                     <a-breadcrumb-item>{{ shoe?.product?.name }}</a-breadcrumb-item>
                 </a-breadcrumb>
@@ -115,7 +144,7 @@ onMounted(async () => {
                     {{ shoe?.product.name }}
                 </div>
                 <div class="text-base mb-4">Mã sản phẩm: {{ shoe?.product.id }}</div>
-                <div class="text-2xl font-bold text-primary">{{ Number(shoe?.product.price).toLocaleString() }} VNĐ</div>
+                <div class="text-2xl font-bold text-primary">{{ Number(shoe?.product.price).toLocaleString() }}₫</div>
                 <!--  -->
                 <div class="divider--dashed my-6"></div>
                 <!--  -->
@@ -130,20 +159,19 @@ onMounted(async () => {
                 <div class="grid grid-cols-2 gap-y-4 gap-x-2 mb-4">
                     <div class="font-black text-2xl uppercase">Size</div>
                     <div class="font-black text-2xl uppercase">Số lượng</div>
-                    <ASelect placeholder="Size" class="w-full" size="large">
+                    <ASelect placeholder="Size" class="w-full" size="large" v-model:value="size">
                         <ASelectOption v-for="child in shoe?.children" :key="child.id" :value="child.size" :disabled="child.in_stock <= 0">
                             {{ child.size }}
                         </ASelectOption>
                     </ASelect>
-                    <AInputNumber min="0" style="width: 100%" size="large" />
+                    <AInputNumber default-value="1" min="1" style="width: 100%" :max="shoe?.children.find((item) => item.size === size)?.in_stock" size="large" v-model:value="quantity" />
                 </div>
                 <!--  -->
                 <div class="grid grid-row-2 grid-cols-4 gap-x-2 gap-y-2">
-                    <div class="col-span-3 button bg-black text-white">Thêm vào giỏ hàng</div>
-                    <div class="col-span-1 button bg-black text-primary" @click="toggleLove">
+                    <div class="col-span-3 big-button bg-primary text-white" @click="addToCart">Thêm vào giỏ hàng</div>
+                    <div class="col-span-1 big-button bg-black text-primary" @click="toggleLove">
                         <Icon icon="ph:heart-straight-fill" :color="isLoved ? '#44AF7D' : 'white'" :width="30" :height="30" />
                     </div>
-                    <div class="col-span-4 button bg-primary text-white">Thanh toán</div>
                 </div>
                 <!--  -->
                 <div class="my-8">
@@ -164,7 +192,7 @@ onMounted(async () => {
 </template>
 
 <style lang="less" scoped>
-.button {
+.big-button {
     @apply flex justify-center py-5 items-center font-black text-xl uppercase cursor-pointer;
 }
 </style>

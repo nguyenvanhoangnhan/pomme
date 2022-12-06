@@ -6,7 +6,7 @@ defineProps<{}>()
 <template>
     <a-tag color="processing">
         <template #icon>
-            <sync-outlined :spin="true" />
+            <sync-outlined />
         </template>
         Đang giao
     </a-tag>

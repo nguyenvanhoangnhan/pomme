@@ -2,6 +2,8 @@
 import { useCartStore } from "@/stores/cart"
 import { Icon } from "@iconify/vue"
 import NavButton from "@/components/atoms/NavButton.vue"
+import { useLoadingStore } from "@/stores/loading"
+import { Modal } from "ant-design-vue"
 defineProps<{}>()
 
 const cart = useCartStore()
@@ -10,8 +12,15 @@ const handleOrder = () => {
     //
 }
 
-const handleDeleteAll = () => {
-    //
+const showComingSoon = () => {
+    Modal.info({
+        title: "Coming soon",
+        content: "Tính năng này đang được phát triển",
+    })
+}
+
+const handleClear = async () => {
+    await cart.clear()
 }
 </script>
 
@@ -33,7 +42,7 @@ const handleDeleteAll = () => {
             </div>
 
             <div class="flex justify-between gap-32">
-                <AButton v-if="!(cart.items.length === 0)" type="primary" size="large" block danger> <span class="uppercase font-semibold">Xóa hết</span> </AButton>
+                <AButton v-if="!(cart.items.length === 0)" type="primary" size="large" block danger @click="handleClear"> <span class="uppercase font-semibold">Xóa hết</span> </AButton>
                 <AButton type="primary" size="large" block @click="$router.push({ name: 'Products' })"><span class="uppercase font-semibold">Quay lại mua hàng</span></AButton>
             </div>
         </div>
@@ -46,24 +55,24 @@ const handleDeleteAll = () => {
                     <div class="font-bold uppercase text-base mb-2">Nhập mã khuyến mãi</div>
                     <div class="flex">
                         <AInput class="flex-1" size="large" />
-                        <AButton class="uppercase" style="font-weight: 600" type="primary" size="large">Áp dụng</AButton>
+                        <AButton class="uppercase" style="font-weight: 600" type="primary" size="large" @click="showComingSoon">Áp dụng</AButton>
                     </div>
                 </div>
                 <div class="divider--dashed my-8"></div>
                 <div class="order-form__calc font-bold text-base text-[#666]">
                     <div class="flex justify-between">
                         <span>Đơn hàng</span>
-                        <span>{{ Number(cart.total).toLocaleString() }} VNĐ</span>
+                        <span>{{ Number(cart.total).toLocaleString() }}₫</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Giảm</span>
-                        <span>{{ Number(0).toLocaleString() }} VNĐ</span>
+                        <span>{{ Number(0).toLocaleString() }}₫</span>
                     </div>
                 </div>
                 <div class="divider--dashed my-8"></div>
                 <div class="order-form__total flex justify-between uppercase font-bold text-lg">
                     <span>Tạm tính</span>
-                    <span>{{ Number(cart.total).toLocaleString() }} VNĐ</span>
+                    <span>{{ Number(cart.total).toLocaleString() }}₫</span>
                 </div>
                 <div class="order-form__order-button mt-6">
                     <NavButton :on-click="handleOrder"> Tiếp tục thanh toán </NavButton>
