@@ -9,7 +9,11 @@ class Logging
 {
     public function handle($request, Closure $next)
     {
-        $msg = join(' ', [$request->header('X-Forwarded-For'), $request->url(), $request->method(), $request->server('HTTP_USER_AGENT')]);
+        $client_ip = $request->header('X-Forwarded-For');
+        $request_method = $request->method();
+        $request_url = $request->url();
+        $user_agent = $request->server('HTTP_USER_AGENT');
+        $msg = "{'client-IP': '$client_ip', 'request-method': '$request_method', 'url': '$request_url', 'user-agent': '$user_agent'}";
         Log::build([
             'driver' => 'single',
             'path' => storage_path('logs/app.log'),
