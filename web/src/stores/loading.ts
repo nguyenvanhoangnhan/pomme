@@ -9,9 +9,11 @@ export const useLoadingStore = defineStore({
     actions: {
         loadingOn() {
             this.isLoading = true
+            console.log("loading on")
         },
         loadingOff() {
             this.isLoading = false
+            console.log("loading off")
         },
     },
 })

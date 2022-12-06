@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { Icon } from "@iconify/vue"
 import { useRoute } from "vue-router"
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel"
@@ -9,9 +9,12 @@ import ViewedProducts from "@/components/common/ViewedProducts.vue"
 import api from "@/api"
 import noImg from "@/assets/NoImage"
 import router from "@/router"
+import { useLoadingStore } from "@/stores/loading"
+import { useLovedProductsStore } from "@/stores/lovedProducts"
 
 defineProps<{}>()
-// get the product id from the route
+const loveProducts = useLovedProductsStore()
+
 const productId = useRoute().params.id
 const isFetched = ref(false)
 const clothes = ref<ClothesWithProduct | null>()
@@ -20,6 +23,14 @@ const currentSlide = ref(0)
 const slideTo = (val: number) => {
     currentSlide.value = val
 }
+
+const toggleLove = async () => {
+    await loveProducts.toggleLoveProduct(Number(productId))
+}
+
+const isLoved = computed(() => {
+    return loveProducts.isLoved(Number(productId))
+})
 
 const fetchData = async () => {
     try {
@@ -35,6 +46,7 @@ const fetchData = async () => {
         router.replace("/404")
     }
 }
+
 onMounted(async () => {
     await fetchData()
     if (clothes.value) {
@@ -48,9 +60,9 @@ onMounted(async () => {
         <div class="product__breadcrumb text-lg px-1">
             <div>
                 <a-breadcrumb>
-                    <a-breadcrumb-item><a href="/products?type=clothes">Phụ kiện</a></a-breadcrumb-item>
+                    <a-breadcrumb-item><RouterLink :to="{ name: 'Products', query: { type: 'clothes' } }">Áo quần</RouterLink></a-breadcrumb-item>
                     <a-breadcrumb-item
-                        ><a href="#"> {{ clothes?.category }}</a></a-breadcrumb-item
+                        ><RouterLink :to="{ name: 'Products', query: { type: 'clothes', category: clothes?.category } }">{{ clothes?.category }}</RouterLink></a-breadcrumb-item
                     >
                     <a-breadcrumb-item>{{ clothes?.product?.name }}</a-breadcrumb-item>
                 </a-breadcrumb>
@@ -97,7 +109,7 @@ onMounted(async () => {
                     {{ clothes?.product.name }}
                 </div>
                 <div class="text-base mb-4">Mã sản phẩm: {{ clothes?.product_id }}</div>
-                <div class="text-2xl font-bold text-primary">{{ Number(clothes?.product.price).toLocaleString() }} VNĐ</div>
+                <div class="text-2xl font-bold text-primary">{{ Number(clothes?.product.price).toLocaleString() }}₫</div>
                 <!--  -->
                 <div class="divider--dashed my-6"></div>
                 <!--  -->
@@ -117,11 +129,10 @@ onMounted(async () => {
                 </div>
                 <!--  -->
                 <div class="grid grid-row-2 grid-cols-4 gap-x-2 gap-y-2">
-                    <div class="col-span-3 button bg-black text-white">Thêm vào giỏ hàng</div>
-                    <div class="col-span-1 button bg-black text-primary">
-                        <Icon icon="ph:heart-straight-fill" color="white" :width="30" :height="30" />
+                    <div class="col-span-3 button bg-primary text-white">Thêm vào giỏ hàng</div>
+                    <div class="col-span-1 button bg-black text-primary" @click="toggleLove">
+                        <Icon icon="ph:heart-straight-fill" :color="isLoved ? '#44AF7D' : 'white'" :width="30" :height="30" />
                     </div>
-                    <div class="col-span-4 button bg-primary text-white">Thanh toán</div>
                 </div>
                 <!--  -->
                 <div class="my-8">

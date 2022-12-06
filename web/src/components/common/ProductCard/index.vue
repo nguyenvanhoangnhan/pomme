@@ -4,10 +4,12 @@ import { computed } from "@vue/reactivity"
 import { useProductsStore } from "@/stores/products"
 import { useLoadingStore } from "@/stores/loading"
 import { useAuthStore } from "@/stores/auth"
+import { useLovedProductsStore } from "@/stores/lovedProducts"
 const props = defineProps<{
     product: ProductWithThumbnail
 }>()
 const products = useProductsStore()
+const loveProducts = useLovedProductsStore()
 const auth = useAuthStore()
 
 const productType = computed(() => {
@@ -15,12 +17,10 @@ const productType = computed(() => {
 })
 
 const toggleLove = async () => {
-    useLoadingStore().loadingOn()
-    await products.toggleLoveProduct(props.product.id)
-    useLoadingStore().loadingOff()
+    await loveProducts.toggleLoveProduct(props.product.id)
 }
 const isLoved = computed(() => {
-    return products.isLoved(props.product.id)
+    return loveProducts.isLoved(props.product.id)
 })
 </script>
 
@@ -42,7 +42,10 @@ const isLoved = computed(() => {
                 <RouterLink :to="{ name: productType + ' Detail', params: { id: product.id } }" class="font-bold text-lg text-center">
                     {{ product.name }}
                 </RouterLink>
-                <div class="font-bold text-base">{{ Number(product.price).toLocaleString() }} VNĐ</div>
+                <div class="font-bold text-base flex gap-2 items-center">
+                    <span> {{ Number((product.price * (100 - product.discount_percent)) / 100).toLocaleString() }}₫ </span>
+                    <span class="line-through font-light text-xs" v-if="product.discount_percent">{{ Number(product.price).toLocaleString() }}₫ </span>
+                </div>
             </div>
         </div>
     </div>

@@ -1,57 +1,31 @@
 <script setup lang="ts">
 import OrderProduct from "@/components/page/order/OrderProduct.vue"
-import { computed } from "@vue/reactivity"
+import { useLoadingStore } from "@/stores/loading"
+import { computed, onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
+import router from "@/router"
+import api from "@/api"
 defineProps<{}>()
 
 // get route param
 const route = useRoute()
-const id = computed(() => route.params.id)
+const { id } = route.params
+const order = ref<OrderWithProducts>({})
 
-const orderProducts = [
-    {
-        order_product_id: 1,
-        order_id: 1,
-        product_id: 1,
-        price_at_order: 550000,
-        quantity: 2,
-        product: {
-            product_id: 1,
-            name: "Shoe #1",
-            price: 800000,
-            images: [
-                {
-                    url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-                    is_thumbnail: true,
-                },
-            ],
-        },
-        size: 40,
-    },
-    {
-        order_product_id: 2,
-        order_id: 1,
-        product_id: 2,
-        price_at_order: 550000,
-        quantity: 4,
-        product: {
-            product_id: 2,
-            name: "Shoe #2",
-            price: 9999,
-            images: [
-                {
-                    url: "https://ananas.vn/wp-content/uploads/Pro_AV00070_1-500x500.jpg",
-                    is_thumbnail: true,
-                },
-            ],
-        },
-        size: 41,
-    },
-] as OrderProduct[]
+onMounted(async () => {
+    useLoadingStore().loadingOn()
+    try {
+        const { data } = await api.get(`/orders/${id}`)
+        order.value = await data
+    } catch (error) {
+        router.push("/404")
+    }
+    useLoadingStore().loadingOff()
+})
 </script>
 
 <template>
-    <div class="order flex flex-col items-center">
+    <div v-if="order" class="order flex flex-col items-center">
         <div class="order__title font-bold uppercase text-2xl">Thông tin đơn hàng</div>
         <div class="divider--solid my-6"></div>
         <div class="font-bold text-lg uppercase">
@@ -64,6 +38,7 @@ const orderProducts = [
                 <AStep title="Đang giao hàng" description="This is a description." />
                 <AStep title="Giao hàng thành công" description="This is a description." />
             </ASteps>
+            <div v-if="order.status === 'canceled'">Đã hủy</div>
         </div>
         <div class="divider--dashed my-4"></div>
         <div class="flex w-full gap-4">
@@ -85,20 +60,20 @@ const orderProducts = [
                 <div class="divider--solid my-4"></div>
                 <ul class="font-medium text-secondary">
                     <li>
-                        <span>Trị giá đơn hàng</span><span>{{ Number(520000).toLocaleString() }} VNĐ</span>
+                        <span>Trị giá đơn hàng</span><span>{{ Number(order.total_price).toLocaleString() }}₫</span>
                     </li>
                     <li>
-                        <span>Giảm giá</span><span>{{ Number(0).toLocaleString() }} VNĐ</span>
+                        <span>Giảm giá</span><span>{{ Number(0).toLocaleString() }}₫</span>
                     </li>
                     <li>
-                        <span>Phí giao hàng</span><span>{{ Number(30000).toLocaleString() }} VNĐ</span>
+                        <span>Phí giao hàng</span><span>{{ Number(order.delivery_fee).toLocaleString() }}₫</span>
                     </li>
                     <li>
-                        <span>Phí thanh toán</span><span>{{ Number(0).toLocaleString() }} VNĐ</span>
+                        <span>Phí thanh toán</span><span>{{ Number(0).toLocaleString() }}₫</span>
                     </li>
                     <div class="divider--dashed my-6"></div>
                     <li>
-                        <span>Tổng thanh toán</span><span>{{ Number(550000).toLocaleString() }} VNĐ</span>
+                        <span>Tổng thanh toán</span><span>{{ Number(order.delivery_fee + order.total_price).toLocaleString() }}₫</span>
                     </li>
                 </ul>
             </div>
@@ -107,7 +82,7 @@ const orderProducts = [
         <div class="order__product-list bg-[#F2F2F2] w-full flex flex-col items-center p-4">
             <div class="font-bold text-base uppercase">Danh sách sản phẩm</div>
             <div class="divider--solid my-4"></div>
-            <OrderProduct v-for="(orderProduct, index) in orderProducts" :key="index" :order-product="orderProduct" />
+            <OrderProduct v-for="(orderProduct, index) in order.products" :key="index" :order-product="orderProduct" />
         </div>
         <div class="mt-4 w-96 self-end">
             <NavButton :on-click="() => $router.push('/')">Quay lại trang chủ</NavButton>

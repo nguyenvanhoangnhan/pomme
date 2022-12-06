@@ -216,30 +216,27 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // seed product wishlist items of user 1
-        // pick 5 random products
-        $wishlistProducts = \App\Models\Product::inRandomOrder()->limit(5)->get();
-        foreach ($wishlistProducts as $product) {
-            \App\Models\UserLoveProduct::create([
-                'user_id' => 2,
-                'product_id' => $product->id,
-            ]);
-        }
-
         // seed order for user 1
         $orderProducts = \App\Models\Product::inRandomOrder()->limit(5)->get();
         $orderQuantities = [1, 2, 3, 4, 5];
-        // orderTotal = sum of (product price * quantity)
-        $orderTotal = 0;
+        // totalPrice = sum of (product price * quantity)
+        $totalPrice = 0;
         foreach ($orderProducts as $index => $product) {
-            $orderTotal += $product->price * $orderQuantities[$index];
+            $totalPrice += $product->price * $orderQuantities[$index];
         }
+
+        // orderName is string contain product names, separated by comma
+        $orderName = $orderProducts->pluck('name')->implode(', ');
+
+        $deliveryFee = 30000;
 
         $order = \App\Models\Order::create([
             'user_id' => 2,
+            'name' => $orderName,
             'status' => 'shipping',
             'shipping_at' => Carbon::now()->addDays(3),
-            'total' => $orderTotal,
+            'total_price' => $totalPrice,
+            'delivery_fee' => $deliveryFee,
             'address' => '54 Nguyễn Lương Bằng',
             'province_code' => '48',
             'district_code' => '490',
@@ -253,6 +250,16 @@ class DatabaseSeeder extends Seeder
                 'quantity' => $orderQuantities[$index],
                 'price_at_order' => $product->price,
                 'size' => $product->type === 'shoe' ? rand(35, 46) : null,
+            ]);
+        }
+
+        // seed product wishlist items of user 1
+        // pick 5 random products
+        $wishlistProducts = \App\Models\Product::inRandomOrder()->limit(5)->get();
+        foreach ($wishlistProducts as $product) {
+            \App\Models\UserLoveProduct::create([
+                'user_id' => 2,
+                'product_id' => $product->id,
             ]);
         }
     }

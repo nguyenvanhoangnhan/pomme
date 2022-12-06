@@ -11,17 +11,18 @@ import { useViewedProductsStore } from "@/stores/viewedProducts"
 import { useProductsStore } from "./stores/products"
 import { useCartStore } from "./stores/cart"
 import { useLoadingStore } from "./stores/loading"
+import { useLovedProductsStore } from "./stores/lovedProducts"
 
 const auth = useAuthStore()
 const cart = useCartStore()
 const loading = useLoadingStore()
-const products = useProductsStore()
+const loveProducts = useLovedProductsStore()
 const viewedProducts = useViewedProductsStore()
 auth.loadAuthData()
 
 if (auth.isLoggedIn) {
     cart.loadFromLocalStorage()
-    products.loadFromLocalStorage()
+    loveProducts.loadFromLocalStorage()
 }
 
 // handle dynamic layout

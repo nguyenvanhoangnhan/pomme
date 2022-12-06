@@ -37,6 +37,8 @@ class ShoeController extends Controller
             'gender' => 'required|in:0,1,2',
             'series' => 'required',
             'shape' => 'required|numeric',
+            'thumbnail' => 'required|string',
+            'images' => 'required|array|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -68,6 +70,21 @@ class ShoeController extends Controller
             'series' => $request->series,
             'shape' => $request->shape,
         ]);
+
+        $images = $request->images;
+        $thumbnail = $request->thumbnail;
+
+        $product->thumbnail()->create([
+            'url' => $thumbnail,
+            'is_thumbnail' => true,
+        ]);
+
+        foreach ($images as $image) {
+            $product->images()->create([
+                'url' => $image,
+                'is_thumbnail' => false,
+            ]);
+        }
 
         return response()->json([
             'success' => true,

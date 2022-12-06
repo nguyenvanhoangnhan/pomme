@@ -1,59 +1,59 @@
 <script setup lang="ts">
+import { useCartStore } from "@/stores/cart"
+import { useLoadingStore } from "@/stores/loading"
 import { Icon } from "@iconify/vue"
 
-defineProps<{
-    // eslint-disable-next-line no-undef
+const props = defineProps<{
     product: UserCartProduct
 }>()
 
-const handleChangeQuantity = (e) => {
+const changeQuantity = (e: any) => {
     console.log(e)
 }
+const removeFromCart = async () => {
+    await useCartStore().removeItem(props.product.pivot.id)
+}
+
+const TYPE = {
+    shoe: "Giày",
+    clothes: "Quần áo",
+    accessory: "Phụ Kiện",
+} as Record<string, string>
 </script>
 
 <template>
     <div class="flex gap-8">
-        <div class="w-[180px]">
-            <img class="w-[180px] h-[180px] object-cover" :src="product?.thumbnail.url" />
-        </div>
+        <RouterLink :to="{ name: product.type.charAt(0).toUpperCase() + product.type.slice(1) + ' Detail', params: { id: product.id } }">
+            <div class="w-[180px]">
+                <img class="w-[180px] h-[180px] object-cover" :src="product?.thumbnail.url" />
+            </div>
+        </RouterLink>
         <div class="flex-1 flex flex-col justify-between">
             <div class="flex justify-between text-lg font-bold">
-                <span class="">{{ product.name }}</span>
-                <span class="text-primary">{{ Number(product.price * product.pivot.quantity).toLocaleString() }} VNĐ</span>
+                <RouterLink :to="{ name: product.type.charAt(0).toUpperCase() + product.type.slice(1) + ' Detail', params: { id: product.id } }">
+                    <span class="">{{ product.name }}</span>
+                </RouterLink>
+                <span class="text-primary">{{ Number(product.price * product.pivot.quantity).toLocaleString() }}₫</span>
             </div>
+            <span class="font-bold"> {{ TYPE[product.type] }} </span>
             <div class="flex justify-between">
                 <span>Giá: {{ Number(product.price).toLocaleString() }} </span>
-                <span class="text-primary">Còn hàng</span>
+                <span class="text-primary" v-if="product.in_stock > 0">Còn hàng</span>
+                <span class="text-red-600" v-else>Hết hàng</span>
             </div>
             <div class="flex justify-between">
                 <div class="flex gap-8">
                     <div>
-                        <div class="font-bold ml-[2px]">Size</div>
-                        <ASelect placeholder="Size" class="w-24">
-                            <ASelectOption :value="35" :key="35"> 35 </ASelectOption>
-                            <ASelectOption :value="36" :key="36"> 36 </ASelectOption>
-                            <ASelectOption :value="37" :key="37"> 38 </ASelectOption>
-                            <ASelectOption :value="38" :key="38"> 38 </ASelectOption>
-                            <ASelectOption :value="39" :key="39"> 39 </ASelectOption>
-                            <ASelectOption :value="40" :key="40"> 40 </ASelectOption>
-                            <ASelectOption :value="41" :key="41"> 41 </ASelectOption>
-                            <ASelectOption :value="42" :key="42"> 42 </ASelectOption>
-                            <ASelectOption :value="43" :key="43"> 43 </ASelectOption>
-                            <ASelectOption :value="44" :key="44"> 44 </ASelectOption>
-                            <ASelectOption :value="45" :key="45"> 45 </ASelectOption>
-                            <ASelectOption :value="46" :key="46"> 46 </ASelectOption>
-                        </ASelect>
-                    </div>
-                    <div>
                         <div class="font-bold ml-[2px]">Số lượng</div>
-                        <AInputNumber style="width: 96px" defaultValue="1" min="1" max="12" :value="product.pivot.quantity" @change="handleChangeQuantity" />
+                        <AInputNumber style="width: 96px" default-value="1" min="1" max="12" :value="product.pivot.quantity" @change="changeQuantity" :precision="0" />
+                    </div>
+                    <div v-if="product.pivot.size">
+                        <div class="font-bold ml-[2px]">Size</div>
+                        <div class="text-sm pt-[6px] text-center">{{ product.pivot.size }}</div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <div class="py-2 px-12 color-primary border border-black">
-                        <Icon icon="ph:heart-bold" :width="20" :height="20" />
-                    </div>
-                    <div class="py-2 px-12 bg-[#303030] text-white">
+                <div class="flex flex-col items-end justify-end gap-4">
+                    <div class="py-2 px-12 bg-[#303030] text-white cursor-pointer" @click="removeFromCart">
                         <Icon icon="ph:trash-bold" :width="20" :height="20" />
                     </div>
                 </div>

@@ -61,9 +61,9 @@ class UserController extends Controller
 
         $user->loveProducts()->toggle($request->product_id);
 
-        return response()->json([
-            'message' => 'Toggle love product successfully',
-        ], 200);
+        $newLovedProducts = $user->loveProducts()->with('thumbnail')->get();
+
+        return response()->json($newLovedProducts, 200);
     }
 
     public function addToCart(Request $request)
@@ -105,9 +105,9 @@ class UserController extends Controller
             ]);
         }
 
-        return response()->json([
-            'message' => 'Add to cart successfully',
-        ], 200);
+        $newCart = $user->cartProducts()->with('thumbnail')->get();
+
+        return response()->json($newCart, 200);
     }
 
     public function removeFromCart(Request $request)
@@ -119,21 +119,13 @@ class UserController extends Controller
             ], 404);
         }
 
-        if (!$user->cartProducts()->where('product_id', $request->product_id)->exists()) {
-            return response()->json([
-                'message' => 'Product not found in cart',
-            ], 404);
-        }
+        // there are many products in cart with the same product_id, so we need to specify by the pivot->id, which get from request
+        // detach the product which has the same product_id and pivot->id
+        $user->cartProducts()->wherePivot('id', $request->cart_product_id)->detach();
 
-        if ($request->size) {
-            $user->cartProducts()->where('product_id', $request->product_id)->where('size', $request->size)->detach();
-        } else {
-            $user->cartProducts()->where('product_id', $request->product_id)->detach();
-        }
+        $newCart = $user->cartProducts()->with('thumbnail')->get();
 
-        return response()->json([
-            'message' => 'Remove from cart successfully',
-        ], 200);
+        return response()->json($newCart, 200);
     }
 
     public function updateCartPivot(Request $request)
@@ -195,9 +187,9 @@ class UserController extends Controller
             $cartItem->pivot->save();
         }
 
-        return response()->json([
-            'message' => 'Change cart item quantity successfully',
-        ], 200);
+        $newCart = $user->cartProducts()->with('thumbnail')->get();
+
+        return response()->json($newCart, 200);
     }
 
     public function clearCart(Request $request)

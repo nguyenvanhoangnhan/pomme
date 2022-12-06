@@ -57,11 +57,19 @@ class OrderController extends Controller
             $total += $product['price_at_order'] * $product['quantity'];
         }
 
+        // orderName is string contain product names, separated by comma
+        $orderName = '';
+        foreach ($request->products as $product) {
+            $productName = Product::find($product['id'])->name;
+            $orderName .= $productName.', ';
+        }
+
         $user = auth()->user();
 
         // create order
         $order = Order::create([
             'user_id' => $user->id,
+            'name' => $orderName,
             'address' => $request->address,
             'province_code' => $request->province_code,
             'district_code' => $request->district_code,
@@ -90,7 +98,7 @@ class OrderController extends Controller
      */
     public function show(Request $request)
     {
-        $order = Order::with('products')->find($request->id);
+        $order = Order::with('products.thumbnail')->find($request->id);
         if (!$order) {
             return response()->json([
                 'status' => 'error',
