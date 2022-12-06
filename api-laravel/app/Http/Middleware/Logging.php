@@ -13,7 +13,7 @@ class Logging
         $requestMethod = $request->method();
         $requestUrl = $request->url();
         $userAgent = $request->server('HTTP_USER_AGENT');
-        $msg = "Request coming {'client-IP': '$clientIp', 'request-method': '$requestMethod', 'url': '$requestUrl', 'user-agent': '$userAgent'}";
+        $msg = "Request coming {\"client-IP\": \"$clientIp\", \"request-method\": \"$requestMethod\", \"url\": \"$requestUrl\", \"user-agent\": \"$userAgent\"}";
         Log::build([
             'driver' => 'single',
             'path' => storage_path('logs/app.log'),
