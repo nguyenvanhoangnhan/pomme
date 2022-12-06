@@ -4,6 +4,7 @@ import { reactive } from "vue"
 import { useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
 import { useProductsStore } from "@/stores/products"
+import { Modal } from "ant-design-vue"
 defineProps<{}>()
 const auth = useAuthStore()
 const router = useRouter()
@@ -25,6 +26,12 @@ const handleLogin = async () => {
 const handleLoginFailed = (errInfo: any) => {
     console.log("Failed:", errInfo)
 }
+const showComingSoon = () => {
+    Modal.info({
+        title: "Coming soon",
+        content: "Tính năng này đang được phát triển",
+    })
+}
 </script>
 
 <template>
@@ -45,10 +52,12 @@ const handleLoginFailed = (errInfo: any) => {
                 ></AInput>
             </AFormItem>
             <div class="forgot-password mb-2 flex justify-end">
-                <RouterLink :to="{ name: 'Reset Password' }" class="inline-flex items-center justify-end group gap-0 -mr-3">
+                <!-- <RouterLink :to="{ name: 'Reset Password' }" class="inline-flex items-center justify-end group gap-0 -mr-3"> -->
+                <div class="inline-flex items-center justify-end group gap-0 -mr-3 cursor-pointer hover:text-primary" @click="showComingSoon">
                     <span class="transition-all group-hover:-translate-x-2"> Quên mật khẩu? </span>
                     <Icon icon="ph:arrow-right-bold" class="opacity-0 -translate-x-6 group-hover:-translate-x-1 group-hover:opacity-100 transition-all" />
-                </RouterLink>
+                </div>
+                <!-- </RouterLink> -->
             </div>
             <AFormItem>
                 <AButton size="large" class="font-bold" type="primary" html-type="submit" block> Đăng nhập </AButton>

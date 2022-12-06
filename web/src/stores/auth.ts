@@ -38,6 +38,9 @@ export const useAuthStore = defineStore({
                 console.log(error)
             }
         },
+        async register(data: RegisterForm) {
+            return api.post("/auth/register", data)
+        },
         saveAuthData(data: AuthData) {
             if (!data) return
             const JSONData = JSON.stringify(data)
@@ -46,7 +49,12 @@ export const useAuthStore = defineStore({
         loadAuthData() {
             const JSONData = localStorage.getItem("authData")
             if (JSONData) {
-                this.data = JSON.parse(JSONData)
+                const data = JSON.parse(JSONData)
+                if (data.expires_at * 1000 < Date.now()) {
+                    localStorage.removeItem("authData")
+                    return
+                }
+                this.data = data
             }
         },
     },

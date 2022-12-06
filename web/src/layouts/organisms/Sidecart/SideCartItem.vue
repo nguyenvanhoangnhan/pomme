@@ -12,8 +12,8 @@ defineProps<{
                 <div class="name font-bold text-base leading-[1.1] text-2-line">{{ item.name }}</div>
                 <div class="text-[12px] leading-[1.1]">
                     <div class="price w-full flex justify-between">
-                        <span class="current-price font-bold">{{ Number(item.price).toLocaleString() }}₫</span>
-                        <span class="price-before-sale line-through">{{ Number(1000000).toLocaleString() }}</span>
+                        <span class="current-price font-bold">{{ Number((item.price * (100 - item.discount_percent)) / 100).toLocaleString() }}₫</span>
+                        <span v-if="item.discount_percent" class="price-before-sale line-through">{{ Number(item.price).toLocaleString() }}</span>
                     </div>
                     <div class="quantity flex w-full justify-between">
                         <span>Số lượng</span>
