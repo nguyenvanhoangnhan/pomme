@@ -1,3 +1,4 @@
+import { useLoadingStore } from "./loading"
 import { defineStore } from "pinia"
 import { notification } from "ant-design-vue"
 import api from "@/api"
@@ -13,6 +14,7 @@ export const useAuthStore = defineStore({
     },
     actions: {
         async login(data: LoginForm) {
+            useLoadingStore().loadingOn()
             try {
                 const { data: authData } = await api.post("/auth/login", data)
                 this.data = authData
@@ -28,8 +30,10 @@ export const useAuthStore = defineStore({
                     description: error.message || "Đã có lỗi xảy ra",
                 })
             }
+            useLoadingStore().loadingOff()
         },
         async logout() {
+            useLoadingStore().loadingOn()
             try {
                 await api.post("/auth/logout")
                 this.data = {} as AuthData
@@ -37,6 +41,7 @@ export const useAuthStore = defineStore({
             } catch (error: any) {
                 console.log(error)
             }
+            useLoadingStore().loadingOff()
         },
         async register(data: RegisterForm) {
             return api.post("/auth/register", data)

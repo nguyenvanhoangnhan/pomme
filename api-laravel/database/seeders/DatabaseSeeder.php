@@ -233,6 +233,7 @@ class DatabaseSeeder extends Seeder
         $order = \App\Models\Order::create([
             'user_id' => 2,
             'name' => $orderName,
+            'receiver_name' => 'Nguyễn Văn Hoàng Nhân',
             'status' => 'shipping',
             'shipping_at' => Carbon::now()->addDays(3),
             'total_price' => $totalPrice,

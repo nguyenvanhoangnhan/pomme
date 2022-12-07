@@ -8,10 +8,6 @@ defineProps<{}>()
 
 const cart = useCartStore()
 
-const handleOrder = () => {
-    //
-}
-
 const showComingSoon = () => {
     Modal.info({
         title: "Coming soon",
@@ -75,7 +71,15 @@ const handleClear = async () => {
                     <span>{{ Number(cart.total).toLocaleString() }}₫</span>
                 </div>
                 <div class="order-form__order-button mt-6">
-                    <NavButton :on-click="handleOrder"> Tiếp tục thanh toán </NavButton>
+                    <NavButton
+                        :on-click="
+                            () => {
+                                $router.push({ name: 'Checkout' })
+                            }
+                        "
+                    >
+                        Tiếp tục thanh toán
+                    </NavButton>
                 </div>
             </div>
         </div>

@@ -5,8 +5,7 @@ import { computed } from "@vue/reactivity"
 import { onMounted, ref } from "vue"
 
 defineProps<{}>()
-const orderStatus = ref("-1")
-//  -1: all, 0: in progress, 1: shipping, 2: delivered
+const orderStatus = ref("all")
 const orders = computed(() => useOrderStore().orders)
 onMounted(() => {
     useOrderStore().fetchOrders()
@@ -20,13 +19,16 @@ onMounted(() => {
             <div class="divider--solid my-8"></div>
             <div class="bg-[#F2F2F2] p-4 flex flex-col gap-8">
                 <ARadioGroup v-model:value="orderStatus" size="large" button-style="solid" class="w-full">
-                    <ARadioButton value="-1" class="w-1/4 text-center font-bold text-lg">Tất cả</ARadioButton>
-                    <ARadioButton value="0" class="w-1/4 text-center font-bold text-lg">Đang xử lí</ARadioButton>
-                    <ARadioButton value="1" class="w-1/4 text-center font-bold text-lg">Đang giao</ARadioButton>
-                    <ARadioButton value="2" class="w-1/4 text-center font-bold text-lg">Đã giao</ARadioButton>
+                    <ARadioButton value="all" class="w-full text-center font-bold text-sm md:text-lg">Tất cả</ARadioButton>
+                    <ARadioButton value="pending" class="w-1/4 text-center font-bold text-sm md:text-lg">Đang xử lí</ARadioButton>
+                    <ARadioButton value="shipping" class="w-1/4 text-center font-bold text-sm md:text-lg">Đang giao</ARadioButton>
+                    <ARadioButton value="delivered" class="w-1/4 text-center font-bold text-sm md:text-lg">Đã giao</ARadioButton>
+                    <ARadioButton value="canceled" class="w-1/4 text-center font-bold text-sm md:text-lg">Đã hủy</ARadioButton>
                 </ARadioGroup>
                 <div class="flex flex-col gap-1">
-                    <Order v-for="order in orders" :key="order.id" :order="order" />
+                    <div v-for="order in orders" :key="order.id">
+                        <Order :order="order" v-if="orderStatus === 'all' || orderStatus === order.status" />
+                    </div>
                 </div>
             </div>
         </div>

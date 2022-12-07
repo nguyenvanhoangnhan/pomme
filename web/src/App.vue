@@ -64,7 +64,7 @@ onMounted(() => {
     <div v-if="isLoadingLayout" class="loading-pomme bg-white text-primary w-screen h-screen flex justify-center items-center fixed z-[999]">
         <img src="/granny-smith-logo.svg" alt="logo" class="w-[10vw]" />
     </div>
-    <div v-if="loading.$state.isLoading" class="loading bg-black bg-opacity-20 w-screen h-screen flex justify-center items-center fixed z-[999]">
+    <div v-if="loading.$state.isLoading" class="loading bg-black bg-opacity-20 w-screen h-screen flex justify-center items-center fixed z-[888]">
         <a-spin size="large"></a-spin>
     </div>
 
