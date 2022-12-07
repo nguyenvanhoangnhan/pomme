@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-  "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint:js": "eslint src --ext .ts,.vue",
     "format": "prettier --write \"src/**/*.{js,ts,vue}\""
@@ -20,6 +20,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jquery": "^3.6.1",
+    "moment": "^2.29.4",
     "pinia": "^2.0.0-rc.10",
     "prettier": "^2.7.1",
     "unplugin-vue-components": "^0.22.9",
