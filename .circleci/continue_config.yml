@@ -118,7 +118,7 @@ jobs:
             docker push $DOCKER_USER/shoe-shop-web:latest
             docker push $DOCKER_USER/shoe-shop-web:$TAG
   redeploy:
-    docker:
+    machine:
       - image: ubuntu-2204:2022.10.2
     steps:
       - run:

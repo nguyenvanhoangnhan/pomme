@@ -9,4 +9,4 @@ ENV VITE_CLOUDINARY_PRESET=pomme-img
 ENV VITE_CLOUDINARY_URL=https://api.cloudinary.com/v1_1/:cloud_name/
 RUN yarn build
 ENTRYPOINT ["yarn"]
-CMD ["preview", "--host"]
+CMD ["preview"]
