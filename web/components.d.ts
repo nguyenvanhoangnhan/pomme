@@ -24,6 +24,8 @@ declare module '@vue/runtime-core' {
     AStep: typeof import('ant-design-vue/es')['Step']
     ASteps: typeof import('ant-design-vue/es')['Steps']
     ATag: typeof import('ant-design-vue/es')['Tag']
+    CartProductItem: typeof import('./src/components/page/cart/CartProductItem.vue')['default']
+    CheckOutProductItem: typeof import('./src/components/page/checkout/CheckOutProductItem.vue')['default']
     HomeCarousel: typeof import('./src/components/page/home/HomeCarousel.vue')['default']
     NavButton: typeof import('./src/components/atoms/NavButton.vue')['default']
     Order: typeof import('./src/components/page/order/Order.vue')['default']
