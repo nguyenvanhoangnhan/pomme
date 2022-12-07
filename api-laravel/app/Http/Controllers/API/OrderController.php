@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,10 +38,12 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'receiver_name' => 'required',
             'address' => 'required',
             'province_code' => 'required',
             'district_code' => 'required',
             'commune_code' => 'required',
+            'delivery_fee' => 'required|numeric',
             'phone' => 'required',
             'products' => 'required|array|min:1',
         ]);
@@ -52,15 +55,15 @@ class OrderController extends Controller
             ], 422);
         }
 
-        $total = 0;
+        $totalPrice = 0;
         foreach ($request->products as $product) {
-            $total += $product['price_at_order'] * $product['quantity'];
+            $totalPrice += $product['price_at_order'] * $product['quantity'];
         }
 
         // orderName is string contain product names, separated by comma
         $orderName = '';
         foreach ($request->products as $product) {
-            $productName = Product::find($product['id'])->name;
+            $productName = Product::find($product['product_id'])->name;
             $orderName .= $productName.', ';
         }
 
@@ -69,13 +72,15 @@ class OrderController extends Controller
         // create order
         $order = Order::create([
             'user_id' => $user->id,
+            'receiver_name' => $request->receiver_name,
             'name' => $orderName,
             'address' => $request->address,
             'province_code' => $request->province_code,
             'district_code' => $request->district_code,
             'commune_code' => $request->commune_code,
             'phone' => $request->phone,
-            'total' => $total,
+            'delivery_fee' => $request->delivery_fee,
+            'total_price' => $totalPrice,
         ]);
 
         // add products to order
@@ -86,6 +91,9 @@ class OrderController extends Controller
 
         // save order
         $order->save();
+
+        // clear cart
+        $user->cartProducts()->detach();
 
         return response()->json($order);
     }

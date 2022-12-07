@@ -54,7 +54,7 @@ interface UserCartProduct extends ProductWithThumbnail {
 }
 
 interface OrderProductPivot {
-    order_id: number
+    order_id?: number
     product_id: number
     price_at_order: number
     quantity: number
@@ -142,4 +142,33 @@ interface CartAddingForm {
     product_id: number
     quantity: number
     size?: number
+}
+
+interface OrderForm {
+    receiver_name: string
+    address: string
+    province_code: string | null
+    district_code: string | null
+    commune_code: string | null
+    phone: string
+    delivery_fee: number
+    products: OrderProductPivot[]
+}
+
+interface AreaProvince {
+    code: string
+    name: string
+}
+
+interface AreaDistrict {
+    code: string
+    name: string
+    province: string
+}
+
+interface AreaCommune {
+    code: string
+    name: string
+    district: string
+    province: string
 }

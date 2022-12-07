@@ -8,18 +8,11 @@ import router from "@/router"
 import api from "@/api"
 defineProps<{}>()
 
-interface AreaCommuneResponse {
-    code: string
-    name: string
-    district: string
-    province: string
-}
-
 // get route param
 const route = useRoute()
 const { id } = route.params
 const order = ref<OrderWithProducts | null>()
-const deliveryLocation = ref<AreaCommuneResponse | null>()
+const deliveryLocation = ref<AreaCommune | null>()
 const currentStep = computed(() => {
     switch (order.value?.status) {
         case "pending":
@@ -50,7 +43,7 @@ onMounted(async () => {
         const { data } = await api.get(`/orders/${id}`)
         order.value = data
         const { data: districtCommunes } = await api.get(`https://api.mysupership.vn/v1/partner/areas/commune?district=${order.value?.district_code}`)
-        deliveryLocation.value = districtCommunes.results.find((commune: AreaCommuneResponse) => commune.code === order.value?.commune_code)
+        deliveryLocation.value = districtCommunes.results.find((commune: AreaCommune) => commune.code === order.value?.commune_code)
     } catch (error: any) {
         router.push("/404")
         console.log(error)
