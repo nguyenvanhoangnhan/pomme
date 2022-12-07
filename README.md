@@ -12,7 +12,7 @@ An e-commerce website that sells shoes, called Pomme.
 Vue 3 w/ Pinia + Laravel, deploy on DigitalOcean.
 
 <p align="center">
-  <img width="88%" src="https://user-images.githubusercontent.com/57064711/202644148-6deae246-92aa-4434-a8b6-b69eeb5bd526.png">
+  <img width="88%" alt="image" src="https://user-images.githubusercontent.com/50044415/206079994-09b92e80-13e9-4c88-ae69-5ed82f740244.png">
 </p>
 
 ## Further information:
@@ -50,22 +50,25 @@ $ cd api-laravel && php artisan serve --port=8000 # api
 ## Lint
 
 ```bash
-# eslink
-$ cd web && yarn lint
+$ cd web && yarn lint # web
+$ cd api-laravel && vendor/bin/phpcs # api
 ```
 
 ## Format code
 
 ```bash
-# format code
-$ cd web && yarn format
+$ cd web && yarn format # web
+$ cd api-laravel && vendor/bin/phpcbf # api
 ```
 
 ## Environment variables
 
 ```bash
 # WEB .env file
-BASE_URL=http://localhost:8080
+VITE_API_URL=http://localhost:8000/api
+VITE_CLOUDINARY_URL=https://api.cloudinary.com/v1_1/:cloud_name/
+VITE_CLOUDINARY_PRESET=abcxyz
+
 
 # API .env file
 APP_NAME=Laravel
@@ -93,12 +96,16 @@ SESSION_DRIVER=file
 SESSION_LIFETIME=120
 
 JWT_SECRET=lmaolmao
+SENTRY_LARAVEL_DSN=
+SENTRY_TRACES_SAMPLE_RATE=1.0
+SENTRY_ENVIRONMENT=development
 ```
 
 ## Databases
 Use MySQL [MySQL](https://www.mysql.com/) for our database connection.
 
 ```bash
+# Migrate and seed data
 cd api-laravel && php artisan migrate:fresh --seed
 ```
 
