@@ -117,6 +117,13 @@ jobs:
             TAG=0.1.$CIRCLE_BUILD_NUM
             docker push $DOCKER_USER/shoe-shop-web:latest
             docker push $DOCKER_USER/shoe-shop-web:$TAG
+  redeploy:
+    docker:
+      - image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Redeploy the application
+          command: curl $DEPLOY_ENDPOINT
  
 workflows:
   ci-api:
@@ -131,6 +138,14 @@ workflows:
               only:
                 - develop
                 - main
+      - redeploy:
+          requires:
+            - build-and-deploy-api-image 
+          filters:
+            branches:
+              only:
+                - develop
+                - main
 
   ci-web:
     when: << pipeline.parameters.run-web-ci >>
@@ -139,6 +154,14 @@ workflows:
       - build-and-deploy-web-image:
           requires:
             - jslint 
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+      - redeploy:
+          requires:
+            - build-and-deploy-web-image 
           filters:
             branches:
               only:
