@@ -99,8 +99,8 @@ const handleQueryType = (type: string) => {
     queryRef.value = { type: type }
 }
 
-router.afterEach(async (to) => {
-    if (to.path !== "/products") {
+router.afterEach(async (to, from) => {
+    if (to.path !== "/products" || to.fullPath === from.fullPath) {
         return
     }
     queryRef.value = route.query

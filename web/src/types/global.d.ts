@@ -67,11 +67,12 @@ interface OrderProduct extends ProductWithThumbnail {
 interface Order {
     id: number
     name: string
+    receiver_name: string
     user_id: number
     address: string
-    province_id: string
-    district_id: string
-    commune_id: string
+    province_code: string
+    district_code: string
+    commune_code: string
     status: string
     phone: string
     total_price: number

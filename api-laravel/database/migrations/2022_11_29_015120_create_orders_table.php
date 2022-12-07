@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->string('receiver_name');
             $table->string('address');
             $table->string('province_code');
             $table->string('district_code');

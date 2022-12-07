@@ -1,3 +1,4 @@
+import { useLoadingStore } from "./../stores/loading"
 import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
@@ -64,6 +65,24 @@ const router = createRouter({
             },
         },
         {
+            name: "Checkout",
+            path: "/checkout",
+            component: () => import("@/views/checkout/index.vue"),
+            meta: {
+                title: "Thanh toán",
+                layout: "default",
+            },
+        },
+        {
+            name: "Wishlist",
+            path: "/wishlist",
+            component: () => import("@/views/wishlist/index.vue"),
+            meta: {
+                title: "Yêu thích",
+                layout: "default",
+            },
+        },
+        {
             name: "Order List",
             path: "/orders",
             component: () => import("@/views/orders/index.vue"),
@@ -118,6 +137,11 @@ router.afterEach((to, from) => {
     // Use next tick to handle router history correctly
     // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
     document.title = to.meta.title ? "Pomme | " + to.meta.title : DEFAULT_TITLE
+    useLoadingStore().loadingOff()
+})
+
+router.beforeEach(async (to, from) => {
+    useLoadingStore().loadingOn()
 })
 
 export default router

@@ -12,6 +12,7 @@ export const useLovedProductsStore = defineStore("love-products", {
             try {
                 const { data } = await api.post(`love/${product_id}`)
                 this.lovedProducts = data
+                this.updateLocalStore()
                 console.log("Toggled love product")
             } catch (error: any) {
                 notification.error({
@@ -45,6 +46,9 @@ export const useLovedProductsStore = defineStore("love-products", {
                     })
                 }
             }
+        },
+        async updateLocalStore() {
+            localStorage.setItem("lovedProducts", JSON.stringify(this.lovedProducts))
         },
         isLoved(productId: number): boolean {
             return this.lovedProducts.some((product) => product.id === productId)

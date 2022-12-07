@@ -3,22 +3,57 @@ import OrderProduct from "@/components/page/order/OrderProduct.vue"
 import { useLoadingStore } from "@/stores/loading"
 import { computed, onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
+import moment from "moment"
 import router from "@/router"
 import api from "@/api"
 defineProps<{}>()
+
+interface AreaCommuneResponse {
+    code: string
+    name: string
+    district: string
+    province: string
+}
 
 // get route param
 const route = useRoute()
 const { id } = route.params
 const order = ref<OrderWithProducts | null>()
+const deliveryLocation = ref<AreaCommuneResponse | null>()
+const currentStep = computed(() => {
+    switch (order.value?.status) {
+        case "pending":
+            return 0
+        case "shipping":
+            return 1
+        case "delivered":
+            return 2
+        default:
+            return 0
+    }
+})
+const orderDates = computed(() => {
+    let shippingAt = moment(order.value?.shipping_at).format("HH:mm - DD/MM/YYYY")
+    shippingAt = shippingAt === "Invalid date" ? "" : shippingAt
+    let deliveredAt = moment(order.value?.delivered_at).format("HH:mm - DD/MM/YYYY")
+    deliveredAt = deliveredAt === "Invalid date" ? "" : deliveredAt
+    return {
+        orderAt: moment(order.value?.created_at).format("HH:mm - DD/MM/YYYY"),
+        shippingAt,
+        deliveredAt,
+    }
+})
 
 onMounted(async () => {
     useLoadingStore().loadingOn()
     try {
         const { data } = await api.get(`/orders/${id}`)
-        order.value = await data
+        order.value = data
+        const { data: districtCommunes } = await api.get(`https://api.mysupership.vn/v1/partner/areas/commune?district=${order.value?.district_code}`)
+        deliveryLocation.value = districtCommunes.results.find((commune: AreaCommuneResponse) => commune.code === order.value?.commune_code)
     } catch (error: any) {
         router.push("/404")
+        console.log(error)
     }
     useLoadingStore().loadingOff()
 })
@@ -33,10 +68,10 @@ onMounted(async () => {
             <span class="text-primary">#{{ id }}</span>
         </div>
         <div class="steps w-4/5 my-8">
-            <ASteps :current="0">
-                <AStep title="Đặt hàng thành công" description="6:12 - 13/03/2021" />
-                <AStep title="Đang giao hàng" description="This is a description." />
-                <AStep title="Giao hàng thành công" description="This is a description." />
+            <ASteps :current="currentStep">
+                <AStep title="Đặt hàng thành công" :description="orderDates.orderAt" />
+                <AStep title="Đang giao hàng" :description="orderDates.shippingAt" />
+                <AStep title="Giao hàng thành công" :description="orderDates.deliveredAt" />
             </ASteps>
             <div v-if="order.status === 'canceled'">Đã hủy</div>
         </div>
@@ -46,13 +81,12 @@ onMounted(async () => {
                 <div class="font-bold text-base uppercase">Thông tin giao nhận</div>
                 <div class="divider--solid my-4"></div>
                 <ul class="font-medium text-secondary">
-                    <li>Họ tên: {{ "--họ tên--" }}</li>
-                    <li>SĐT: {{ "--điện thoại--" }}</li>
-                    <li>Email: {{ "--email--" }}</li>
-                    <li>Địa chỉ: {{ "--địa chỉ--" }}</li>
-                    <li>Phường/Xã: {{ "--phường/xã--" }}</li>
-                    <li>Quận/Huyện: {{ "--quận/huyện--" }}</li>
-                    <li>Thành phố/Tỉnh: {{ "--thành phố/tỉnh--" }}</li>
+                    <li>Họ tên: {{ order.receiver_name }}</li>
+                    <li>SĐT: {{ order.phone }}</li>
+                    <li>Địa chỉ: {{ order.address }}</li>
+                    <li>Phường/Xã: {{ deliveryLocation?.name }}</li>
+                    <li>Quận/Huyện: {{ deliveryLocation?.district }}</li>
+                    <li>Thành phố/Tỉnh: {{ deliveryLocation?.province }}</li>
                 </ul>
             </div>
             <div class="order__payment-info flex-1 bg-[#F2F2F2] p-4">

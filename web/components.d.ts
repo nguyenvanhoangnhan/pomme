@@ -38,5 +38,7 @@ declare module '@vue/runtime-core' {
     TagProcessing: typeof import('./src/components/atoms/TagProcessing.vue')['default']
     TagShipping: typeof import('./src/components/atoms/TagShipping.vue')['default']
     ViewedProducts: typeof import('./src/components/common/ViewedProducts.vue')['default']
+    Wishlist: typeof import('./src/components/page/wishlist/index.vue')['default']
+    WishListItem: typeof import('./src/components/page/wishlist/WishListItem.vue')['default']
   }
 }
