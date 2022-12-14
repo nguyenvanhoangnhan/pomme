@@ -1,0 +1,27 @@
+<svg id="Granny_Smith_Logo" data-name="Granny Smith Logo" xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 2000 2000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #44af7d;
+        stroke: #44af7d;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 80px;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="_1" data-name="1" class="cls-1" d="M550.1,425.788l1.021,1.021L81.352,896.58l-1.021-1.022Z"/>
+  <path id="_2" data-name="2" class="cls-1" d="M857.647,423.639L859.3,425.3,96.883,1187.72l-1.657-1.66Z"/>
+  <path id="_3" data-name="3" class="cls-1" d="M1089.36,502.572l1.97,1.972L184.116,1411.76l-1.973-1.98Z"/>
+  <path id="_4" data-name="4" class="cls-1" d="M1490.05,412.212l2.57,2.572-1182.992,1183-2.572-2.58Z"/>
+  <path id="_5" data-name="5" class="cls-1" d="M1682.88,530.046l2.67,2.668L457.975,1760.29l-2.668-2.67Z"/>
+  <path id="_6" data-name="6" class="cls-1" d="M1836.56,682.981l2.57,2.568L657.868,1866.81l-2.568-2.57Z"/>
+  <path id="_7" data-name="7" class="cls-1" d="M1900.65,928.074l2.13,2.127L924.255,1908.73l-2.127-2.13Z"/>
+  <path id="_8" data-name="8" class="cls-1" d="M1887.21,1253.15l1.44,1.45-664.86,664.86-1.45-1.44Z"/>
+  <path id="small1" class="cls-1" d="M405.907,540.291l-0.161.161-74.073-74.073,0.161-.161Z"/>
+  <path id="small2" class="cls-1" d="M183.8,757.956l-0.161.161-74.073-74.073,0.161-.162Z"/>
+  <path id="small1-2" data-name="small1" class="cls-1" d="M1733.17,1579.8l-0.16.16-74.08-74.07,0.17-.16Z"/>
+  <path id="small2-2" data-name="small2" class="cls-1" d="M1511.06,1797.46l-0.16.17-74.07-74.08,0.16-.16Z"/>
+  <path id="stalk" class="cls-1" d="M1032.44,291.305l-1.57,1.573L812.047,73.843l1.572-1.573Z"/>
+</svg>

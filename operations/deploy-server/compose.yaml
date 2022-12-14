@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+  web:
+    image: psycholog1st/shoe-shop-web
+    ports:
+      - 4173:4173
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: pomme
+      MYSQL_ROOT_PASSWORD:
+    ports:
+      - 3306:3306
+  api:
+    image: psycholog1st/shoe-shop-api
+    ports:
+      - 8000:8000
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+    volumes:
+      - logs:/var/www/storage/logs
+    environment:
+      APP_NAME: Laravel
+      APP_ENV: production
+      APP_KEY:
+      APP_DEBUG: false
+      APP_URL: http://localhost
+      LOG_CHANNEL: stack
+      LOG_DEPRECATIONS_CHANNEL: null
+      LOG_LEVEL: debug
+      DB_CONNECTION: mysql
+      DB_HOST: 172.17.0.1
+      DB_PORT: 3306
+      DB_DATABASE: pomme
+      DB_USERNAME: root
+      DB_PASSWORD:
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: file
+      FILESYSTEM_DRIVER: local
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: file
+      SESSION_LIFETIME: 120
+      JWT_SECRET:
+      SENTRY_LARAVEL_DSN:
+      SENTRY_TRACES_SAMPLE_RATE: 1.0
+      SENTRY_ENVIRONMENT: production
+volumes:
+  logs:

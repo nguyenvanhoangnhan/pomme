@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - 5173:5173
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    environment:
+      BASE_URL: http://localhost:8000
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: pomme
+      MYSQL_ROOT_PASSWORD: password123
+    ports:
+      - 3306:3306
+  api: 
+    build: ./api-laravel
+    ports: 
+      - 8000:8000
+    env_file: ./api-laravel/.env
