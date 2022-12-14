@@ -66,8 +66,9 @@ $ cd api-laravel && vendor/bin/phpcbf # api
 ```bash
 # WEB .env file
 VITE_API_URL=http://localhost:8000/api
-VITE_CLOUDINARY_URL=https://api.cloudinary.com/v1_1/:cloud_name/
-VITE_CLOUDINARY_PRESET=abcxyz
+VITE_CLOUDINARY_NAME=<cloud_name>
+VITE_CLOUDINARY_PRESET=<cloud_preset>
+
 
 
 # API .env file
