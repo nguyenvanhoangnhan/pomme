@@ -12,7 +12,7 @@ const router = createRouter({
             meta: {
                 title: "Home",
                 layout: "home",
-                auth: "customer",
+                auth: false,
             },
         },
         {
@@ -263,6 +263,7 @@ router.beforeEach(async (to, from) => {
     console.log(to.fullPath)
     useLoadingStore().loadingOn()
     if (to.meta.auth && !useAuthStore()?.data?.user) {
+        console.log(to.meta.auth)
         router.push({ name: "Login" })
         return
     }

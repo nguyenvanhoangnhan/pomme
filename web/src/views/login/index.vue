@@ -19,6 +19,10 @@ const loginFormState = reactive<LoginForm>({
 })
 const handleLogin = async () => {
     await auth.login(loginFormState)
+    if (auth.data.access_token && auth.data.user.role === "admin") {
+        window.location.replace("/admin")
+        return
+    }
     if (auth.data.access_token) {
         window.location.replace("/")
     }
