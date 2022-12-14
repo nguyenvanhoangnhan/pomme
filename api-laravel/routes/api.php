@@ -53,6 +53,8 @@ Route::group([
     Route::put('accessories', [AccessoryController::class, 'update']);
     Route::post('clothes', [ClothesController::class, 'store']);
     Route::put('clothes', [ClothesController::class, 'update']);
+    Route::delete('/{product_id}', [ProductController::class, 'destroy'])
+        ->where('product_id', '[0-9]+');
 });
 
 

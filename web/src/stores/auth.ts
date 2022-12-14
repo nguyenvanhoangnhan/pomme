@@ -38,6 +38,7 @@ export const useAuthStore = defineStore({
                 await api.post("/auth/logout")
                 this.data = {} as AuthData
                 localStorage.removeItem("authData")
+                window.location.reload()
             } catch (error: any) {
                 console.log(error)
             }

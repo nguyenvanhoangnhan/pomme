@@ -75,6 +75,10 @@ const onFinishFailed = () => {
     })
 }
 
+const filterOption = (input: string, option: any) => {
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+}
+
 onMounted(async () => {
     area.loadFromLocalStorage()
     await area.fetchProvinces()
@@ -138,7 +142,15 @@ onMounted(async () => {
                         <AInput v-model:value="orderForm.address" placeholder="e.g. 54 Nguyễn Lương Bằng"></AInput>
                     </AFormItem>
                     <AFormItem label="Tỉnh/Thành phố" name="province_code" :rules="[{ required: true, message: 'Xin vui chọn trường này' }]">
-                        <ASelect v-model:value="orderForm.province_code" placeholder="Chọn tỉnh/thành" :options="provinceSelects" @change="handleSelectProvince"> </ASelect>
+                        <ASelect
+                            v-model:value="orderForm.province_code"
+                            placeholder="Chọn tỉnh/thành"
+                            :options="provinceSelects"
+                            @change="handleSelectProvince"
+                            show-search
+                            :filter-option="filterOption"
+                        >
+                        </ASelect>
                     </AFormItem>
                     <AFormItem label="Quận/Huyện" name="district_code" :rules="[{ required: true, message: 'Xin vui chọn trường này' }]">
                         <ASelect v-model:value="orderForm.district_code" placeholder="Chọn quận/huyện" :options="districtSelects" @change="handleSelectDistrict"> </ASelect>

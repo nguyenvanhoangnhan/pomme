@@ -162,7 +162,14 @@ class ProductController extends Controller
      */
     public function destroy(Request $request)
     {
-        $id = $request->id;
+        if (auth()->user()->role !== 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to delete this product',
+            ], 401);
+        }
+
+        $id = $request->product_id;
         $product = Product::find($id);
         if (!$product) {
             return response()->json([

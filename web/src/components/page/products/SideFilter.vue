@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue"
+import { reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
 import { useProductsStore } from "@/stores/products"
@@ -38,28 +38,13 @@ const SHOE_SHAPES = {
 } as Record<string, string>
 
 const isShowMenus = reactive({
-    series: false,
-    gender: false,
-    shape: false,
-    accessoryCategory: false,
-    clothesCategory: false,
+    series: "series" in queryRef.value,
+    gender: "gender" in queryRef.value,
+    shape: "shape" in queryRef.value,
+    accessoryCategory: queryRef.value?.type == TYPES.accessory && "category" in queryRef.value,
+    clothesCategory: queryRef.value?.type == TYPES.clothes && "category" in queryRef.value,
 })
 
-if ("series" in queryRef.value) {
-    isShowMenus.series = true
-}
-if ("gender" in queryRef.value) {
-    isShowMenus.gender = true
-}
-if ("shape" in queryRef.value) {
-    isShowMenus.shape = true
-}
-if (queryRef.value?.type == TYPES.accessory && "category" in queryRef.value) {
-    isShowMenus.accessoryCategory = true
-}
-if (queryRef.value?.type == TYPES.clothes && "category" in queryRef.value) {
-    isShowMenus.clothesCategory = true
-}
 const handleQueries = (attr: string, val: string | null) => {
     if (val == "Tất cả") {
         removeQuery(attr)

@@ -1,3 +1,4 @@
+import { useLoadingStore } from "@/stores/loading"
 import { defineStore } from "pinia"
 import { notification } from "ant-design-vue"
 import { LocationQuery } from "vue-router"
@@ -39,6 +40,26 @@ export const useProductsStore = defineStore("products", {
             } finally {
                 this.isFetchingNextPage = false
             }
+        },
+        async removeProduct(id: number) {
+            try {
+                useLoadingStore().loadingOn()
+                await api.delete(`/products/${id}`)
+                this.products = this.products.filter((product) => product.id !== id)
+                notification.success({
+                    message: "Success",
+                    description: `Xóa sản phẩm #${id} thành công!`,
+                })
+            } catch (error) {
+                notification.error({
+                    message: "Error",
+                    description: "Lỗi khi xóa sản phẩm",
+                })
+                useLoadingStore().loadingOff()
+                return false
+            }
+            useLoadingStore().loadingOff()
+            return true
         },
     },
 })

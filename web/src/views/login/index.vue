@@ -20,7 +20,7 @@ const loginFormState = reactive<LoginForm>({
 const handleLogin = async () => {
     await auth.login(loginFormState)
     if (auth.data.access_token) {
-        window.location.replace("/products")
+        window.location.replace("/")
     }
 }
 const handleLoginFailed = (errInfo: any) => {
