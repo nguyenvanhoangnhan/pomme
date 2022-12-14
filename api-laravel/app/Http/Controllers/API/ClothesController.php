@@ -33,7 +33,9 @@ class ClothesController extends Controller
             'price' => 'required|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
-            'category' => 'required|string',
+            'category' => 'required',
+            'thumbnail' => 'required|string',
+            'images' => 'required|array|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -57,6 +59,21 @@ class ClothesController extends Controller
                 'success' => false,
                 'message' => 'Product could not be created',
             ], 500);
+        }
+
+        $images = $request->images;
+        $thumbnail = $request->thumbnail;
+
+        $product->thumbnail()->create([
+            'url' => $thumbnail,
+            'is_thumbnail' => true,
+        ]);
+
+        foreach ($images as $image) {
+            $product->images()->create([
+                'url' => $image,
+                'is_thumbnail' => false,
+            ]);
         }
 
         $clothes = Clothes::create([

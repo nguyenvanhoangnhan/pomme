@@ -34,9 +34,9 @@ class ShoeController extends Controller
             'price' => 'required|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
-            'gender' => 'required|in:0,1,2',
             'series' => 'required',
             'shape' => 'required|numeric',
+            'gender' => 'required|in:0,1,2',
             'thumbnail' => 'required|string',
             'images' => 'required|array|min:3',
         ]);
@@ -135,8 +135,10 @@ class ShoeController extends Controller
             'shoe_id' => 'required|exists:shoes,id',
             'name' => 'nullable',
             'price' => 'nullable|min:0',
-            'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
+            'discount_percent' => 'nullable|min:0|max:100',
+            'thumbnail' => 'nullable|string',
+            'images' => 'nullable|array|min:3',
             'gender' => 'nullable|in:0,1,2',
             'series' => 'nullable',
             'shape' => 'nullable|numeric',
@@ -179,6 +181,22 @@ class ShoeController extends Controller
 
         if ($request->shape) {
             $shoe->shape = $request->shape;
+        }
+
+        if ($request->thumbnail) {
+            $product->thumbnail()->update([
+                'url' => $request->thumbnail,
+            ]);
+        }
+
+        if ($request->images) {
+            $product->images()->where('is_thumbnail', false)->delete();
+            foreach ($request->images as $image) {
+                $product->images()->create([
+                    'url' => $image,
+                    'is_thumbnail' => false,
+                ]);
+            }
         }
 
         $product->save();

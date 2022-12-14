@@ -6,6 +6,7 @@ import { useRoute } from "vue-router"
 import moment from "moment"
 import router from "@/router"
 import api from "@/api"
+import { notification } from "ant-design-vue"
 defineProps<{}>()
 
 // get route param
@@ -36,6 +37,21 @@ const orderDates = computed(() => {
         deliveredAt,
     }
 })
+const cancelOrder = async () => {
+    useLoadingStore().loadingOn()
+    try {
+        useLoadingStore().loadingOn()
+        await api.post(`/orders/cancel/${id}`)
+        order.value!.status = "canceled"
+    } catch (error: any) {
+        notification.error({
+            message: "Lỗi khi hủy đơn hàng",
+            description: error.message || "Thông tin lỗi không xác định",
+        })
+    } finally {
+        useLoadingStore().loadingOff()
+    }
+}
 
 onMounted(async () => {
     useLoadingStore().loadingOn()
@@ -44,6 +60,7 @@ onMounted(async () => {
         order.value = data
         const { data: districtCommunes } = await api.get(`https://api.mysupership.vn/v1/partner/areas/commune?district=${order.value?.district_code}`)
         deliveryLocation.value = districtCommunes.results.find((commune: AreaCommune) => commune.code === order.value?.commune_code)
+        if (order.value?.status === "finished") order.value.status = "delivered"
     } catch (error: any) {
         router.push("/404")
         console.log(error)
@@ -63,10 +80,16 @@ onMounted(async () => {
         <div class="steps w-4/5 my-8">
             <ASteps :current="currentStep">
                 <AStep title="Đặt hàng thành công" :description="orderDates.orderAt" />
-                <AStep title="Đang giao hàng" :description="orderDates.shippingAt" />
-                <AStep title="Giao hàng thành công" :description="orderDates.deliveredAt" />
+                <AStep title="Đang giao hàng" :description="order.status !== 'canceled' ? orderDates.shippingAt : ''" />
+                <AStep title="Giao hàng thành công" :description="order.status !== 'canceled' ? orderDates.deliveredAt : ''" />
             </ASteps>
-            <div v-if="order.status === 'canceled'">Đã hủy</div>
+            <div v-if="order.status === 'canceled'" class="text-center text-red-500 font-medium">Đã hủy</div>
+            <div v-if="order.status === 'pending'">
+                <div class="divider--dashed my-6"></div>
+                <div class="text-center">
+                    <AButton type="primary" danger @click="cancelOrder">Hủy đơn hàng</AButton>
+                </div>
+            </div>
         </div>
         <div class="divider--dashed my-4"></div>
         <div class="flex w-full gap-4">

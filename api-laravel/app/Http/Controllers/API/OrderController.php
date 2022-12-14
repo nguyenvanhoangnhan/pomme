@@ -67,6 +67,8 @@ class OrderController extends Controller
             $orderName .= $productName.', ';
         }
 
+        $orderName = substr($orderName, 0, -2);
+
         $user = auth()->user();
 
         // create order
@@ -94,6 +96,13 @@ class OrderController extends Controller
 
         // clear cart
         $user->cartProducts()->detach();
+
+        // add sold count to products
+        for ($i = 0; $i < count($order->products); $i++) {
+            $order->products[$i]->in_stock -= $order->products[$i]->pivot->quantity;
+            $order->products[$i]->sold += $order->products[$i]->pivot->quantity;
+            $order->products[$i]->save();
+        }
 
         return response()->json($order);
     }
@@ -171,7 +180,7 @@ class OrderController extends Controller
     {
         // status must be "pending", "shipping", "delivered", "canceled"
         $validator = Validator::make($request->all(), [
-            'status' => 'required|in:pending,shipping,delivered,canceled',
+            'status' => 'required|in:pending,shipping,delivered,canceled,finished',
         ]);
 
         if ($validator->fails()) {
@@ -204,6 +213,14 @@ class OrderController extends Controller
 
         if ($request->status === 'delivered') {
             $order->delivered_at = now();
+        }
+
+        if ($request->status === 'canceled') {
+            for ($i = 0; $i < count($order->products); $i++) {
+                $order->products[$i]->in_stock += $order->products[$i]->pivot->quantity;
+                $order->products[$i]->sold -= $order->products[$i]->pivot->quantity;
+                $order->products[$i]->save();
+            }
         }
 
         $order->save();

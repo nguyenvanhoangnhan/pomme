@@ -17,9 +17,10 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $users = [
-            ['nhan053qt@gmail.com', 'Admin', 'pwd123', 'admin'],
+            ['admin@pomme.tech', 'Yagami Light', 'pwd123', 'admin'],
             ['nguyen.vh.nhan@gmail.com', 'Nguyễn Văn Hoàng Nhân', 'pwd123', 'customer'],
             ['letronghoangminh@gmail.com', 'Lê Trọng Hoàng Minh', 'pwd123', 'customer'],
+            ['hoangtiendung@gmail.com', 'Hoàng Tiến Dũng', 'pwd123', 'customer'],
         ];
 
         $shoes = [
@@ -183,7 +184,7 @@ class DatabaseSeeder extends Seeder
         foreach (\App\Models\Product::all() as $product) {
             \App\Models\Image::create([
                 'is_thumbnail' => true,
-                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Thumbnail',
+                'url' => 'https://via.placeholder.com/500/dddddd/34495e?text=Thumbnail',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([

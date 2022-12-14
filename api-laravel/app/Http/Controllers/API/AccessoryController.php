@@ -34,6 +34,8 @@ class AccessoryController extends Controller
             'discount_percent' => 'nullable|min:0|max:100',
             'in_stock' => 'nullable|min:0',
             'category' => 'required|string',
+            'thumbnail' => 'required|string',
+            'images' => 'required|array|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -63,6 +65,18 @@ class AccessoryController extends Controller
             'product_id' => $product->id,
             'category' => $request->category,
         ]);
+
+        $product->thumbnail()->create([
+            'url' => $thumbnail,
+            'is_thumbnail' => true,
+        ]);
+
+        foreach ($images as $image) {
+            $product->images()->create([
+                'url' => $image,
+                'is_thumbnail' => false,
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -104,6 +118,8 @@ class AccessoryController extends Controller
             'name' => 'nullable',
             'price' => 'nullable|min:0',
             'discount_percent' => 'nullable|min:0|max:100',
+            'thumbnail' => 'nullable|string',
+            'images' => 'nullable|array|min:3',
             'in_stock' => 'nullable|min:0',
             'category' => 'nullable|string',
         ]);
@@ -136,6 +152,22 @@ class AccessoryController extends Controller
 
         if ($request->category) {
             $accessory->category = $request->category;
+        }
+
+        if ($request->thumbnail) {
+            $product->thumbnail()->update([
+                'url' => $request->thumbnail,
+            ]);
+        }
+
+        if ($request->images) {
+            $product->images()->where('is_thumbnail', false)->delete();
+            foreach ($request->images as $image) {
+                $product->images()->create([
+                    'url' => $image,
+                    'is_thumbnail' => false,
+                ]);
+            }
         }
 
         $product->save();
