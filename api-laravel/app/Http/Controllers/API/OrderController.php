@@ -217,7 +217,7 @@ class OrderController extends Controller
 
         if ($request->status === 'canceled') {
             for ($i = 0; $i < count($order->products); $i++) {
-            $order->products[$i]->in_stock += $order->products[$i]->pivot->quantity;
+                $order->products[$i]->in_stock += $order->products[$i]->pivot->quantity;
                 $order->products[$i]->sold -= $order->products[$i]->pivot->quantity;
                 $order->products[$i]->save();
             }
