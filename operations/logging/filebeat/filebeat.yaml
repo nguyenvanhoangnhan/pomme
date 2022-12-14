@@ -1,0 +1,50 @@
+filebeat.inputs:
+- type: filestream
+  id: laravel
+  enabled: true
+  paths:
+    - /var/lib/docker/volumes/root_logs/_data/app.log
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.kibana:
+
+output.logstash:
+  hosts: ["localhost:5044"]
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+  - dissect:
+      tokenizer: "[%{time}] production.INFO: Request %{event}"
+      field: "message"
+  - decode_json_fields:
+      fields: ["dissect.event"]
+      process_array: false
+      max_depth: 2
+      target: "json"
+      overwrite_keys: false
+      add_error_key: true
+  - script:
+      lang: javascript
+      id: myscript1
+      source: >
+        function process(event) {
+          var wso2ts = event.Get("dissect.wso2timestamp")
+          wso2ts = new Date(wso2ts.replace(' ', 'T').replace(',','.'))
+          event.Put("dissect.wso2ts", wso2ts)
+        }
+  - timestamp:
+      field: dissect.wso2ts
+      layouts:
+        - '2022-12-07 02:18:42'
+  - drop_fields:
+      fields: [dissect]
