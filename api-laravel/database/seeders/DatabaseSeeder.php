@@ -196,7 +196,8 @@ class DatabaseSeeder extends Seeder
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671078032/tkim8r5q3wwggw0mecgd.jpg' => $product->id,
+                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671078032/tkim8r5q3wwggw0mecgd.jpg',
+                'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
                 'url' => 'https://via.placeholder.com/500/35495/ffffff?text=Image+4',
