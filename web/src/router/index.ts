@@ -118,7 +118,7 @@ const router = createRouter({
             path: "/products",
             component: () => import("@/views/products/index.vue"),
             meta: {
-                auth: "customer",
+                auth: false,
             },
         },
         {
