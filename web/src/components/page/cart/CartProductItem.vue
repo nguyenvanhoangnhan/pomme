@@ -9,7 +9,12 @@ const props = defineProps<{
 }>()
 
 const changeQuantity = (e: any) => {
-    console.log(e)
+    console.log("size: ", props.product.pivot.size)
+    if (props.product.pivot.size) {
+        useCartStore().updateItem(props.product.id, e, props.product.pivot.size)
+        return
+    }
+    useCartStore().updateItem(props.product.id, e, 0)
 }
 const removeFromCart = async () => {
     await useCartStore().removeItem(props.product.pivot.id)

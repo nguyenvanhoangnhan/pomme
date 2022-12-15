@@ -68,15 +68,25 @@ export const useCartStore = defineStore({
             }
             useLoadingStore().loadingOff()
         },
-        async updateItem(productId: number, quantity: number, size?: string) {
+        async updateItem(productId: number, quantity: number, size: number) {
             useLoadingStore().loadingOn()
-            const formData = {
-                quantity: quantity,
-                size: size,
+            let formData = {}
+            if (size === 0) {
+                formData = {
+                    quantity: quantity,
+                    size: null,
+                }
+            } else {
+                formData = {
+                    quantity: quantity,
+                    size: size,
+                }
             }
+            console.log(formData)
             try {
-                const { data } = await api.put(`cart/${productId}`, formData)
+                const { data } = await api.post(`cart/${productId}`, formData)
                 this.items = data
+                this.updateLocalStore()
             } catch (error: any) {
                 console.log(error)
             }

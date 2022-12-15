@@ -132,8 +132,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'quantity' => 'nullable|integer|min:1',
-            'size' => 'nullable|integer|min:1',
-            'old_size' => 'nullable|integer|min:1',
+            'size' => 'nullable|integer|min:35|max:46',
         ]);
 
         if ($validator->fails()) {
@@ -157,34 +156,38 @@ class UserController extends Controller
             ], 404);
         }
 
-        // if request->old_size, find the cart item with the old size and update it
-        $cartItem = null;
-        if ($request->old_size) {
-            $cartItem = $user->cartProducts()->where('product_id', $request->product_id)->where('size', $request->old_size)->first();
-        } else {
-            $cartItem = $user->cartProducts()->where('product_id', $request->product_id)->first();
+        if ($request->size) {
+            $cartItem = $user->cartProducts()
+                ->where('product_id', $request->product_id)
+                ->where('size', $request->size)
+                ->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => 'Product not found in cart.',
+                ], 404);
+            }
+
+                $cartItem->pivot->quantity = $request->quantity;
+                $cartItem->pivot->save();
+                $cartItem->save();
         }
 
-        if (!$cartItem) {
-            return response()->json([
-                'message' => 'Cart item not found',
-            ], 404);
-        }
+        if (!$request->size) {
+            $cartItem = $user->cartProducts()
+                ->where('product_id', $request->product_id)
+                ->first();
 
-        if ($request->quantity) {
-            $cartItem->pivot->quantity = $request->quantity;
-            $cartItem->pivot->save();
-        }
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => 'Product not found in cart',
+                ], 404);
+            }
 
-        // check if the new size is already in cart, if so, merge the quantity
-        if ($request->size && $user->cartProducts()->where('product_id', $request->product_id)->where('size', $request->size)->exists()) {
-            $newCartItem = $user->cartProducts()->where('product_id', $request->product_id)->where('size', $request->size)->first();
-            $newCartItem->pivot->quantity += $cartItem->pivot->quantity;
-            $newCartItem->pivot->save();
-            $cartItem->pivot->delete();
-        } elseif ($request->size) {
-            $cartItem->pivot->size = $request->size;
-            $cartItem->pivot->save();
+                // update the quantity of the product
+                $cartItem->pivot->quantity = $request->quantity;
+                $cartItem->pivot->save();
+                $cartItem->save();
         }
 
         $newCart = $user->cartProducts()->with('thumbnail')->get();
