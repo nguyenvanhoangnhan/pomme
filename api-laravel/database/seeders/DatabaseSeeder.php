@@ -184,20 +184,19 @@ class DatabaseSeeder extends Seeder
         foreach (\App\Models\Product::all() as $product) {
             \App\Models\Image::create([
                 'is_thumbnail' => true,
-                'url' => 'https://via.placeholder.com/500/dddddd/34495e?text=Thumbnail',
+                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671077977/vrtie6bsiacr6newpiqa.jpg',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Image+1',
+                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671078022/qze0srsuuclgqyez3dvx.jpg',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://via.placeholder.com/500/35495/ffffff?text=Image+2',
+                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671078027/nnq4wnpzgxxhzz4vodeo.jpg',
                 'product_id' => $product->id,
             ]);
             \App\Models\Image::create([
-                'url' => 'https://via.placeholder.com/500/8b8b8b/ffffff?text=Image+3',
-                'product_id' => $product->id,
+                'url' => 'https://res.cloudinary.com/cyantiz/image/upload/v1671078032/tkim8r5q3wwggw0mecgd.jpg' => $product->id,
             ]);
             \App\Models\Image::create([
                 'url' => 'https://via.placeholder.com/500/35495/ffffff?text=Image+4',
